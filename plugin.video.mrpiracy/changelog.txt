@@ -1,5 +1,5 @@
-v0.5.5(05/03/2017)
-- Paginacao nos episodios, 50 por pagina.
+v0.5.6(21/03/2017)
+- pequena correção
 
 v0.5.4(05/03/2017)
 - Correcao Openload

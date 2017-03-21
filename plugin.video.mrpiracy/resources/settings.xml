@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<settings>
+    <category label="Definições Gerais">
+        <setting label="Conta MrPiracy:" type="lsep" />
+        <setting id="email" type="text" label="Email" default=""/>
+        <setting id="password" type="text" label="Password" default="" option="hidden" enable="!eq(-1,false)"/>
+        <setting type="sep" />
+        <setting id="marcarVisto" type="enum" label="Marcar como Visto" values="Local|Site|Ambos (Site e Local)" default="0"/>
+        <setting type="sep" />
+        <setting label="Trakt:" type="lsep" />
+        <setting id="utilizadorTrakt" type="action" label="Utilizador" option="close" action="RunPlugin(plugin://plugin.video.mrpiracy/?modo=loginTrakt)" />
+    		<setting id="tokenTrakt" type="text" option="hidden" visible="false" label="" default="" />
+    		<setting id="refreshTrakt" type="text" option="hidden" visible="false" label="" default="" />
+        <setting id="tokenMrpiracy" type="text" option="hidden" visible="false" label="" default="" />
+        <setting id="refreshMrpiracy" type="text" option="hidden" visible="false" label="" default="" />
+        <setting id="loggedin" type="text" option="hidden" visible="false" label="" default="" />
+        <setting type="sep" />
+        <setting id="trailer-filmes" type="bool" label="Procurar Trailers para Filmes" default="false"/>
+        <setting id="nao-visto-episodios" type="bool" label="Próximo episódio automaticamente?" default="true"/>
+    </category>
+    <category label="Download">
+    	<setting label="Pasta para download:" type="lsep" />
+    	<setting label="" type="folder" id="pastaDownloads" source="auto" option="writeable" default="Escolha a pasta para Download" enable="!eq(-2,false)"/>
+    </category>
+    <!--<category label="Biblioteca">
+        <setting id="bibliotecaFilmes" type="folder" label="Filmes" default="special://userdata/addon_data/plugin.video.mrpiracy/Filmes"/>
+        <setting id="bibliotecaSeries" type="folder" label="Series" default="special://userdata/addon_data/plugin.video.mrpiracy/Series"/>
+    </category>-->
+    <category label="Tipos de vista">
+      <setting label="Definições de vista:" type="lsep" />
+     <setting id="menuView" type="enum" label="Vista de Menu" values="Lista|Lista Grande" default="0"/>
+     <setting id="filmesSeriesView" type="enum" label="Vista de Filmes e Séries" values="Lista|Lista Grande|Miniatura|Posters|Fanart|Media Info 1|Media Info 2|Media Info 3" default="0"/>
+     <setting id="temporadasView" type="enum" label="Vista de temporadas" values="Lista|Lista Grande|Miniatura" default="2"/>
+     <setting id="episodiosView" type="enum" label="Vista de episodios" values="Lista|Lista Grande|Miniatura|Media Info 1|Media Info 2|Media Info 3" default="2"/>
+   </category>
+</settings>
