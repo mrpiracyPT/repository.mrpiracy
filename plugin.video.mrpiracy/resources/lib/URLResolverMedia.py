@@ -230,21 +230,112 @@ class OpenLoad():
 			'Accept-Language': 'en-US,en;q=0.8',
 			'Referer': url}
 
-	#Code updated with code from https://gitlab.com/iptvplayer-for-e2 
-	def decodeK(self, k):
-		d = max(2, ord(k[0]) - 55)
-		e = min(d, len(k) - 12 - 2)
-		t = k[e:e + 12]
+	#Código atualizado a partir de: https://gitlab.com/iptvplayer-for-e2 
+	def decodeK(self, k, p0, p1, p2):
+		y = ord(k[0]);
+		e = y - p1
+		d = max(2, e)
+		e = min(d, len(k) - p0 - 2)
+		t = k[e:e + p0]
+		h = 0
 		g = []
-		for h in range(0, len(t), 2):
-			f = t[h:h+2]
-			g.append(int(f, 16))
-		v = k[0:e] + k[e+12:]
+		while h < len(t):
+			f = t[h:h+3]
+			g.append(int(f, 0x8))
+			h += 3
+		v = k[0:e] + k[e+p0:]
 		p = []
-		for h in range(0, len(v), 2):
-			p.append(chr(int(v[h:h + 2], 16) ^ g[(h / 2) % 6]))
+		i = 0
+		h = 0
+		while h < len(v):
+			B = v[h:h + 2]
+			C = v[h:h + 3]
+			f = int(B, 0x10)
+			h += 0x2
 
+			if (i % 3) == 0:
+				f = int(C, 8)
+				h += 1
+			elif i % 2 == 0 and i != 0 and ord(v[i-1]) < 0x3c:
+				f = int(C, 0xa)
+				h += 1
+			    
+			A = g[i % p2]
+			f = f ^ 0xd5;
+			f = f ^ A;
+			p.append( chr(f) )
+			i += 1
 		return "".join(p)
+
+	def getAllItemsBeetwenMarkers(self, data, marker1, marker2, withMarkers=True, caseSensitive=True):
+		itemsTab = []
+		if caseSensitive:
+			sData = data
+		else:
+			sData = data.lower()
+			marker1 = marker1.lower()
+			marker2 = marker2.lower()
+		idx1 = 0
+		while True:
+			idx1 = sData.find(marker1, idx1)
+			if -1 == idx1: return itemsTab
+			idx2 = sData.find(marker2, idx1 + len(marker1))
+			if -1 == idx2: return itemsTab
+			tmpIdx2 = idx2 + len(marker2) 
+			if withMarkers:
+				idx2 = tmpIdx2
+			else:
+				idx1 = idx1 + len(marker1)
+			itemsTab.append(data[idx1:idx2])
+			idx1 = tmpIdx2
+		return itemsTab
+	def rgetDataBeetwenMarkers2(self, data, marker1, marker2, withMarkers=True, caseSensitive=True):
+		if caseSensitive:
+			sData = data
+		else:
+			sData = data.lower()
+			marker1 = marker1.lower()
+			marker2 = marker2.lower()
+		idx1 = len(data)
+
+		idx1 = sData.rfind(marker1, 0, idx1)
+		if -1 == idx1: return False, ''
+		idx2 = sData.rfind(marker2, 0, idx1)
+		if -1 == idx2: return False, ''
+
+		if withMarkers:
+			return True, data[idx2:idx1+len(marker1)]
+		else:
+			return True, data[idx2+len(marker2):idx1]
+	def getSearchGroups(self, data, pattern, grupsNum=1, ignoreCase=False):
+		tab = []
+		if ignoreCase:
+			match = re.search(pattern, data, re.IGNORECASE)
+		else:
+			match = re.search(pattern, data)
+
+		for idx in range(grupsNum):
+			try:    value = match.group(idx + 1)
+			except Exception: value = ''
+			tab.append(value)
+		return tab
+	def getDataBeetwenMarkers(self, data, marker1, marker2, withMarkers=True, caseSensitive=True):
+		if caseSensitive:
+			idx1 = data.find(marker1)
+		else:
+			idx1 = data.lower().find(marker1.lower())
+		if -1 == idx1: return False, ''
+		if caseSensitive:
+			idx2 = data.find(marker2, idx1 + len(marker1))
+		else:
+			idx2 = data.lower().find(marker2.lower(), idx1 + len(marker1))
+		if -1 == idx2: return False, ''
+
+		if withMarkers:
+			idx2 = idx2 + len(marker2)
+		else:
+			idx1 = idx1 + len(marker1)
+		return True, data[idx1:idx2]
 	def parserOPENLOADIO(self, urlF):
 		try:
 			req = urllib2.Request(urlF, headers={'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.11; rv:43.0) Gecko/20100101 Firefox/43.0'})
@@ -282,22 +373,34 @@ class OpenLoad():
 			if(aResult[0]):
 				ID = aResult[1][0]
 
-			for i in TabUrl:
-				if len(i[1]) > 30:
-					hideenurl = i[1]
-			if not(hideenurl):
+			
+			tab = [(0x24, 0x37, 0x7), (0x1e, 0x34, 0x6)]
+			orgData = self.getDataBeetwenMarkers(code, '$(document)', '}});')[1].decode('string_escape')
+			p0 = self.getDataBeetwenMarkers(orgData, "splice", ';')[1]
+			p0 = self.getSearchGroups(p0, "\,(0x[0-9a-fA-F]+?)\)")[0]
+			p1 = self.getDataBeetwenMarkers(orgData, "'#'", 'continue;')[1]
+			p1 = self.getSearchGroups(p1, "\,(0x[0-9a-fA-F]+?)\)")[0]
+			p2 = self.rgetDataBeetwenMarkers2(orgData, '^=0x', 'var ')[1]
+			p2 = self.getSearchGroups(p2, "\,(0x[0-9a-fA-F]+?)\)")[0]
+			
+			tab.insert(0, (int(p0, 16), int(p1, 16), int(p2, 16)))
+			dec = ''
+			for item in tab:
+				dec = self.decodeK(TabUrl[0][1], item[0], item[1], item[2])
+				if dec != '': break
+			if not(dec):
 				#log("No Encoded Section Found. Deleted?")
 				raise ResolverError('No Encoded Section Found. Deleted?')
 
-			viStr = self.decodeK(hideenurl)
+			
 	  
-			api_call = "https://openload.co/stream/" + viStr + "?mime=true" 
+			api_call = "https://openload.co/stream/" + dec + "?mime=true" 
 
 			if 'KDA_8nZ2av4/x.mp4' in api_call:
-				log('Openload.co resolve failed')
+				#log('Openload.co resolve failed')
 				raise ResolverError('Openload.co resolve failed')
-			if viStr == api_call:
-				log('pigeon url : ' + api_call)
+			if dec == api_call:
+				#log('pigeon url : ' + api_call)
 				api_call = ''
 				raise ResolverError('pigeon url : ' + api_call)
 			
