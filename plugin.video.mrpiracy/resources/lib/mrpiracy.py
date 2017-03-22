@@ -123,38 +123,38 @@ class mrpiracy:
 			controlo.alerta('MrPiracy', 'Precisa de definir o seu email e password')
 			return False
 		else:
+			#try:
+			post = {'username': controlo.addon.getSetting('email'), 'password': controlo.addon.getSetting('password'),'grant_type': 'password', 'client_id': 'kodi', 'client_secret':'pyRmmKK3cbjouoDMLXNtt2eGkyTTAG' }
+
+			resultado = controlo.abrir_url(self.API_SITE+'login', post=json.dumps(post), header=controlo.headers)
+			if resultado == 'DNS':
+				controlo.alerta('MrPiracy', 'Tem de alterar os DNS para poder usufruir do addon')
+				return False
+			
+			resultado = json.loads(resultado)
+			#colocar o loggedin
+			token = resultado['access_token']
+			refresh = resultado['refresh_token']
+			headersN = controlo.headers
+			headersN['Authorization'] = 'Bearer %s' % token
+			
+			resultado = controlo.abrir_url(self.API_SITE+'me', header=headersN)
+			resultado = json.loads(resultado)
 			try:
-				post = {'username': controlo.addon.getSetting('email'), 'password': controlo.addon.getSetting('password'),'grant_type': 'password', 'client_id': 'kodi', 'client_secret':'pyRmmKK3cbjouoDMLXNtt2eGkyTTAG' }
-
-				resultado = controlo.abrir_url(self.API_SITE+'login', post=json.dumps(post), header=controlo.headers)
-				if resultado == 'DNS':
-					controlo.alerta('MrPiracy', 'Tem de alterar os DNS para poder usufruir do addon')
-					return False
-				
-				resultado = json.loads(resultado)
-				#colocar o loggedin
-				token = resultado['access_token']
-				refresh = resultado['refresh_token']
-				headersN = controlo.headers
-				headersN['Authorization'] = 'Bearer %s' % token
-				
-				resultado = controlo.abrir_url(self.API_SITE+'me', header=headersN)
-				resultado = json.loads(resultado)
-				try:
-					username = resultado['username'].decode('utf-8')
-				except:
-					username = resultado['username'].encode('utf-8')
-				
-
-				if resultado['email'] == controlo.addon.getSetting('email'):
-					xbmc.executebuiltin("XBMC.Notification(MrPiracy, Sessão iniciada: "+username+", '10000', "+controlo.addonFolder+"/icon.png)")
-					controlo.addon.setSetting('tokenMrpiracy', token)
-					controlo.addon.setSetting('refreshMrpiracy', refresh)
-					controlo.addon.setSetting('loggedin', username)
-					return True
+				username = resultado['username'].decode('utf-8')
 			except:
+				username = resultado['username'].encode('utf-8')
+			
+
+			if resultado['email'] == controlo.addon.getSetting('email'):
+				xbmc.executebuiltin("XBMC.Notification(MrPiracy, Sessão iniciada: "+username+", '10000', "+controlo.addonFolder+"/icon.png)")
+				controlo.addon.setSetting('tokenMrpiracy', token)
+				controlo.addon.setSetting('refreshMrpiracy', refresh)
+				controlo.addon.setSetting('loggedin', username)
+				return True
+			"""except:
 				controlo.alerta('MrPiracy', 'Não foi possível abrir a página. Por favor tente novamente')
-	        	return False
+	        	return False"""
 
 	def getEventos(self):
 		controlo.headers['Authorization'] = 'Bearer %s' % controlo.addon.getSetting('tokenMrpiracy')

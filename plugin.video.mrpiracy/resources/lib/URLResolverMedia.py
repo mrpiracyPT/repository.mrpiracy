@@ -250,6 +250,7 @@ class OpenLoad():
 		while h < len(v):
 			B = v[h:h + 2]
 			C = v[h:h + 3]
+			D = v[h:h + 4]
 			f = int(B, 0x10)
 			h += 0x2
 
@@ -257,8 +258,8 @@ class OpenLoad():
 				f = int(C, 8)
 				h += 1
 			elif i % 2 == 0 and i != 0 and ord(v[i-1]) < 0x3c:
-				f = int(C, 0xa)
-				h += 1
+				f = int(D, 0xa)
+				h += 2
 			    
 			A = g[i % p2]
 			f = f ^ 0xd5;
