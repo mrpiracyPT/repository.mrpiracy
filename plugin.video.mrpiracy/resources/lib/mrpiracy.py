@@ -15,9 +15,9 @@ sys.setdefaultencoding('utf8')
 class mrpiracy:
 
 	def __init__(self):
-		self.API = base64.urlsafe_b64decode('aHR0cDovL215YXBpbXAudGsv')
-		self.API_SITE = base64.urlsafe_b64decode('aHR0cDovL215YXBpbXAudGsvYXBpLw==')
-		self.SITE = base64.urlsafe_b64decode('aHR0cDovL21ycGlyYWN5Lm1sLw==')
+		self.API = base64.urlsafe_b64decode('aHR0cDovL21wYXBpLm1sLw==')
+		self.API_SITE = base64.urlsafe_b64decode('aHR0cDovL21wYXBpLm1sL2FwaS8=')
+		self.SITE = base64.urlsafe_b64decode('aHR0cDovL21ycGlyYWN5LmdxLw==')
 	
 	def definicoes(self):
 		controlo.addon.openSettings()
@@ -123,38 +123,38 @@ class mrpiracy:
 			controlo.alerta('MrPiracy', 'Precisa de definir o seu email e password')
 			return False
 		else:
-			#try:
-			post = {'username': controlo.addon.getSetting('email'), 'password': controlo.addon.getSetting('password'),'grant_type': 'password', 'client_id': 'kodi', 'client_secret':'pyRmmKK3cbjouoDMLXNtt2eGkyTTAG' }
-
-			resultado = controlo.abrir_url(self.API_SITE+'login', post=json.dumps(post), header=controlo.headers)
-			if resultado == 'DNS':
-				controlo.alerta('MrPiracy', 'Tem de alterar os DNS para poder usufruir do addon')
-				return False
-			
-			resultado = json.loads(resultado)
-			#colocar o loggedin
-			token = resultado['access_token']
-			refresh = resultado['refresh_token']
-			headersN = controlo.headers
-			headersN['Authorization'] = 'Bearer %s' % token
-			
-			resultado = controlo.abrir_url(self.API_SITE+'me', header=headersN)
-			resultado = json.loads(resultado)
 			try:
-				username = resultado['username'].decode('utf-8')
-			except:
-				username = resultado['username'].encode('utf-8')
-			
+				post = {'username': controlo.addon.getSetting('email'), 'password': controlo.addon.getSetting('password'),'grant_type': 'password', 'client_id': 'kodi', 'client_secret':'pyRmmKK3cbjouoDMLXNtt2eGkyTTAG' }
 
-			if resultado['email'] == controlo.addon.getSetting('email'):
-				xbmc.executebuiltin("XBMC.Notification(MrPiracy, Sessão iniciada: "+username+", '10000', "+controlo.addonFolder+"/icon.png)")
-				controlo.addon.setSetting('tokenMrpiracy', token)
-				controlo.addon.setSetting('refreshMrpiracy', refresh)
-				controlo.addon.setSetting('loggedin', username)
-				return True
-			"""except:
+				resultado = controlo.abrir_url(self.API_SITE+'login', post=json.dumps(post), header=controlo.headers)
+				if resultado == 'DNS':
+					controlo.alerta('MrPiracy', 'Tem de alterar os DNS para poder usufruir do addon')
+					return False
+				
+				resultado = json.loads(resultado)
+				#colocar o loggedin
+				token = resultado['access_token']
+				refresh = resultado['refresh_token']
+				headersN = controlo.headers
+				headersN['Authorization'] = 'Bearer %s' % token
+				
+				resultado = controlo.abrir_url(self.API_SITE+'me', header=headersN)
+				resultado = json.loads(resultado)
+				try:
+					username = resultado['username'].decode('utf-8')
+				except:
+					username = resultado['username'].encode('utf-8')
+				
+
+				if resultado['email'] == controlo.addon.getSetting('email'):
+					xbmc.executebuiltin("XBMC.Notification(MrPiracy, Sessão iniciada: "+username+", '10000', "+controlo.addonFolder+"/icon.png)")
+					controlo.addon.setSetting('tokenMrpiracy', token)
+					controlo.addon.setSetting('refreshMrpiracy', refresh)
+					controlo.addon.setSetting('loggedin', username)
+					return True
+			except:
 				controlo.alerta('MrPiracy', 'Não foi possível abrir a página. Por favor tente novamente')
-	        	return False"""
+	        	return False
 
 	def getEventos(self):
 		controlo.headers['Authorization'] = 'Bearer %s' % controlo.addon.getSetting('tokenMrpiracy')
@@ -655,6 +655,7 @@ class mrpiracy:
 		temporadaParaVer = 0
 		serieParaVer = 0
 		episodioParaVer = 0
+		contagem = 0
 		for i in resultado['data']:
 			if i['URL'] == '' and i['URL2'] == '':
 				continue
@@ -728,6 +729,8 @@ class mrpiracy:
 					serieParaVer = i['id_serie']
 					episodioParaVer = i['id_episodio']
 					naoVisto = True
+			else:
+				contagem = contagem + 1
 
 			imagem = ''
 			if i['imagem'] == 1:
@@ -745,9 +748,11 @@ class mrpiracy:
 		self.vista_episodios()
 		if naoVisto == True:
 			if controlo.addon.getSetting('nao-visto-episodios') == 'true':
-				pergunta = controlo.simNao('MrPiracy', 'Carregar o Episódio #'+str(numeroParaVer)+' da temporada #'+str(temporadaParaVer)+'?')
-				if pergunta:
-					self.player(self.API_SITE+tipo+'/'+str(serieParaVer)+'/episodio/'+str(episodioParaVer))
+				controlo.log(str(contagem))
+				if contagem > 0:
+					pergunta = controlo.simNao('MrPiracy', 'Carregar o Episódio #'+str(numeroParaVer)+' da temporada #'+str(temporadaParaVer)+'?')
+					if pergunta:
+						self.player(self.API_SITE+tipo+'/'+str(serieParaVer)+'/episodio/'+str(episodioParaVer))
 		
 	def listagemAnos(self, url):
 		anos = [
