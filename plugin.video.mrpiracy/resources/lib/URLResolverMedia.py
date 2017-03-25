@@ -64,8 +64,8 @@ class RapidVideo():
 		sPattern =  '"file":"([^"]+)","label":"([0-9]+)p.+?'
 		aResult = self.parse(sourceCode, sPattern)
 		try:
-			self.legenda = re.compile('"file":"([^"]+)","label":".+?","kind":"captions"').findall(sourceCode)[0]
-			log(self.legenda)
+			self.legenda = "https://www.raptu.com%s"%re.compile('"file":"([^"]+)","label":".+?","kind":"captions"').findall(sourceCode)[0]
+			#log(self.legenda)
 		except:
 			self.legenda = ''
 		videoUrl = ''

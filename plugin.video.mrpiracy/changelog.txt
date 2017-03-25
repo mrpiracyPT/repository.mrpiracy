@@ -1,5 +1,8 @@
+v0.6.0(25/03/2017)
+- Correção legendas RapidVideo
+
 v0.5.9(25/03/2017)
-- Correção OpenLoad
+- Séries: só aparece mensagem para continuar se já tiver pelo menos 1 episodio visto!
 
 v0.5.8(22/03/2017)
 - Correção OpenLoad

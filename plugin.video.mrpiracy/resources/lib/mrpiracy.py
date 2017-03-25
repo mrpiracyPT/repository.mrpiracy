@@ -748,7 +748,6 @@ class mrpiracy:
 		self.vista_episodios()
 		if naoVisto == True:
 			if controlo.addon.getSetting('nao-visto-episodios') == 'true':
-				controlo.log(str(contagem))
 				if contagem > 0:
 					pergunta = controlo.simNao('MrPiracy', 'Carregar o Episódio #'+str(numeroParaVer)+' da temporada #'+str(temporadaParaVer)+'?')
 					if pergunta:
