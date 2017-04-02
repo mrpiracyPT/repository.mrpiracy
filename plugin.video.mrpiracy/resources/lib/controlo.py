@@ -5,6 +5,7 @@ import os,xbmc,xbmcaddon,xbmcplugin,xbmcgui,xbmcvfs,sys,urllib,urllib2,unicodeda
 import threading
 from datetime import datetime
 
+import ssl
 
 from t0mm0.common.addon import Addon
 
@@ -23,7 +24,7 @@ teclado = xbmc.Keyboard
 pastaDados = Addon(addonInfo("id")).get_profile().decode("utf-8")
 headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.11; rv:43.0) Gecko/20100101 Firefox/43.0', 'Accept-Charset': 'utf-8;q=0.7,*;q=0.7', 'Content-Type': 'application/json'}
 dataHoras = datetime.now()
-
+context = ssl.SSLContext(ssl.PROTOCOL_TLSv1)
 def addDir(name,url,modo,iconimage,pagina=False,tipo=False,infoLabels=False,poster=False,visto=False, menuO=False):
     menu = []
     if infoLabels: infoLabelsAux = infoLabels
@@ -147,10 +148,10 @@ def abrir_url(url, post=None, header=None, code=False, erro=False):
         req = urllib2.Request(url, headers=header)
 
     try:
-        response = urllib2.urlopen(req)
-    except urllib2.HTTPError as response:
-        if erro == True:
-            return str(response.code), "asd"
+        response = urllib2.urlopen(req,context=context)
+    except urllib2.HTTPError, e:
+        print e.fp.read()
+        
 
     link=response.read()
 

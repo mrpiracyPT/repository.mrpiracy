@@ -27,6 +27,7 @@ from JsParser import JsParser
 from JJDecoder import JJDecoder
 from png import Reader as PNGReader
 from HTMLParser import HTMLParser
+import controlo
 
 def clean(text):
     command={'&#8220;':'"','&#8221;':'"', '&#8211;':'-','&amp;':'&','&#8217;':"'",'&#8216;':"'"}
@@ -57,9 +58,16 @@ class RapidVideo():
 
 	def getMediaUrl(self):
 		try:
-			sourceCode = self.net.http_GET(self.url, headers=self.headers).content.decode('unicode_escape')
+			sourceCode = controlo.abrir_url(self.url, header=self.headers).decode('unicode_escape')
 		except:
-			sourceCode = self.net.http_GET(self.url, headers=self.headers).content
+			sourceCode = controlo.abrir_url(self.url, header=self.headers)
+
+		
+		videoUrl = ''
+		sPattern = '<input type="hidden" value="(\d+)" name="block">'
+		aResult1 = self.parse(sourceCode,sPattern)
+		if (aResult1[0] == True):
+			sourceCode = controlo.abrir_url(self.url, post='confirm.x=74&confirm.y=35&block=1', header=self.headers)
 
 		sPattern =  '"file":"([^"]+)","label":"([0-9]+)p.+?'
 		aResult = self.parse(sourceCode, sPattern)
@@ -68,7 +76,6 @@ class RapidVideo():
 			#log(self.legenda)
 		except:
 			self.legenda = ''
-		videoUrl = ''
 		if aResult[0]:
 			links = []
 			qualidades = []
@@ -231,42 +238,41 @@ class OpenLoad():
 			'Referer': url}
 
 	#Código atualizado a partir de: https://gitlab.com/iptvplayer-for-e2 
-	def decodeK(self, k, p0, p1, p2):
-		y = ord(k[0]);
-		e = y - p1
-		d = max(2, e)
-		e = min(d, len(k) - p0 - 2)
-		t = k[e:e + p0]
-		h = 0
-		g = []
-		while h < len(t):
-			f = t[h:h+3]
-			g.append(int(f, 0x8))
-			h += 3
-		v = k[0:e] + k[e+p0:]
-		p = []
-		i = 0
-		h = 0
-		while h < len(v):
-			B = v[h:h + 2]
-			C = v[h:h + 3]
-			D = v[h:h + 4]
-			f = int(B, 0x10)
-			h += 0x2
-
-			if (i % 3) == 0:
-				f = int(C, 8)
-				h += 1
-			elif i % 2 == 0 and i != 0 and ord(v[i-1]) < 0x3c:
-				f = int(D, 0xa)
-				h += 2
-			    
-			A = g[i % p2]
-			f = f ^ 0xd5;
-			f = f ^ A;
-			p.append( chr(f) )
-			i += 1
-		return "".join(p)
+	def decodeK(self, enc):
+		decoded = ''
+		try:
+			a = enc[0:24]
+			b = []
+			for i in range(0, len(a), 8):
+				b.append(int(a[i:i + 8] or '0', 16))
+			enc = enc[24:]
+			j = 0
+			k = 0
+			while j < len(enc):
+				c = 128
+				d = 0
+				e = 0
+				f = 0
+				_more = True
+				while _more:
+					if j + 1 >= len(enc):
+						c = 143
+					f = int(enc[j:j + 2] or '0', 16)
+					j += 2
+					d += (f & 127) << e
+					e += 7
+					_more = f >= c
+				g = d ^ b[k % 3]
+				for i in range(4):
+					char_dec = (g >> 8 * i) & (c + 127)
+					char = chr(char_dec)
+					if char != '#':
+						decoded += char
+				k += 1
+		except Exception:
+			return ''
+		            
+		return decoded
 
 	def getAllItemsBeetwenMarkers(self, data, marker1, marker2, withMarkers=True, caseSensitive=True):
 		itemsTab = []
@@ -370,11 +376,9 @@ class OpenLoad():
 			if not (code):
 				#log("No Encoded Section Found. Deleted?")
 				raise ResolverError('No Encoded Section Found. Deleted?')
-			aResult = self.parse(code, "window.r='([^']+)';")
+			aResult = self.parse(code, "window.R='([^']+)';")
 			if(aResult[0]):
 				ID = aResult[1][0]
-
-			
 			tab = [(0x24, 0x37, 0x7), (0x1e, 0x34, 0x6)]
 			orgData = self.getDataBeetwenMarkers(code, '$(document)', '}});')[1].decode('string_escape')
 			p0 = self.getDataBeetwenMarkers(orgData, "splice", ';')[1]
@@ -385,13 +389,14 @@ class OpenLoad():
 			p2 = self.getSearchGroups(p2, "\,(0x[0-9a-fA-F]+?)\)")[0]
 			
 			tab.insert(0, (int(p0, 16), int(p1, 16), int(p2, 16)))
-			dec = ''
-			for item in tab:
-				dec = self.decodeK(TabUrl[0][1], item[0], item[1], item[2])
-				if dec != '': break
-			if not(dec):
-				#log("No Encoded Section Found. Deleted?")
+			
+			for i in TabUrl:
+				if len(i[1]) > 30:
+					hideenurl = i[1]
+			if not(hideenurl):
 				raise ResolverError('No Encoded Section Found. Deleted?')
+			
+			dec = self.decodeK(hideenurl)
 
 			
 	  
@@ -406,18 +411,59 @@ class OpenLoad():
 				raise ResolverError('pigeon url : ' + api_call)
 			
 			return api_call
-		except Exception as e:
-			self.messageOk('MrPiracy', 'Ocorreu um erro a obter o link. Escolha outro servidor.')
-		except ResolverError:
-			self.messageOk('MrPiracy', 'Ocorreu um erro a obter o link. Escolha outro servidor.')
+		#ResolverError, 
+		except (Exception, ResolverError):
+			try:
+				media_id = self.getId()
+				
+				video_url = self.__check_auth(media_id)
+				if not video_url:
+					video_url = self.__auth_ip(media_id)
+				print video_url
+				if video_url:
+					return video_url
+				else:
+					raise ResolverError("Sem autorização do Openload")
+			except ResolverError:
+				self.messageOk('MrPiracy', 'Ocorreu um erro a obter o link. Escolha outro servidor.')
+	def _api_get_url(self, url):
+		
+		result = self.net.http_GET(url).content
+		
+		js_result = json.loads(result)
+		if js_result['status'] != 200:
+			raise ResolverError(js_result['status'], js_result['msg'])
+		return js_result
+	def __auth_ip(self, media_id):
+		js_data = self._api_get_url('https://api.openload.co/1/streaming/info')
+		pair_url = js_data.get('result', {}).get('auth_url', '')
+		if pair_url:
+			pair_url = pair_url.replace('\/', '/')
+			header = "Autorização do Openload"
+			line1 = "Para visualizar este video, é necessaria autorização"
+			line2 = "Acede ao link em baixo para permitires acesso ao video:"
+			line3 = "[B][COLOR blue]%s[/COLOR][/B] e clica em 'Pair'" % (pair_url)
+			with CountdownDialog(header, line1, line2, line3) as cd:
+				return cd.start(self.__check_auth, [media_id])
+	
+	def __check_auth(self, media_id):
+		try:
+			js_data = self._api_get_url('https://api.openload.co/1/streaming/get?file=%s' % media_id)
+		except ResolverError as e:
+			status, msg = e
+			if status == 403:
+				return
+			else:
+				raise ResolverError(msg)
 
+		return js_data.get('result', {}).get('url')
 	def getId(self):
 		#return self.url.split('/')[-1]
 		try:
 			try:
-				return re.compile('https\:\/\/openload\.co\/embed\/(.+?)').findall(self.url)[0]
+				return re.compile('https\:\/\/openload\.co\/embed\/(.+)\/').findall(self.url)[0]
 			except:
-				return re.compile('https\:\/\/openload\.co\/embed\/(.+?)\/').findall(self.url)[0]
+				return re.compile('https\:\/\/openload\.co\/embed\/(.+)').findall(self.url)[0]
 		except:
 			return re.compile('https\:\/\/openload.co\/f\/(.+?)\/').findall(self.url)[0]
 
@@ -664,3 +710,70 @@ class Vidzi():
 
 	def getSubtitle(self):
 		return self.subtitle
+
+#tknorris code: https://github.com/tknorris/script.module.urlresolver/
+
+class CountdownDialog(object):
+    __INTERVALS = 5
+    
+    def __init__(self, heading, line1='', line2='', line3='', active=True, countdown=60, interval=5):
+        self.heading = heading
+        self.countdown = countdown
+        self.interval = interval
+        self.line3 = line3
+        if active and urlresolver.ALLOW_POPUPS:
+            if xbmc.getCondVisibility('Window.IsVisible(progressdialog)'):
+                pd = CustomProgressDialog.ProgressDialog()
+            else:
+                pd = xbmcgui.DialogProgress()
+            if not self.line3: line3 = 'Expires in: %s seconds' % (countdown)
+            pd.create(self.heading, line1, line2, line3)
+            pd.update(100)
+            self.pd = pd
+        else:
+            self.pd = None
+
+    def __enter__(self):
+        return self
+    
+    def __exit__(self, type, value, traceback):
+        if self.pd is not None:
+            self.pd.close()
+            del self.pd
+    
+    def start(self, func, args=None, kwargs=None):
+        if args is None: args = []
+        if kwargs is None: kwargs = {}
+        result = func(*args, **kwargs)
+        if result:
+            return result
+        
+        if self.pd is not None:
+            start = time.time()
+            expires = time_left = self.countdown
+            interval = self.interval
+            while time_left > 0:
+                for _ in range(CountdownDialog.__INTERVALS):
+                    sleep(interval * 1000 / CountdownDialog.__INTERVALS)
+                    if self.is_canceled(): return
+                    time_left = expires - int(time.time() - start)
+                    if time_left < 0: time_left = 0
+                    progress = time_left * 100 / expires
+                    line3 = 'Expires in: %s seconds' % (time_left) if not self.line3 else ''
+                    self.update(progress, line3=line3)
+                    
+                result = func(*args, **kwargs)
+                if result:
+                    return result
+    
+    def is_canceled(self):
+        if self.pd is None:
+            return False
+        else:
+            return self.pd.iscanceled()
+        
+    def update(self, percent, line1='', line2='', line3=''):
+        if self.pd is not None:
+            self.pd.update(percent, line1, line2, line3)
+class ResolverError(Exception):
+    pass

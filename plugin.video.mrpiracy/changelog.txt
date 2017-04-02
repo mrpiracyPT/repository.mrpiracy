@@ -1,3 +1,7 @@
+v0.6.1(02/04/2017)
+- RapidVideo
+- Openload, Temporariamente por API
+
 v0.6.0(25/03/2017)
 - Correção legendas RapidVideo
 
