@@ -150,8 +150,12 @@ def abrir_url(url, post=None, header=None, code=False, erro=False):
     try:
         response = urllib2.urlopen(req,context=context)
     except urllib2.HTTPError, e:
-        print e.fp.read()
-        
+        try:
+            response = urllib2.urlopen(req)
+        except urllib2.HTTPError as response:
+            if erro == True:
+                log(str(response.code))
+                return str(response.code), "asd"
 
     link=response.read()
 

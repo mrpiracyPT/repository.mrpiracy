@@ -1,3 +1,8 @@
+v0.6.3(02/04/2017)
+- progresso trakt
+- correcao legenda
+- correcao abrir_url
+
 v0.6.2(02/04/2017)
 - Openload, Temporariamente por API
 

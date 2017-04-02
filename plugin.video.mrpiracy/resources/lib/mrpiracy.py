@@ -1151,6 +1151,7 @@ class mrpiracy:
 			legenda = URLResolverMedia.OpenLoad(servidores[servidor]).getSubtitle()
 			if not '.vtt' in legenda:
 				legenda = legendaAux
+			legenda = legendaAux
 		elif 'drive.google.com/' in servidores[servidor]:
 			stream, ext_g = URLResolverMedia.GoogleVideo(servidores[servidor]).getMediaUrl()
 		elif 'cloud.mail.ru' in servidores[servidor]:
@@ -1668,7 +1669,31 @@ class mrpiracy:
 			except ValueError:
 				continue
 			if 'codigo' in resultado:
+				url = self.API_SITE+'serie/%s/temporada/%s/episodio/%s/imdb' % (serie["show"]["ids"]["imdb"]+'PT',temporadaNumero, episodioN )
+				resultado = controlo.abrir_url(url, header=controlo.headers)
+				if resultado == 'DNS':
+					controlo.alerta('MrPiracy', 'Tem de alterar os DNS para poder usufruir do addon')
+					return False
+				tipo = 'anime'
+				
+				try:
+					resultado = json.loads(resultado)
+				except ValueError:
+					continue
+			if 'codigo' in resultado:
 				url = self.API_SITE+'anime/%s/temporada/%s/episodio/%s/imdb' % (serie["show"]["ids"]["imdb"],temporadaNumero, episodioN )
+				resultado = controlo.abrir_url(url, header=controlo.headers)
+				if resultado == 'DNS':
+					controlo.alerta('MrPiracy', 'Tem de alterar os DNS para poder usufruir do addon')
+					return False
+				tipo = 'anime'
+				
+				try:
+					resultado = json.loads(resultado)
+				except ValueError:
+					continue
+			if 'codigo' in resultado:
+				url = self.API_SITE+'anime/%s/temporada/%s/episodio/%s/imdb' % (serie["show"]["ids"]["imdb"]+'PT',temporadaNumero, episodioN )
 				resultado = controlo.abrir_url(url, header=controlo.headers)
 				if resultado == 'DNS':
 					controlo.alerta('MrPiracy', 'Tem de alterar os DNS para poder usufruir do addon')

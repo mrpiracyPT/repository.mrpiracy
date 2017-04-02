@@ -239,5 +239,5 @@ class Player(xbmc.Player):
             f.write(str(self.tempo))
             f.close()
         except:
-            traceback.print_exc()
+            #traceback.print_exc()
             print "Não gravou o conteudo em %s" % self.pastaVideo
