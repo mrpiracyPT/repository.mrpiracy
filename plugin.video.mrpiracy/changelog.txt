@@ -1,3 +1,6 @@
+v0.6.4(02/04/2017)
+- correcao abrir_url
+
 v0.6.3(02/04/2017)
 - progresso trakt
 - correcao legenda
