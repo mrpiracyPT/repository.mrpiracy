@@ -153,7 +153,7 @@ def abrir_url(url, post=None, header=None, code=False, erro=False):
 
     try:
         response = urllib2.urlopen(req,context=context)
-    except urllib2.HTTPError, e:
+    except:
         try:
             response = urllib2.urlopen(req)
         except urllib2.HTTPError as response:
