@@ -418,7 +418,7 @@ class OpenLoad():
 				video_url = self.__check_auth(media_id)
 				if not video_url:
 					video_url = self.__auth_ip(media_id)
-				print video_url
+				
 				if video_url:
 					return video_url
 				else:
@@ -455,7 +455,7 @@ class OpenLoad():
 			else:
 				raise ResolverError(msg)	
 
-		
+
 		return js_data.get('result', {}).get('url')
 	def getId(self):
 		#return self.url.split('/')[-1]
