@@ -20,7 +20,6 @@ import json, re, xbmc, urllib, xbmcgui, os, sys, pprint, urlparse, urllib2, base
 import htmlentitydefs
 from cPacker import cPacker
 from t0mm0.common.net import Net
-from bs4 import BeautifulSoup
 import jsunpacker
 from AADecoder import AADecoder
 from JsParser import JsParser
@@ -28,7 +27,7 @@ from JJDecoder import JJDecoder
 from png import Reader as PNGReader
 from HTMLParser import HTMLParser
 import controlo
-
+import time
 def clean(text):
     command={'&#8220;':'"','&#8221;':'"', '&#8211;':'-','&amp;':'&','&#8217;':"'",'&#8216;':"'"}
     regex = re.compile("|".join(map(re.escape, command.keys())))
@@ -454,8 +453,9 @@ class OpenLoad():
 			if status == 403:
 				return
 			else:
-				raise ResolverError(msg)
+				raise ResolverError(msg)	
 
+		
 		return js_data.get('result', {}).get('url')
 	def getId(self):
 		#return self.url.split('/')[-1]
@@ -721,11 +721,11 @@ class CountdownDialog(object):
         self.countdown = countdown
         self.interval = interval
         self.line3 = line3
-        if active and urlresolver.ALLOW_POPUPS:
-            if xbmc.getCondVisibility('Window.IsVisible(progressdialog)'):
-                pd = CustomProgressDialog.ProgressDialog()
-            else:
-                pd = xbmcgui.DialogProgress()
+        if active:
+            #if xbmc.getCondVisibility('Window.IsVisible(progressdialog)'):
+            #    pd = ProgressDialog()
+            #else:
+            pd = xbmcgui.DialogProgress()
             if not self.line3: line3 = 'Expires in: %s seconds' % (countdown)
             pd.create(self.heading, line1, line2, line3)
             pd.update(100)
@@ -754,7 +754,7 @@ class CountdownDialog(object):
             interval = self.interval
             while time_left > 0:
                 for _ in range(CountdownDialog.__INTERVALS):
-                    sleep(interval * 1000 / CountdownDialog.__INTERVALS)
+                    xbmc.sleep(interval * 1000 / CountdownDialog.__INTERVALS)
                     if self.is_canceled(): return
                     time_left = expires - int(time.time() - start)
                     if time_left < 0: time_left = 0

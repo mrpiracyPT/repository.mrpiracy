@@ -19,7 +19,6 @@ import zipfile
 import StringIO
 import Database
 from t0mm0.common.net import Net
-from bs4 import BeautifulSoup
 
 
 

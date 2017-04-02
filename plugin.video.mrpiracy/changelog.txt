@@ -1,3 +1,6 @@
+v0.6.2(02/04/2017)
+- Openload, Temporariamente por API
+
 v0.6.1(02/04/2017)
 - RapidVideo
 - Openload, Temporariamente por API
