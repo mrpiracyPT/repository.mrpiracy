@@ -1151,7 +1151,6 @@ class mrpiracy:
 			legenda = URLResolverMedia.OpenLoad(servidores[servidor]).getSubtitle()
 			if not '.vtt' in legenda:
 				legenda = legendaAux
-			legenda = legendaAux
 		elif 'drive.google.com/' in servidores[servidor]:
 			stream, ext_g = URLResolverMedia.GoogleVideo(servidores[servidor]).getMediaUrl()
 		elif 'cloud.mail.ru' in servidores[servidor]:
