@@ -8,7 +8,7 @@ import time
 import sys
 
 REG_NAME = '[\w]+'
-REG_OP = '[\/\*\-\+\{\}<>\|\&=~^%!]+' #not space here, and no bracket
+REG_OP = '[\/\*\-\+<>\|\&=~^%!]+' #not space here, and no bracket
 DEBUG = False # Never enable it in kodi, too big size log
 MAX_RECURSION = 50
 ALPHA = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_'

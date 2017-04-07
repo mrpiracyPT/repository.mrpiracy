@@ -401,8 +401,11 @@ class OpenLoad():
 			Liste_var = []
 			JP.AddHackVar(Item_url, Coded_url)
 
-			JP.ProcessJS(code, Liste_var)
-			url = JP.GetVarHack("#streamurl")
+			try:
+				JP.ProcessJS(code, Liste_var)
+				url = JP.GetVarHack("#streamurl")
+			except:
+				raise ResolverError('No Encoded Section Found. Deleted?')
 
 			if not(url):
 				raise ResolverError('No Encoded Section Found. Deleted?')
@@ -421,7 +424,7 @@ class OpenLoad():
 		except (Exception, ResolverError):
 			try:
 				media_id = self.getId()
-				
+				log("API OPENLOAD")
 				video_url = self.__check_auth(media_id)
 				if not video_url:
 					video_url = self.__auth_ip(media_id)

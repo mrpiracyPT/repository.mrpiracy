@@ -1,3 +1,7 @@
+v0.6.7(07/04/2017)
+- correcao Openload API
+- correcao login (so faz 1 por dia)
+
 v0.6.6(05/04/2017)
 - correcao Openload
 
