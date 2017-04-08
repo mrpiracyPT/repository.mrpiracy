@@ -330,7 +330,7 @@ class OpenLoad():
 		#hack a virer dans le futur
 		P8 = '\$\(document\).+?\(function\(\){'
 		code= re.sub(P8,'\n',code)
-		P4 = 'if\(!_[0-9a-z_\[\(\'\)\]]+,document\)\){'
+		P4 = 'if\(!_[0-9a-z_\[\(\'\)\]]+,document[^;]+\)\){'
 		code = re.sub(P4,'if (false) {',code)
 
 		#hexa convertion
@@ -525,7 +525,7 @@ class OpenLoad():
 		pageOpenLoad = self.net.http_GET(self.url, headers=self.headers).content
 
 		try:
-			subtitle = re.compile('<track\s+kind="captions"\s+src="(.+?)"').findall(pageOpenLoad)[0]
+			subtitle = re.compile('<script.+?>\s+var\s+suburl\s+=\s+"(.+?)";').findall(pageOpenLoad)[0]
 		except:
 			subtitle = ''
 		#return self.site + subtitle

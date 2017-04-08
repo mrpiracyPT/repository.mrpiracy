@@ -129,7 +129,7 @@ class mrpiracy:
 			f.close()
 			a = datetime.strptime(texto, controlo.date_format)
 			b = datetime.now()
-			controlo.log(b)
+			
 			diff = b - a
 			dias = diff.days
 		if dias > 0:
@@ -1186,27 +1186,6 @@ class mrpiracy:
 
 		if legenda == '':
 			legenda = legendaAux
-		"""else:
-			if 'vidzi' in servidores[0]:
-				vidzi = URLResolverMedia.Vidzi(servidores[0])
-				stream = vidzi.getMediaUrl()
-				legenda = vidzi.getSubtitle()
-			elif 'uptostream.com' in servidores[0]:
-				stream = URLResolverMedia.UpToStream(servidores[0]).getMediaUrl()
-			elif 'server.mrpiracy.win' in servidores[0]:
-				stream = servidores[servidor]
-			elif 'openload' in servidores[0]:
-				stream = URLResolverMedia.OpenLoad(servidores[0]).getMediaUrl()
-				legenda = URLResolverMedia.OpenLoad(servidores[0]).getSubtitle()
-			elif 'drive.google.com/' in servidores[0]:
-				stream, ext_g = URLResolverMedia.GoogleVideo(servidores[0]).getMediaUrl()
-			elif 'cloud.mail.ru' in servidores[0]:
-				stream, ext_g = URLResolverMedia.CloudMailRu(servidores[0]).getMediaUrl()
-			elif 'rapidvideo.com' in servidores[servidor] or 'raptu' in servidores[servidor]:
-				rapid = URLResolverMedia.RapidVideo(servidores[servidor])
-				stream = rapid.getMediaUrl()
-				legenda = rapid.getLegenda()
-		"""
 		controlo.log(legenda)
 		return stream, legenda, ext_g
 
