@@ -1,3 +1,7 @@
+v0.7.0(13/04/2017)
+- correcao imports
+- correcao imagens em PT
+
 v0.6.9(13/04/2017)
 - correcao legendas Openload
 - correcao login error
