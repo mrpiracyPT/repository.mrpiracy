@@ -120,7 +120,7 @@ class mrpiracy:
 		"""if controlo.addon.getSetting('loggedin') != '':
 			xbmc.executebuiltin("XBMC.Notification(MrPiracy, Sessão iniciada: "+controlo.addon.getSetting('loggedin')+", '10000', "+controlo.addonFolder+"/icon.png)")
 			return True"""
-		ficheiro = os.path.join(controlo.pastaDados,'login.mrpiracy')
+		"""ficheiro = os.path.join(controlo.pastaDados,'login.mrpiracy')
 		dias = 1
 		username = controlo.addon.getSetting('loggedin')
 		if xbmcvfs.exists(ficheiro):
@@ -132,54 +132,54 @@ class mrpiracy:
 			
 			diff = b - a
 			dias = diff.days
-		if dias > 0:
-			if controlo.addon.getSetting('email') == '' or controlo.addon.getSetting('password') == '':
-				controlo.alerta('MrPiracy', 'Precisa de definir o seu email e password')
-				return False
-			else:
-				try:
-					post = {'username': controlo.addon.getSetting('email'), 'password': controlo.addon.getSetting('password'),'grant_type': 'password', 'client_id': 'kodi', 'client_secret':'pyRmmKK3cbjouoDMLXNtt2eGkyTTAG' }
-
-					resultado = controlo.abrir_url(self.API_SITE+'login', post=json.dumps(post), header=controlo.headers)
-					if resultado == 'DNS':
-						controlo.alerta('MrPiracy', 'Tem de alterar os DNS para poder usufruir do addon')
-						return False
-					
-					resultado = json.loads(resultado)
-					#colocar o loggedin
-					token = resultado['access_token']
-					refresh = resultado['refresh_token']
-					headersN = controlo.headers
-					headersN['Authorization'] = 'Bearer %s' % token
-					
-					resultado = controlo.abrir_url(self.API_SITE+'me', header=headersN)
-					resultado = json.loads(resultado)
-					try:
-						username = resultado['username'].decode('utf-8')
-					except:
-						username = resultado['username'].encode('utf-8')
-					
-
-					if resultado['email'] == controlo.addon.getSetting('email'):
-						xbmc.executebuiltin("XBMC.Notification(MrPiracy, Sessão iniciada: "+username+", '10000', "+controlo.addonFolder+"/icon.png)")
-						controlo.addon.setSetting('tokenMrpiracy', token)
-						controlo.addon.setSetting('refreshMrpiracy', refresh)
-						controlo.addon.setSetting('loggedin', username)
-						try:
-							hoje = datetime.now().strftime(controlo.date_format)
-							f = open(ficheiro, "w")
-							f.write(hoje)
-							f.close()
-						except:
-							#traceback.print_exc()
-							controlo.log("Não gravou o conteudo em %s" % ficheiro)
-						return True
-				except:
-					controlo.alerta('MrPiracy', 'Não foi possível abrir a página. Por favor tente novamente')
-				return False
+		if dias > 0:"""
+		if controlo.addon.getSetting('email') == '' or controlo.addon.getSetting('password') == '':
+			controlo.alerta('MrPiracy', 'Precisa de definir o seu email e password')
+			return False
 		else:
+			try:
+				post = {'username': controlo.addon.getSetting('email'), 'password': controlo.addon.getSetting('password'),'grant_type': 'password', 'client_id': 'kodi', 'client_secret':'pyRmmKK3cbjouoDMLXNtt2eGkyTTAG' }
+
+				resultado = controlo.abrir_url(self.API_SITE+'login', post=json.dumps(post), header=controlo.headers)
+				if resultado == 'DNS':
+					controlo.alerta('MrPiracy', 'Tem de alterar os DNS para poder usufruir do addon')
+					return False
+				
+				resultado = json.loads(resultado)
+				#colocar o loggedin
+				token = resultado['access_token']
+				refresh = resultado['refresh_token']
+				headersN = controlo.headers
+				headersN['Authorization'] = 'Bearer %s' % token
+				
+				resultado = controlo.abrir_url(self.API_SITE+'me', header=headersN)
+				resultado = json.loads(resultado)
+				try:
+					username = resultado['username'].decode('utf-8')
+				except:
+					username = resultado['username'].encode('utf-8')
+				
+
+				if resultado['email'] == controlo.addon.getSetting('email'):
+					xbmc.executebuiltin("XBMC.Notification(MrPiracy, Sessão iniciada: "+username+", '10000', "+controlo.addonFolder+"/icon.png)")
+					controlo.addon.setSetting('tokenMrpiracy', token)
+					controlo.addon.setSetting('refreshMrpiracy', refresh)
+					controlo.addon.setSetting('loggedin', username)
+					"""try:
+						hoje = datetime.now().strftime(controlo.date_format)
+						f = open(ficheiro, "w")
+						f.write(hoje)
+						f.close()
+					except:
+						#traceback.print_exc()
+						controlo.log("Não gravou o conteudo em %s" % ficheiro)"""
+					return True
+			except:
+				controlo.alerta('MrPiracy', 'Não foi possível abrir a página. Por favor tente novamente')
+			return False
+		"""else:
 			xbmc.executebuiltin("XBMC.Notification(MrPiracy, Sessão iniciada: "+username+", '10000', "+controlo.addonFolder+"/icon.png)")
-			return True
+			return True"""
 	def getEventos(self):
 		controlo.headers['Authorization'] = 'Bearer %s' % controlo.addon.getSetting('tokenMrpiracy')
 		resultado = controlo.abrir_url(self.API_SITE+'eventos', header=controlo.headers)
@@ -1173,7 +1173,7 @@ class mrpiracy:
 		elif 'openload' in servidores[servidor]:
 			stream = URLResolverMedia.OpenLoad(servidores[servidor]).getMediaUrl()
 			legenda = URLResolverMedia.OpenLoad(servidores[servidor]).getSubtitle()
-			if not '.vtt' in legenda:
+			if not '.vtt' in legenda or legenda == '':
 				legenda = legendaAux
 		elif 'drive.google.com/' in servidores[servidor]:
 			stream, ext_g = URLResolverMedia.GoogleVideo(servidores[servidor]).getMediaUrl()

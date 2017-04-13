@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import json, re, xbmc, urllib, xbmcgui, os, sys, pprint, urlparse, urllib2, base64, math, string
+import json, re, xbmc, urllib, xbmcgui, os, sys, pprint, urlparse, urllib2, base64, math, string, socket
 import htmlentitydefs
 from cPacker import cPacker
 from t0mm0.common.net import Net
@@ -29,6 +29,9 @@ from png import Reader as PNGReader
 from HTMLParser import HTMLParser
 import controlo
 import time
+
+#from external.pyopenssl import SSL, crypto
+
 def clean(text):
     command={'&#8220;':'"','&#8221;':'"', '&#8211;':'-','&amp;':'&','&#8217;':"'",'&#8216;':"'"}
     regex = re.compile("|".join(map(re.escape, command.keys())))
@@ -55,19 +58,56 @@ class RapidVideo():
 
 	def getId(self):
 		return urlparse.urlparse(self.url).path.split("/")[-1]
+	def verify_cb(self, conn, cert, errnum, depth, ok):
+		certsubject = crypto.X509Name(cert.get_subject())
+		commonname = certsubject.commonName
+		print('Got certificate: ' + commonname)
+		return ok
+	def abrir(self, url):
+		ctx = SSL.Context(SSL.SSLv23_METHOD)
+		ctx.set_options(SSL.OP_NO_SSLv2)
+		ctx.set_options(SSL.OP_NO_SSLv3)
+		ctx.set_verify(SSL.VERIFY_PEER, verify_cb)  # Demand a certificate
+		ctx.use_privatekey_file(os.path.join(os.curdir, 'client.pkey'))
+		ctx.use_certificate_file(os.path.join(os.curdir, 'client.cert'))
+		ctx.load_verify_locations(os.path.join(os.curdir, 'CA.cert'))
+		sock = SSL.Connection(ctx, socket.socket(socket.AF_INET, socket.SOCK_STREAM))
+		sock.connect((url, 80))
+		coisas = ''
+		while 1:
+			line = sys.stdin.readline()
+			if line == '':
+				break
+			try:
+				sock.send(line)
+				coisas = sock.recv(1024).decode('utf-8')
+				
+			except SSL.Error:
+				print('Connection died unexpectedly')
+				break
 
+
+		sock.shutdown()
+		sock.close()
+		return coisas
+		"""req = urllib2.Request(url, headers=self.headers)
+		response = urllib2.urlopen(req,context=context)
+		link=response.read()
+
+		response.close()
+		return link"""
 	def getMediaUrl(self):
 		try:
-			sourceCode = controlo.abrir_url(self.url, header=self.headers).decode('unicode_escape')
+			sourceCode = self.net.http_GET(self.url, headers=self.headers).content.decode('unicode_escape')
 		except:
-			sourceCode = controlo.abrir_url(self.url, header=self.headers)
+			sourceCode = self.net.http_GET(self.url, headers=self.headers).content
 
 		
 		videoUrl = ''
-		sPattern = '<input type="hidden" value="(\d+)" name="block">'
+		"""sPattern = '<input type="hidden" value="(\d+)" name="block">'
 		aResult1 = self.parse(sourceCode,sPattern)
 		if (aResult1[0] == True):
-			sourceCode = controlo.abrir_url(self.url, post='confirm.x=74&confirm.y=35&block=1', header=self.headers)
+			sourceCode = self.net.http_POST(self.url, 'confirm.x=74&confirm.y=35&block=1', headeres=self.headers)"""
 
 		sPattern =  '"file":"([^"]+)","label":"([0-9]+)p.+?'
 		aResult = self.parse(sourceCode, sPattern)
@@ -525,7 +565,7 @@ class OpenLoad():
 		pageOpenLoad = self.net.http_GET(self.url, headers=self.headers).content
 
 		try:
-			subtitle = re.compile('<script.+?>\s+var\s+suburl\s+=\s+"(.+?)";').findall(pageOpenLoad)[0]
+			subtitle = re.compile('<track\s+kind="captions"\s+src="(.+?)"').findall(pageOpenLoad)[0]
 		except:
 			subtitle = ''
 		#return self.site + subtitle
