@@ -1,3 +1,6 @@
+v0.7.1(15/04/2017)
+- correcao Openload
+
 v0.7.0(13/04/2017)
 - correcao imports
 - correcao imagens em PT

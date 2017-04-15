@@ -34,28 +34,23 @@
 #https://javascriptweblog.wordpress.com/2011/04/04/the-javascript-comma-operator/
 
 
-import re
+
+import math,re
+
 import types
 from types import NoneType
 import time
-import math
 
 import sys
 
 REG_NAME = '[\w]+'
-REG_OP = '[\/\*\-\+<>\|\&=~^%!]+' #not space here, and no bracket
+REG_OP = '[\/\*\-\+\{\}<>\|\&=~^%!]+' #not space here, and no bracket
 DEBUG = False # Never enable it in kodi, too big size log
 MAX_RECURSION = 50
 ALPHA = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_'
 
-#if(!_0x45ae41[_0x5949('28')](_0x5949('9'),document)||!(!(typeof (document.write) == 'undefined'))){
-
 #---------------------------------------------------------------------------------
 
-def logwrite(stri):
-    fh = open('G:\\JSparser\\debug.txt', "a")
-    fh.write(stri + '\n')
-    fh.close()
 
 def RemoveGuil(string):
     if not (isinstance(string, types.StringTypes)):
@@ -647,9 +642,10 @@ class JsParser(object):
 
             ch = string[i]
             
-            if ch == '"' and not GetPrevchar(string,i) == '\\' and not c2:
+            #if ch == '"' and not GetPrevchar(string,i) == '\\' and not c2:
+            if ch == '"' and not c2:
                 c1 = 1 - c1
-            if ch == "'" and not GetPrevchar(string,i) == '\\' and not c1:
+            if ch == "'" and not c1:
                 c2 = 1 - c2
             
             #if we are in a chain no more thing to do than waiting for end
@@ -729,7 +725,7 @@ class JsParser(object):
         if ';' not in string:
             #out('ERROR Extract chain without ";" > ' + string )
             return string.rstrip() + ';', i
-        
+
         raise Exception("Can't extract chain " + string)
 
     #Everything Without a "Real" is False   
@@ -849,7 +845,6 @@ class JsParser(object):
                 else:
                     s = name
 
-        Find_lib = False
         for lib in List_Lib:
             if hasattr(lib, function):
                 if not function == "eval":
@@ -871,12 +866,9 @@ class JsParser(object):
                     if not NV == s:
                         self.SetVar(vars,name,NV)
                 
-                Find_lib = True
-                
-                break
-                
-        if Find_lib:
-            return r,JScode
+                return r,JScode
+
+               
             
         #test, if all is ok, never reached
         if (False):
@@ -1001,16 +993,12 @@ class JsParser(object):
             if c == "(":
                 
                 c2 = GetItemAlone(JScode,')')[1:-1]
-                pos2 = len(c2) + 1
+                pos2 = len(c2) + 2
+                JScode = JScode[(pos2):]
                 
-                #useless parenthese ?
-                if re.match(r'^[\w]+$',c2,re.UNICODE):
-                    JScode = c2 + JScode[(pos2 + 1):]
-                    continue              
                 v = self.evalJS(c2,vars,allow_recursion)
-                InterpretedCode.AddValue(v)
-                JScode = JScode[(pos2 + 1):]
-                continue
+                self.SetVar(vars,'TEMPORARY_VARS'+str(allow_recursion),v)
+                JScode = 'TEMPORARY_VARS'+str(allow_recursion) + JScode
                 
             #remove "useless" code
             if JScode.startswith('new '):
@@ -1120,28 +1108,22 @@ class JsParser(object):
                 
             #1 - Array / method
             if c == "[":
-                c2 = GetItemAlone(JScode,')')[1:-1]
-                pos2 = len(c2) + 1
+                c2 = GetItemAlone(JScode,']')[1:-1]
+                pos2 = len(c2) + 2
+                #v = self.evalJS(c2,vars,allow_recursion)
                 
-                v = self.evalJS(c2,vars,allow_recursion)
-
-                if v == 'constructor':
-                    v2 = InterpretedCode.GetPrevious()
-                    v3 = GetConstructor(v2)
-                #elif CheckType(v) == 'Numeric':
-                #    v2 = InterpretedCode.GetPrevious()
-                #    InterpretedCode.AddValue(v2[int(v)])
-                #elif InterpretedCode.CheckString():
-                #    v2 = InterpretedCode.GetPrevious()
-                #    try:
-                #        item = v2[v]
-                #    except:
-                 #       bb(mm)
-                else:
-                    InterpretedCode.AddValue([])
+                #all this part is managed away but not for some rare case.
+                A = InterpretedCode.GetPrevious()
+                if not A:
+                    valueT = MySplit(c2,',')
+                    JScode = JScode[(pos2):]
+                    valueT = [] #To be continued later
+                    InterpretedCode.AddValue(valueT)         
+                    continue
                     
-                JScode = JScode[(pos2 + 1):]             
-                continue
+                #other case
+                self.SetVar(vars,'TEMPORARY_VARS'+str(allow_recursion),A)
+                JScode = 'TEMPORARY_VARS'+str(allow_recursion) + JScode
 
             #2 - Alpha chain
             elif c == '"' or c == "'":
@@ -1216,10 +1198,17 @@ class JsParser(object):
                         name = self.evalJS(name,vars,allow_recursion)
 
                     r,JScode = self.FonctionParser(vars,allow_recursion,name,fonction,P1.arg,JScode)
-                    
-                self.SetVar(vars,'TEMPORARY_VARS'+str(allow_recursion),r)
-                JScode = 'TEMPORARY_VARS'+str(allow_recursion) + JScode
                 
+                #to speed up
+                if not JScode:
+                    InterpretedCode.AddValue(r)
+                    continue                    
+                #normal way
+                else:
+                    self.SetVar(vars,'TEMPORARY_VARS'+str(allow_recursion),r)
+                    JScode = 'TEMPORARY_VARS'+str(allow_recursion) + JScode
+            
+            #after this part, all TEMPORARY_VARS need to be removed
             if JScode.startswith('TEMPORARY_VARS'+str(allow_recursion)):
                 r = self.GetVar(vars,'TEMPORARY_VARS'+str(allow_recursion))
                 self.InitVar(vars,'TEMPORARY_VARS'+str(allow_recursion))
@@ -1724,8 +1713,6 @@ class JsParser(object):
         #***********************
         # The real Parser
         #**********************
-        
-        logwrite(JScode)
 
         Parser_return = None
         
@@ -2050,8 +2037,7 @@ class JsParser(object):
         
         #Special
         vars.append(('Math',Math))
-
-        
+      
         vars.append(('String',''))
         vars.append(('document',{'write':'ok'}))
         
@@ -2108,9 +2094,13 @@ class Math(object):
     @toStr("function %s() {\n    [native code]\n}")
     def sin(self,arg):
         return math.sin(arg[0])
+    
+    @toStr("function %s() {\n    [native code]\n}")
+    def atan(self,arg):
+        return math.atan(arg[0])
          
     def __contains__(self,arg):
-        if arg in ['max','min','abs','pow','sin']:
+        if arg in ['max','min','abs','pow','sin','atan']:
             return True
         return False
 

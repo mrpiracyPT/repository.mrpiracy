@@ -1192,7 +1192,7 @@ class mrpiracy:
 
 		if legenda == '':
 			legenda = legendaAux
-		controlo.log(legenda)
+		#controlo.log(legenda)
 		return stream, legenda, ext_g
 
 	def pesquisa(self, url):
