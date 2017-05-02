@@ -30,6 +30,8 @@ from HTMLParser import HTMLParser
 import controlo
 import time
 
+import HTMLParser
+
 #from external.pyopenssl import SSL, crypto
 
 def clean(text):
@@ -58,12 +60,28 @@ class RapidVideo():
 
 	def getId(self):
 		return urlparse.urlparse(self.url).path.split("/")[-1]
+	def abrirRapidVideo(self, url):
+		headers = { 'User-Agent' : 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)' }
+		req = urllib2.Request('https://ooops.rf.gd/url.php?url=' + url, headers=headers)
+		response = urllib2.urlopen(req)
+		link=response.read()
+		response.close()
+		return link
+
 	def getMediaUrl(self):
 		try:
+			#sourceCode = self.abrirRapidVideo(self.url).decode('unicode_escape')
 			sourceCode = self.net.http_GET(self.url, headers=self.headers).content.decode('unicode_escape')
+			
 		except:
-			sourceCode = self.net.http_GET(self.url, headers=self.headers).content
-
+			#sourceCode = self.abrirRapidVideo(self.url)
+			headers = { 'User-Agent' : 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)' }
+			sourceCode = controlo.abrir_url('https://ooops.rf.gd/url.php?url=' + self.url, header=headers)
+			html_parser = HTMLParser.HTMLParser()
+			sourceCode = html_parser.unescape(sourceCode)
+			
+			#sourceCode = self.net.http_GET(self.url, headers=self.headers).content
+	
 		
 		videoUrl = ''
 		sPattern = '<input type="hidden" value="(\d+)" name="block">'
@@ -401,7 +419,7 @@ class OpenLoad():
 
 			code = self.CleanCode(code, Coded_url)
 
-			xbmc.executebuiltin("Notification(%s,%s,%s)" % ("MrPiracy", "A Descomprimir Openload...", 15000))
+			xbmc.executebuiltin("Notification(%s,%s,%s)" % ("MrPiracy", "A Descomprimir Openload, aguarde!", 15000))
 			JP = JsParser()
 			Liste_var = []
 			JP.AddHackVar(Item_url, Coded_url)

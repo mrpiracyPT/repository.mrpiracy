@@ -1,3 +1,7 @@
+v0.7.2(02/05/2017)
+- RapidVideo para Kodi 16
+- Correcao legendas para os filmes
+
 v0.7.1(15/04/2017)
 - correcao Openload
 

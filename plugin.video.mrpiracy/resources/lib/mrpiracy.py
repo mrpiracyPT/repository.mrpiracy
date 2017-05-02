@@ -1038,14 +1038,17 @@ class mrpiracy:
 			nome = resultado['nome_ingles']
 			temporada = 0
 			episodio = 0
+			coiso = 'filme'
 		else:
 			idVideo = resultado['id_serie']
 			nome = resultado['nome_episodio']
 			temporada = resultado['temporada']
 			episodio = resultado['episodio']
+			coiso = 'outro'
+
 		controlo.mensagemprogresso.create('MrPiracy', u'Abrir emissão','Por favor aguarde...')
 		controlo.mensagemprogresso.update(25, "", u'Obter video e legenda', "")
-		stream, legenda, ext_g = self.getStreamLegenda(resultado)
+		stream, legenda, ext_g = self.getStreamLegenda(resultado, coiso=coiso)
 		controlo.mensagemprogresso.update(50, "", u'Prepara-te, vai começar!', "")
 		playlist = xbmc.PlayList(1)
 		playlist.clear()
@@ -1080,7 +1083,7 @@ class mrpiracy:
 				xbmc.sleep(5000)
 				player_mr.trackerTempo()
 
-	def getStreamLegenda(self, resultado):
+	def getStreamLegenda(self, resultado, coiso=None):
 
 		i = 0
 		servidores = []
@@ -1190,9 +1193,13 @@ class mrpiracy:
 			stream = rapid.getMediaUrl()
 			legenda = rapid.getLegenda()
 
+		if coiso == 'filme':
+			legenda = legendaAux
+			if resultado['IMBD'] not in legenda:
+				legenda = self.API+'subs/%s.srt' % resultado['IMBD']
+
 		if legenda == '':
 			legenda = legendaAux
-		#controlo.log(legenda)
 		return stream, legenda, ext_g
 
 	def pesquisa(self, url):
@@ -1714,6 +1721,29 @@ class mrpiracy:
 					continue
 			if 'codigo' in resultado:
 				continue
+			url = self.API_SITE+'serie/%s' % (resultado['id_serie'])
+			resultadoS = controlo.abrir_url(url, header=controlo.headers)
+			if resultadoS == 'DNS':
+				controlo.alerta('MrPiracy', 'Tem de alterar os DNS para poder usufruir do addon')
+				return False
+			tipo = 'serie'
+			try:
+				resultadoS = json.loads(resultadoS)
+			except ValueError:
+				continue
+			if 'codigo' in resultadoS:
+				url = self.API_SITE+'anime/%s' % (resultado['id_serie'])
+				resultadoS = controlo.abrir_url(url, header=controlo.headers)
+				if resultadoS == 'DNS':
+					controlo.alerta('MrPiracy', 'Tem de alterar os DNS para poder usufruir do addon')
+					return False
+				tipo = 'anime'
+				
+				try:
+					resultadoS = json.loads(resultadoS)
+				except ValueError:
+					continue
+		
 
 			if resultado['URL'] == '' and resultado['URL2'] == '':
 				continue
@@ -1728,9 +1758,29 @@ class mrpiracy:
 				imagem = self.API+'images/series/'+resultado['IMBD']+'.jpg'
 			elif resultado['imagem'] == 0:
 				imagem = self.API+'images/capas/'+resultado['imdbSerie']+'.jpg'
-
-			controlo.addVideo('[B]'+resultado['nomeSerie']+'[/B] '+temporadaNumero+'x'+episodioN+' . '+nome, self.API_SITE+tipo+'/'+str(resultado['id_serie'])+'/temporada/'+str(resultado['temporada'])+'/episodio/'+str(resultado['episodio']), 'player', imagem, False, 'episodio', resultado['temporada'], resultado['episodio'], infoLabels, self.API+resultado['background'])
+			categoria = resultadoS['categoria1']
+			if resultadoS['categoria2'] != '':
+				categoria += ','+resultadoS['categoria2']
+			if resultadoS['categoria3'] != '':
+				categoria += ','+resultadoS['categoria3']
+			pt = ''
+			br = ''
+			final = ''
+			semLegenda = ''
+			if resultado['fimtemporada'] == 1:
+				final = '[B]Final da Temporada [/B]'
+			if resultado['semlegenda'] == 1:
+				semLegenda = '[COLOR red][B]S/ LEGENDA [/B][/COLOR]'
+			if 'Brasileiro' in categoria:
+				br = '[B][COLOR green]B[/COLOR][COLOR yellow]R[/COLOR]: [/B]'
+			if 'Portu' in categoria:
+				pt = '[B][COLOR green]P[/COLOR][COLOR red]T[/COLOR]: [/B]'
+			if 'PT' in resultado['IMBD']:
+				resultado['IMBD'] = re.compile('(.+?)PT').findall(resultado['IMBD'])[0]
+				pt = '[B][COLOR green]P[/COLOR][COLOR red]T[/COLOR]: [/B]'
+			controlo.addVideo(pt+br+semLegenda+final+'[B]'+resultado['nomeSerie']+'[/B] '+temporadaNumero+'x'+episodioN+' . '+nome, self.API_SITE+tipo+'/'+str(resultado['id_serie'])+'/temporada/'+str(resultado['temporada'])+'/episodio/'+str(resultado['episodio']), 'player', imagem, False, 'episodio', resultado['temporada'], resultado['episodio'], infoLabels, self.API+resultado['background'])
 		self.vista_filmesSeries()
+		xbmc.executebuiltin("Container.SetViewMode(50)")
 	def watchlistFilmes(self):
 		vistos = Database.selectWatchFilmes()
 		controlo.headers['Authorization'] = 'Bearer %s' % controlo.addon.getSetting('tokenMrpiracy')
