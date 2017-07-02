@@ -392,7 +392,7 @@ class OpenLoad():
 			else:
 				#log("No Encoded Section Found. Deleted?")
 				raise ResolverError('No Encoded Section Found. Deleted?')
-			sPattern = '<script src="\/assets\/js\/video-js\/video\.js\.ol\.js"(.+)*'
+			sPattern = '<script src="\/assets\/js\/video-js\/video\.js.+?.js"(.+)*'
 			aResult = self.parse(html, sPattern)
 			if (aResult[0]):
 				sHtmlContent2 = aResult[1][0]

@@ -1101,7 +1101,7 @@ class mrpiracy:
 			elif 'uptostream.com' in resultado['URL']:
 				nome = 'UpToStream'
 			elif 'rapidvideo.com' in resultado['URL'] or 'raptu' in resultado['URL']:
-				nome = 'RapidVideo'
+				nome = 'Raptu'
 			titulos.append('Servidor #%s: %s' % (i, nome))
 		if resultado['URL2'] != '':
 			i+=1
@@ -1115,7 +1115,7 @@ class mrpiracy:
 			elif 'uptostream.com' in resultado['URL2']:
 				nome = 'UpToStream'
 			elif 'rapidvideo.com' in resultado['URL2'] or 'raptu' in resultado['URL2']:
-				nome = 'RapidVideo'
+				nome = 'Raptu'
 			titulos.append('Servidor #%s: %s' % (i, nome))
 		try:
 			if resultado['URL3'] != '':
@@ -1130,7 +1130,7 @@ class mrpiracy:
 				elif 'uptostream.com' in resultado['URL3']:
 					nome = 'UpToStream'
 				elif 'rapidvideo.com' in resultado['URL3'] or 'raptu' in resultado['URL3']:
-					nome = 'RapidVideo'
+					nome = 'Raptu'
 				titulos.append('Servidor #%s: %s' % (i, nome))
 		except:
 			pass
@@ -1147,7 +1147,7 @@ class mrpiracy:
 				elif 'uptostream.com' in resultado['URL4']:
 					nome = 'UpToStream'
 				elif 'rapidvideo.com' in resultado['URL4'] or 'raptu' in resultado['URL4']:
-					nome = 'RapidVideo'
+					nome = 'Raptu'
 				titulos.append('Servidor #%s: %s' % (i, nome))
 		except:
 			pass
