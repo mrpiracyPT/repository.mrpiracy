@@ -51,6 +51,7 @@ def log(msg, level=xbmc.LOGNOTICE):
 		try:
 			a=1
 		except: pass  
+
 class RapidVideo():
 	def __init__(self, url):
 		self.url = url
@@ -67,6 +68,7 @@ class RapidVideo():
 		link=response.read()
 		response.close()
 		return link
+	
 
 	def getMediaUrl(self):
 		try:
@@ -114,7 +116,7 @@ class RapidVideo():
 
 				qualidade = xbmcgui.Dialog().select('Escolha a qualidade', qualidades)
 				videoUrl = links[qualidade]
-
+		
 		return videoUrl
 	def getLegenda(self):
 		return self.legenda

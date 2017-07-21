@@ -262,19 +262,19 @@ class mrpiracy:
 					visto = self.verificarVistoLocal(i['id_video'])
 
 					
-				if visto == False:			
-					if Trakt.loggedIn():
-						for v in json.loads(vistos):
-							if v["movie"]["ids"]["imdb"] is None:
-								continue
-							if v["movie"]["ids"]["imdb"] == i['IMBD']:
-								visto = True
-								cor = "blue"
-								break
-							else:
-								visto = False
-					else:
-						visto = False
+				#if visto == False:			
+				if Trakt.loggedIn():
+					for v in json.loads(vistos):
+						if v["movie"]["ids"]["imdb"] is None:
+							continue
+						if v["movie"]["ids"]["imdb"] == i['IMBD']:
+							visto = True
+							cor = "blue"
+							break
+						else:
+							visto = False
+				else:
+					visto = False
 
 				try:
 					nome = i['nome_ingles'].decode('utf-8')
@@ -368,19 +368,19 @@ class mrpiracy:
 				elif opcao == '0' or opcao == '2':
 					visto = self.verificarVistoLocal(i['id_video'])
 
-				if visto == False:
-					if Trakt.loggedIn():
-						for v in json.loads(vistos):
-							if v["movie"]["ids"]["imdb"] is None:
-								continue
-							if v["movie"]["ids"]["imdb"] == i['IMBD']:
-								visto = True
-								cor = "blue"
-								break
-							else:
-								visto = False
-					else:
-						visto = False
+				#if visto == False:
+				if Trakt.loggedIn():
+					for v in json.loads(vistos):
+						if v["movie"]["ids"]["imdb"] is None:
+							continue
+						if v["movie"]["ids"]["imdb"] == i['IMBD']:
+							visto = True
+							cor = "blue"
+							break
+						else:
+							visto = False
+				else:
+					visto = False
 				try:
 					nome = i['nome_ingles'].decode('utf-8')
 				except:
@@ -465,19 +465,19 @@ class mrpiracy:
 				elif opcao == '0' or opcao == '2':
 					visto = self.verificarVistoLocal(resultado['id_video'])
 				visto = False
-				if visto == False:			
-					if Trakt.loggedIn():
-						for v in json.loads(vistosF):
-							if v["movie"]["ids"]["imdb"] is None:
-								continue
-							if v["movie"]["ids"]["imdb"] == resultado['IMBD']:
-								visto = True
-								cor = "blue"
-								break
-							else:
-								visto = False
-					else:
-						visto = False
+				#if visto == False:			
+				if Trakt.loggedIn():
+					for v in json.loads(vistosF):
+						if v["movie"]["ids"]["imdb"] is None:
+							continue
+						if v["movie"]["ids"]["imdb"] == resultado['IMBD']:
+							visto = True
+							cor = "blue"
+							break
+						else:
+							visto = False
+				else:
+					visto = False
 			
 				try:
 					nome = resultado['nome_ingles'].decode('utf-8')
@@ -571,19 +571,19 @@ class mrpiracy:
 			elif opcao == '0' or opcao == '2':
 				visto = self.verificarVistoLocal(i['id_video'])
 
-			if visto == False:		
-				if Trakt.loggedIn():
-					for v in json.loads(vistos):
-						if v["movie"]["ids"]["imdb"] is None:
-							continue
-						if v["movie"]["ids"]["imdb"] == i['IMBD']:
-							visto = True
-							cor = "blue"
-							break
-						else:
-							visto = False
-				else:
-					visto = False
+			#if visto == False:		
+			if Trakt.loggedIn():
+				for v in json.loads(vistos):
+					if v["movie"]["ids"]["imdb"] is None:
+						continue
+					if v["movie"]["ids"]["imdb"] == i['IMBD']:
+						visto = True
+						cor = "blue"
+						break
+					else:
+						visto = False
+			else:
+				visto = False
 
 			infoLabels = {'Title': i['nome_ingles'], 'Year': i['ano'], 'Genre': categoria, 'Plot': i['descricao_video'], 'Cast':i['atores'].split(','), 'Trailer': i['trailer'], 'Director': i['diretor'], 'Rating': i['imdbRating'], 'IMDBNumber': i['IMBD'] }
 			
@@ -660,6 +660,11 @@ class mrpiracy:
 		while j <= resultado['temporadas']:
 			controlo.addDir("[B]Temporada[/B] "+str(j), url+'/temporada/'+str(j), 'episodios', os.path.join(controlo.artFolder, controlo.skin,'temporadas', 'temporada'+str(j)+'.png'),poster=self.API+resultado['background'])
 			j+=1
+		try:
+			if resultado['temporadaEspecial'] > 0:
+				controlo.addDir("[B]Temporada Especial[/B]", url+'/temporada/999', 'episodios', os.path.join(controlo.artFolder, controlo.skin,'temporadas', 'temporada1.png'),poster=self.API+resultado['background'])
+		except:
+			pass
 		self.vista_temporadas()
 	def episodios(self, url):
 		controlo.headers['Authorization'] = 'Bearer %s' % controlo.addon.getSetting('tokenMrpiracy')
@@ -721,31 +726,31 @@ class mrpiracy:
 			elif opcao == '0' or opcao == '2':
 				visto = self.verificarVistoLocal(i['id_serie'], temporada=i['temporada'], episodio=i['episodio'])
 			
-			if visto == False:
-				if Trakt.loggedIn():			
-					ep = i['episodio']
-					if '/' in i['episodio']:
-						ep = i['episodio'].split('/')[0]
-					if 'e' in i['episodio']:
-						ep = i['episodio'].split('e')[0]
-					for v in json.loads(vistos):
-						if v["show"]["ids"]["imdb"] is None:
-							visto = False
-							continue
-						if v["show"]["ids"]["imdb"] != i['imdbSerie']:
-							visto = False
-							continue
-						else:
-							for s in v["seasons"]:
-								if int(s['number']) == int(i['temporada']):
-									for e in s['episodes']:
-										if int(e["number"]) == int(ep):
-											vistoe = True
-											break
-										else:
-											vistoe = False
-				else:
-					visto = False
+			#if visto == False:
+			if Trakt.loggedIn():			
+				ep = i['episodio']
+				if '/' in i['episodio']:
+					ep = i['episodio'].split('/')[0]
+				if 'e' in i['episodio']:
+					ep = i['episodio'].split('e')[0]
+				for v in json.loads(vistos):
+					if v["show"]["ids"]["imdb"] is None:
+						visto = False
+						continue
+					if v["show"]["ids"]["imdb"] != i['imdbSerie']:
+						visto = False
+						continue
+					else:
+						for s in v["seasons"]:
+							if int(s['number']) == int(i['temporada']):
+								for e in s['episodes']:
+									if int(e["number"]) == int(ep):
+										vistoe = True
+										break
+									else:
+										vistoe = False
+			else:
+				visto = False
 						
 			if vistoe:
 				visto = True
@@ -858,19 +863,19 @@ class mrpiracy:
 				elif opcao == '0' or opcao == '2':
 					visto = self.verificarVistoLocal(i['id_video'])
 
-				if visto == False:			
-					if Trakt.loggedIn():
-						for v in json.loads(vistos):
-							if v["movie"]["ids"]["imdb"] is None:
-								continue
-							if v["movie"]["ids"]["imdb"] == i['IMBD']:
-								visto = True
-								cor = "blue"
-								break
-							else:
-								visto = False
-					else:
-						visto = False
+				#if visto == False:			
+				if Trakt.loggedIn():
+					for v in json.loads(vistos):
+						if v["movie"]["ids"]["imdb"] is None:
+							continue
+						if v["movie"]["ids"]["imdb"] == i['IMBD']:
+							visto = True
+							cor = "blue"
+							break
+						else:
+							visto = False
+				else:
+					visto = False
 				try:
 					nome = resultado['nome_ingles'].decode('utf-8')
 				except:
@@ -962,19 +967,19 @@ class mrpiracy:
 				elif opcao == '0' or opcao == '2':
 					visto = self.verificarVistoLocal(i['id_video'])
 
-				if visto == False:			
-					if Trakt.loggedIn():
-						for v in json.loads(vistos):
-							if v["movie"]["ids"]["imdb"] is None:
-								continue
-							if v["movie"]["ids"]["imdb"] == i['IMBD']:
-								visto = True
-								cor = "blue"
-								break
-							else:
-								visto = False
-					else:
-						visto = False
+				#if visto == False:			
+				if Trakt.loggedIn():
+					for v in json.loads(vistos):
+						if v["movie"]["ids"]["imdb"] is None:
+							continue
+						if v["movie"]["ids"]["imdb"] == i['IMBD']:
+							visto = True
+							cor = "blue"
+							break
+						else:
+							visto = False
+				else:
+					visto = False
 				i['background'] = 'images/background/'+i['IMBD']+'.jpg'
 
 				infoLabels = {'Title': resultado['nome_ingles'], 'Year': resultado['ano'], 'Genre': categoria, 'Plot':resultado['descricao_video'], 'Cast':resultado['atores'].split(','), 'Trailer': resultado['trailer'], 'Director': resultado['diretor'], 'Rating': resultado['imdbRating'], 'IMDBNumber': resultado['IMBD'] }
@@ -1089,6 +1094,7 @@ class mrpiracy:
 		servidores = []
 		titulos = []
 		nome = ''
+
 		if resultado['URL'] != '':
 			i+=1
 			servidores.append(resultado['URL'])
@@ -1166,10 +1172,19 @@ class mrpiracy:
 			pass
 		legendaAux = legenda
 		ext_g = 'coiso'
-		if len(titulos) > 1:
-			servidor = controlo.select('Escolha o servidor', titulos)
-		else:
-			servidor = 0
+		servidor = 0
+		if controlo.addon.getSetting('melhor-fonte') == 'true':
+			i = 0
+			for nome in titulos:
+				if 'OpenLoad' in nome:
+					servidor = i
+				i = i+1
+
+		else:	
+			if len(titulos) > 1:
+				servidor = controlo.select('Escolha o servidor', titulos)
+			else:
+				servidor = 0
 
 		if 'vidzi' in servidores[servidor]:
 			vidzi = URLResolverMedia.Vidzi(servidores[servidor])
@@ -1295,19 +1310,19 @@ class mrpiracy:
 					elif opcao == '0' or opcao == '2':
 						visto = self.verificarVistoLocal(i['id_video'])
 
-					if visto == False:			
-						if Trakt.loggedIn():
-							for v in json.loads(vistos):
-								if v["movie"]["ids"]["imdb"] is None:
-									continue
-								if v["movie"]["ids"]["imdb"] == i['IMBD']:
-									visto = True
-									cor = "blue"
-									break
-								else:
-									visto = False
-						else:
-							visto = False
+					#if visto == False:			
+					if Trakt.loggedIn():
+						for v in json.loads(vistos):
+							if v["movie"]["ids"]["imdb"] is None:
+								continue
+							if v["movie"]["ids"]["imdb"] == i['IMBD']:
+								visto = True
+								cor = "blue"
+								break
+							else:
+								visto = False
+					else:
+						visto = False
 							
 					controlo.addVideo('[COLOR '+cor+']'+pt+br+nome+' ('+i['ano']+')[/COLOR]', self.API_SITE+'filme/'+str(i['id_video']), 'player', i['foto'],visto, 'filme', 0, 0, infoLabels, self.API+i['background'], trailer=i['trailer'])
 			elif tipo == 1 or tipo == 2:
