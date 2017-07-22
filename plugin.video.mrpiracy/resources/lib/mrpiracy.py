@@ -662,7 +662,7 @@ class mrpiracy:
 			j+=1
 		try:
 			if resultado['temporadaEspecial'] > 0:
-				controlo.addDir("[B]Temporada Especial[/B]", url+'/temporada/999', 'episodios', os.path.join(controlo.artFolder, controlo.skin,'temporadas', 'temporada1.png'),poster=self.API+resultado['background'])
+				controlo.addDir("[B]Temporada Especial[/B]", url+'/temporada/999', 'episodios', os.path.join(controlo.artFolder, controlo.skin,'temporadas', 'temporadaEspecial.png'),poster=self.API+resultado['background'])
 		except:
 			pass
 		self.vista_temporadas()
@@ -1097,64 +1097,96 @@ class mrpiracy:
 
 		if resultado['URL'] != '':
 			i+=1
-			servidores.append(resultado['URL'])
 			if 'openload' in resultado['URL']:
 				nome = "OpenLoad"
+				servidores.append(resultado['URL'])
+				titulos.append('Servidor #%s: %s' % (i, nome))
 			elif 'vidzi' in resultado['URL']:
 				nome = 'Vidzi'
+				servidores.append(resultado['URL'])
+				titulos.append('Servidor #%s: %s' % (i, nome))
 			elif 'google' in resultado['URL'] or 'cloud.mail.ru' in resultado['URL']:
 				nome = 'MrPiracy'
+				servidores.append(resultado['URL'])
+				titulos.append('Servidor #%s: %s' % (i, nome))
 			elif 'uptostream.com' in resultado['URL']:
 				nome = 'UpToStream'
+				servidores.append(resultado['URL'])
+				titulos.append('Servidor #%s: %s' % (i, nome))
 			elif 'rapidvideo.com' in resultado['URL'] or 'raptu' in resultado['URL']:
 				nome = 'Raptu'
-			titulos.append('Servidor #%s: %s' % (i, nome))
+				servidores.append(resultado['URL'])
+				titulos.append('Servidor #%s: %s' % (i, nome))
 		if resultado['URL2'] != '':
 			i+=1
-			servidores.append(resultado['URL2'])
 			if 'openload' in resultado['URL2']:
 				nome = "OpenLoad"
+				servidores.append(resultado['URL2'])
+				titulos.append('Servidor #%s: %s' % (i, nome))
 			elif 'vidzi' in resultado['URL2']:
 				nome = 'Vidzi'
+				servidores.append(resultado['URL2'])
+				titulos.append('Servidor #%s: %s' % (i, nome))
 			elif 'google' in resultado['URL2'] or 'cloud.mail.ru' in resultado['URL2']:
 				nome = 'MrPiracy'
+				servidores.append(resultado['URL2'])
+				titulos.append('Servidor #%s: %s' % (i, nome))
 			elif 'uptostream.com' in resultado['URL2']:
 				nome = 'UpToStream'
+				servidores.append(resultado['URL2'])
+				titulos.append('Servidor #%s: %s' % (i, nome))
 			elif 'rapidvideo.com' in resultado['URL2'] or 'raptu' in resultado['URL2']:
 				nome = 'Raptu'
-			titulos.append('Servidor #%s: %s' % (i, nome))
+				servidores.append(resultado['URL2'])
+				titulos.append('Servidor #%s: %s' % (i, nome))
 		try:
 			if resultado['URL3'] != '':
 				i+=1
-				servidores.append(resultado['URL3'])
 				if 'openload' in resultado['URL3']:
 					nome = "OpenLoad"
+					servidores.append(resultado['URL3'])
+					titulos.append('Servidor #%s: %s' % (i, nome))
 				elif 'vidzi' in resultado['URL3']:
 					nome = 'Vidzi'
+					servidores.append(resultado['URL3'])
+					titulos.append('Servidor #%s: %s' % (i, nome))
 				elif 'google' in resultado['URL3'] or 'cloud.mail.ru' in resultado['URL3']:
 					nome = 'MrPiracy'
+					servidores.append(resultado['URL3'])
+					titulos.append('Servidor #%s: %s' % (i, nome))
 				elif 'uptostream.com' in resultado['URL3']:
 					nome = 'UpToStream'
+					servidores.append(resultado['URL3'])
+					titulos.append('Servidor #%s: %s' % (i, nome))
 				elif 'rapidvideo.com' in resultado['URL3'] or 'raptu' in resultado['URL3']:
 					nome = 'Raptu'
-				titulos.append('Servidor #%s: %s' % (i, nome))
+					servidores.append(resultado['URL3'])
+					titulos.append('Servidor #%s: %s' % (i, nome))
 		except:
 			pass
 		try:
 			if resultado['URL4'] != '':
 				i+=1
-				servidores.append(resultado['URL4'])
 				if 'openload' in resultado['URL4']:
 					nome = "OpenLoad"
+					servidores.append(resultado['URL4'])
+					titulos.append('Servidor #%s: %s' % (i, nome))
 				elif 'vidzi' in resultado['URL4']:
 					nome = 'Vidzi'
+					servidores.append(resultado['URL4'])
+					titulos.append('Servidor #%s: %s' % (i, nome))
 				elif 'google' in resultado['URL4'] or 'cloud.mail.ru' in resultado['URL4']:
 					nome = 'MrPiracy'
+					servidores.append(resultado['URL4'])
+					titulos.append('Servidor #%s: %s' % (i, nome))
 				elif 'uptostream.com' in resultado['URL4']:
 					nome = 'UpToStream'
+					servidores.append(resultado['URL4'])
+					titulos.append('Servidor #%s: %s' % (i, nome))
 				elif 'rapidvideo.com' in resultado['URL4'] or 'raptu' in resultado['URL4']:
 					nome = 'Raptu'
-				titulos.append('Servidor #%s: %s' % (i, nome))
+					servidores.append(resultado['URL4'])
+					titulos.append('Servidor #%s: %s' % (i, nome))
 		except:
 			pass
 		legenda = ''
