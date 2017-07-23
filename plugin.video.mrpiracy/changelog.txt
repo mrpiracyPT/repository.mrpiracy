@@ -1,3 +1,6 @@
+v0.7.6(23/07/2017)
+- Correcao dos Filmes/Episodios Vistos
+
 v0.7.5(23/07/2017)
 - Correcao Temporada Especial (adicionado imagem)
 - Correcao de Servidores duplicados

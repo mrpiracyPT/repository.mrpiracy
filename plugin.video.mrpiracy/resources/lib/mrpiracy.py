@@ -255,11 +255,12 @@ class mrpiracy:
 					i['IMBD'] = re.compile('(.+?)PT').findall(i['IMBD'])[0]
 					pt = '[B][COLOR green]P[/COLOR][COLOR red]T[/COLOR]: [/B]'
 				visto = False
+				vistoa = False
 				if opcao == '1' or opcao == '2':
 					if i['visto'] == 1:
-						visto = True
+						vistoa = True
 				elif opcao == '0' or opcao == '2':
-					visto = self.verificarVistoLocal(i['id_video'])
+					vistoa = self.verificarVistoLocal(i['id_video'])
 
 					
 				#if visto == False:			
@@ -273,6 +274,8 @@ class mrpiracy:
 							break
 						else:
 							visto = False
+				if vistoa:
+					visto = True
 				else:
 					visto = False
 
@@ -362,11 +365,12 @@ class mrpiracy:
 					i['IMBD'] = re.compile('(.+?)PT').findall(i['IMBD'])[0]
 					pt = '[B][COLOR green]P[/COLOR][COLOR red]T[/COLOR]: [/B]'
 				visto = False
+				vistoa = False
 				if opcao == '1' or opcao == '2':
 					if i['visto'] == 1:
-						visto = True
+						vistoa = True
 				elif opcao == '0' or opcao == '2':
-					visto = self.verificarVistoLocal(i['id_video'])
+					vistoa = self.verificarVistoLocal(i['id_video'])
 
 				#if visto == False:
 				if Trakt.loggedIn():
@@ -379,6 +383,8 @@ class mrpiracy:
 							break
 						else:
 							visto = False
+				if vistoa:
+					visto = True
 				else:
 					visto = False
 				try:
@@ -458,12 +464,12 @@ class mrpiracy:
 				if 'PT' in resultado['IMBD']:
 					resultado['IMBD'] = re.compile('(.+?)PT').findall(resultado['IMBD'])[0]
 					pt = '[B][COLOR green]P[/COLOR][COLOR red]T[/COLOR]: [/B]'
-				visto = False
+				vistoa = False
 				if opcao == '1' or opcao == '2':
 					if i['visto'] == 1:
-						visto = True
+						vistoa = True
 				elif opcao == '0' or opcao == '2':
-					visto = self.verificarVistoLocal(resultado['id_video'])
+					vistoa = self.verificarVistoLocal(resultado['id_video'])
 				visto = False
 				#if visto == False:			
 				if Trakt.loggedIn():
@@ -476,6 +482,8 @@ class mrpiracy:
 							break
 						else:
 							visto = False
+				if vistoa:
+					visto = True
 				else:
 					visto = False
 			
@@ -565,11 +573,12 @@ class mrpiracy:
 				i['IMBD'] = re.compile('(.+?)PT').findall(i['IMBD'])[0]
 				pt = '[B][COLOR green]P[/COLOR][COLOR red]T[/COLOR]: [/B]'
 			visto = False
+			vistoa = False
 			if opcao == '1' or opcao == '2':
 				if i['visto'] == 1:
-					visto = True
+					vistoa = True
 			elif opcao == '0' or opcao == '2':
-				visto = self.verificarVistoLocal(i['id_video'])
+				vistoa = self.verificarVistoLocal(i['id_video'])
 
 			#if visto == False:		
 			if Trakt.loggedIn():
@@ -582,6 +591,9 @@ class mrpiracy:
 						break
 					else:
 						visto = False
+			
+			if vistoa:
+				visto = True
 			else:
 				visto = False
 
@@ -720,11 +732,12 @@ class mrpiracy:
 			vistoe = False
 			cor = 'white'
 			visto = False
+			vistos = False
 			if opcao == '1' or opcao == '2':
 				if i['visto'] == 1:
-					visto = True
+					vistos = True
 			elif opcao == '0' or opcao == '2':
-				visto = self.verificarVistoLocal(i['id_serie'], temporada=i['temporada'], episodio=i['episodio'])
+				vistos = self.verificarVistoLocal(i['id_serie'], temporada=i['temporada'], episodio=i['episodio'])
 			
 			#if visto == False:
 			if Trakt.loggedIn():			
@@ -749,6 +762,9 @@ class mrpiracy:
 										break
 									else:
 										vistoe = False
+			
+			if vistos:
+				visto = True
 			else:
 				visto = False
 						
@@ -857,11 +873,12 @@ class mrpiracy:
 					i['IMBD'] = re.compile('(.+?)PT').findall(i['IMBD'])[0]
 					pt = '[B][COLOR green]P[/COLOR][COLOR red]T[/COLOR]: [/B]'
 				visto = False
+				vistoa = False
 				if opcao == '1' or opcao == '2':
 					if i['visto'] == 1:
-						visto = True
+						vistoa = True
 				elif opcao == '0' or opcao == '2':
-					visto = self.verificarVistoLocal(i['id_video'])
+					vistoa = self.verificarVistoLocal(i['id_video'])
 
 				#if visto == False:			
 				if Trakt.loggedIn():
@@ -874,6 +891,8 @@ class mrpiracy:
 							break
 						else:
 							visto = False
+				if vistoa:
+					visto = True
 				else:
 					visto = False
 				try:
@@ -961,11 +980,12 @@ class mrpiracy:
 					i['IMBD'] = re.compile('(.+?)PT').findall(i['IMBD'])[0]
 					pt = '[B][COLOR green]P[/COLOR][COLOR red]T[/COLOR]: [/B]'
 				visto = False
+				vistoa = False
 				if opcao == '1' or opcao == '2':
 					if i['visto'] == 1:
-						visto = True
+						vistoa = True
 				elif opcao == '0' or opcao == '2':
-					visto = self.verificarVistoLocal(i['id_video'])
+					vistoa = self.verificarVistoLocal(i['id_video'])
 
 				#if visto == False:			
 				if Trakt.loggedIn():
@@ -978,6 +998,8 @@ class mrpiracy:
 							break
 						else:
 							visto = False
+				if vistoa:
+					visto = True
 				else:
 					visto = False
 				i['background'] = 'images/background/'+i['IMBD']+'.jpg'
@@ -1336,11 +1358,12 @@ class mrpiracy:
 						i['IMBD'] = re.compile('(.+?)PT').findall(i['IMBD'])[0]
 						pt = '[B][COLOR green]P[/COLOR][COLOR red]T[/COLOR]: [/B]'
 					visto = False
+					vistoa = False
 					if opcao == '1' or opcao == '2':
 						if i['visto'] == 1:
-							visto = True
+							vistoa = True
 					elif opcao == '0' or opcao == '2':
-						visto = self.verificarVistoLocal(i['id_video'])
+						vistoa = self.verificarVistoLocal(i['id_video'])
 
 					#if visto == False:			
 					if Trakt.loggedIn():
@@ -1353,6 +1376,8 @@ class mrpiracy:
 								break
 							else:
 								visto = False
+					if vistoa:
+						visto = True
 					else:
 						visto = False
 							
