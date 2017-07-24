@@ -732,12 +732,12 @@ class mrpiracy:
 			vistoe = False
 			cor = 'white'
 			visto = False
-			vistos = False
+			vistoa = False
 			if opcao == '1' or opcao == '2':
 				if i['visto'] == 1:
-					vistos = True
+					vistoa = True
 			elif opcao == '0' or opcao == '2':
-				vistos = self.verificarVistoLocal(i['id_serie'], temporada=i['temporada'], episodio=i['episodio'])
+				vistoa = self.verificarVistoLocal(i['id_serie'], temporada=i['temporada'], episodio=i['episodio'])
 			
 			#if visto == False:
 			if Trakt.loggedIn():			
@@ -763,7 +763,7 @@ class mrpiracy:
 									else:
 										vistoe = False
 			
-			if vistos:
+			if vistoa:
 				visto = True
 			else:
 				visto = False

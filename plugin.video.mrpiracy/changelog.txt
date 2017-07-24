@@ -1,3 +1,6 @@
+v0.7.7(24/07/2017)
+- Correcao dos Filmes/Episodios Vistos com o Trakt
+
 v0.7.6(23/07/2017)
 - Correcao dos Filmes/Episodios Vistos
 
