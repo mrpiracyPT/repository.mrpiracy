@@ -3,7 +3,7 @@
 
 import urlparse,sys,xbmcplugin
 
-from resources.lib import mrpiracy
+from resources.lib import mrpiracy, controlo
 
 params = dict(urlparse.parse_qsl(sys.argv[2].replace('?','')))
 
@@ -15,6 +15,7 @@ try: iconimage = params.get('iconimage')
 except: pass
 try: nome = params.get('nome')
 except: pass
+
 
 
 if modo == None or modo == 'inicio':
@@ -83,4 +84,8 @@ elif modo == 'progressoTrakt':
 	mrpiracy.mrpiracy().progressoTrakt()
 elif modo == 'loginTrakt':
 	mrpiracy.mrpiracy().loginTrakt()
+elif modo == 'traktListas':
+	mrpiracy.mrpiracy().traktListas()
+elif modo == 'traktListasItems':
+	mrpiracy.mrpiracy().traktListasItems(url)
 xbmcplugin.endOfDirectory(int(sys.argv[1]))
