@@ -1,3 +1,6 @@
+v0.7.9(31/07/2017)
+- Correcao da informação do filme/episodio sem legenda.
+
 v0.7.8(28/07/2017)
 - Correcao das imagens nos episodios das series
 - Adicionado a Listas pessoais do Trakt

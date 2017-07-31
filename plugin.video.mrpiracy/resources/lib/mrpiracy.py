@@ -246,6 +246,9 @@ class mrpiracy:
 					categoria += ','+i['categoria3']
 				pt = ''
 				br = ''
+				semLegenda = ''
+				if i['legenda'] == "semlegenda":
+					semLegenda = '[COLOR red][B]S/ LEGENDA [/B][/COLOR]'
 				if 'Brasileiro' in categoria:
 					br = '[B][COLOR green]B[/COLOR][COLOR yellow]R[/COLOR]: [/B]'
 				if 'Portu' in categoria:
@@ -290,7 +293,7 @@ class mrpiracy:
 				
 				
 				infoLabels = {'Title': i['nome_ingles'], 'Year': i['ano'], 'Genre': categoria, 'Plot': i['descricao_video'], 'Cast':i['atores'].split(','), 'Trailer': i['trailer'], 'Director': i['diretor'], 'Rating': i['imdbRating'], 'IMDBNumber': i['IMBD'] }
-				controlo.addVideo('[COLOR '+cor+']'+pt+br+nome+' ('+i['ano']+')[/COLOR]', self.API_SITE+'filme/'+str(i['id_video']), 'player', i['foto'],visto, 'filme', 0, 0, infoLabels, self.API+i['background'], trailer=i['trailer'])
+				controlo.addVideo('[COLOR '+cor+']'+pt+br+semLegenda+nome+' ('+i['ano']+')[/COLOR]', self.API_SITE+'filme/'+str(i['id_video']), 'player', i['foto'],visto, 'filme', 0, 0, infoLabels, self.API+i['background'], trailer=i['trailer'])
 				
 		elif tipo == 1 or tipo == 2:
 			for i in resultado['data']:
@@ -357,6 +360,9 @@ class mrpiracy:
 					categoria += ','+i['categoria3']
 				pt = ''
 				br = ''
+				semLegenda = ''
+				if i['legenda'] == "semlegenda":
+					semLegenda = '[COLOR red][B]S/ LEGENDA [/B][/COLOR]'
 				if 'Brasileiro' in categoria:
 					br = '[B][COLOR green]B[/COLOR][COLOR yellow]R[/COLOR]: [/B]'
 				if 'Portu' in categoria:
@@ -395,7 +401,7 @@ class mrpiracy:
 				if 'http' not in i['foto']:
 					i['foto'] = self.API+'images/capas/'+i['foto'].split('/')[-1]
 				infoLabels = {'Title': i['nome_ingles'], 'Year': i['ano'], 'Genre': categoria, 'Plot': i['descricao_video'], 'Cast':i['atores'].split(','), 'Trailer': i['trailer'], 'Director': i['diretor'], 'Rating': i['imdbRating'], 'IMDBNumber': i['IMBD'] }
-				controlo.addVideo('[COLOR '+cor+']'+pt+br+nome+' ('+i['ano']+')[/COLOR]', self.API_SITE+'filme/'+str(i['id_video']), 'player', i['foto'],visto, 'filme', 0, 0, infoLabels, self.API+i['background'], trailer=i['trailer'])
+				controlo.addVideo('[COLOR '+cor+']'+pt+br+semLegenda+nome+' ('+i['ano']+')[/COLOR]', self.API_SITE+'filme/'+str(i['id_video']), 'player', i['foto'],visto, 'filme', 0, 0, infoLabels, self.API+i['background'], trailer=i['trailer'])
 				
 		elif tipo == 1 or tipo == 2:
 			for i in resultado['data']:
@@ -566,6 +572,9 @@ class mrpiracy:
 			pt = ''
 			cor = "white"
 			br = ''
+			semLegenda = ''
+			if i['legenda'] == "semlegenda":
+				semLegenda = '[COLOR red][B]S/ LEGENDA [/B][/COLOR]'
 			if 'Brasileiro' in categoria:
 				br = '[B][COLOR green]B[/COLOR][COLOR yellow]R[/COLOR]: [/B]'
 			if 'Portu' in categoria:
@@ -608,7 +617,7 @@ class mrpiracy:
 				i['foto'] = self.API+'images/capas/'+i['foto'].split('/')[-1]
 			i['background'] = 'images/background/'+i['IMBD']+'.jpg'
 			
-			controlo.addVideo('[COLOR '+cor+']'+pt+br+nome+' ('+i['ano']+')[/COLOR]', self.API_SITE+'filme/'+str(i['id_video']), 'player', i['foto'],visto, 'filme', 0, 0, infoLabels, self.API+i['background'], trailer=i['trailer'])
+			controlo.addVideo('[COLOR '+cor+']'+pt+br+semLegenda+nome+' ('+i['ano']+')[/COLOR]', self.API_SITE+'filme/'+str(i['id_video']), 'player', i['foto'],visto, 'filme', 0, 0, infoLabels, self.API+i['background'], trailer=i['trailer'])
 			
 		current = resultado['meta']['pagination']['current_page']
 		total = resultado['meta']['pagination']['total_pages']
@@ -719,9 +728,9 @@ class mrpiracy:
 			br = ''
 			final = ''
 			semLegenda = ''
-			if i['fimtemporada'] == 1:
+			if i['fimtemporada'] == "1":
 				final = '[B]Final da Temporada [/B]'
-			if i['semlegenda'] == 1:
+			if i['semlegenda'] == "1":
 				semLegenda = '[COLOR red][B]S/ LEGENDA [/B][/COLOR]'
 			if 'Brasileiro' in categoria:
 				br = '[B][COLOR green]B[/COLOR][COLOR yellow]R[/COLOR]: [/B]'
@@ -837,9 +846,9 @@ class mrpiracy:
 		resultado = json.loads(resultado)
 
 		for i in resultado:
-			if i['id_categoria'] == 0:
+			if i['id_categoria'] == "0":
 				continue
-			if 'filme' not in url and i['tipo'] == 1:
+			if 'filme' not in url and i['tipo'] == "1":
 				continue
 			controlo.addDir(i['categorias'], url+'/'+str(i['id_categoria']), 'categorias', os.path.join(controlo.artFolder, controlo.skin, 'generos.png'))
 		self.vista_menu()
@@ -865,6 +874,9 @@ class mrpiracy:
 
 				pt = ''
 				br = ''
+				semLegenda = ''
+				if resultado['legenda'] == "semlegenda":
+					semLegenda = '[COLOR red][B]S/ LEGENDA [/B][/COLOR]'
 				if 'Brasileiro' in categoria:
 					br = '[B][COLOR green]B[/COLOR][COLOR yellow]R[/COLOR]: [/B]'
 				if 'Portu' in categoria:
@@ -904,7 +916,7 @@ class mrpiracy:
 					resultado['foto'] = self.API+'images/capas/'+resultado['foto'].split('/')[-1]
 		
 				infoLabels = {'Title': resultado['nome_ingles'], 'Year': resultado['ano'], 'Genre': categoria, 'Plot':resultado['descricao_video'], 'Cast':resultado['atores'].split(','), 'Trailer': resultado['trailer'], 'Director': resultado['diretor'], 'Rating': resultado['imdbRating'], 'IMDBNumber': resultado['IMBD'] }
-				controlo.addVideo('[COLOR '+cor+']'+pt+br+nome+' ('+i['ano']+')[/COLOR]', self.API_SITE+'filme/'+str(resultado['id_video']), 'player', resultado['foto'],visto, 'filme', 0, 0, infoLabels, self.API+resultado['background'], trailer=resultado['trailer'])
+				controlo.addVideo('[COLOR '+cor+']'+pt+br+semLegenda+nome+' ('+i['ano']+')[/COLOR]', self.API_SITE+'filme/'+str(resultado['id_video']), 'player', resultado['foto'],visto, 'filme', 0, 0, infoLabels, self.API+resultado['background'], trailer=resultado['trailer'])
 			elif 'serie' in url or 'anime' in url:
 				if 'serie' in url:
 					tipo = 'serie'
@@ -972,6 +984,9 @@ class mrpiracy:
 					resultado['foto'] = self.API+'images/capas/'+resultado['foto'].split('/')[-1]
 				pt = ''
 				br = ''
+				semLegenda = ''
+				if resultado['legenda'] == "semlegenda":
+					semLegenda = '[COLOR red][B]S/ LEGENDA [/B][/COLOR]'
 				if 'Brasileiro' in categoria:
 					br = '[B][COLOR green]B[/COLOR][COLOR yellow]R[/COLOR]: [/B]'
 				if 'Portu' in categoria:
@@ -1006,7 +1021,7 @@ class mrpiracy:
 				i['background'] = 'images/background/'+i['IMBD']+'.jpg'
 
 				infoLabels = {'Title': resultado['nome_ingles'], 'Year': resultado['ano'], 'Genre': categoria, 'Plot':resultado['descricao_video'], 'Cast':resultado['atores'].split(','), 'Trailer': resultado['trailer'], 'Director': resultado['diretor'], 'Rating': resultado['imdbRating'], 'IMDBNumber': resultado['IMBD'] }
-				controlo.addVideo('[COLOR '+cor+']'+pt+br+nome+' ('+i['ano']+')[/COLOR]', self.API_SITE+'filme/'+str(resultado['id_video']), 'player', resultado['foto'],visto, 'filme', 0, 0, infoLabels, self.API+resultado['background'], trailer=resultado['trailer'])
+				controlo.addVideo('[COLOR '+cor+']'+pt+br+semLegenda+nome+' ('+i['ano']+')[/COLOR]', self.API_SITE+'filme/'+str(resultado['id_video']), 'player', resultado['foto'],visto, 'filme', 0, 0, infoLabels, self.API+resultado['background'], trailer=resultado['trailer'])
 			elif 'serie' in url or 'anime' in url:
 				if 'serie' in url:
 					tipo = 'serie'
@@ -1216,12 +1231,17 @@ class mrpiracy:
 
 		if '://' in resultado['legenda'] or resultado['legenda'] == '':
 			legenda = self.API+'subs/%s.srt' % resultado['IMBD']
-		elif resultado['legenda'] != '':
+		elif resultado['legenda'] != '' and resultado['legenda'] != 'semlegenda':
 			if not '.srt' in resultado['legenda']:
 				resultado['legenda'] = resultado['legenda']+'.srt'
 			legenda = self.API+'subs/%s' % resultado['legenda']
 		try:
-			if resultado['semlegenda'] == 1:
+			if resultado['semlegenda'] == "1":
+				legenda = ''
+		except:
+			pass
+		try:
+			if resultado['legenda'] == "semlegenda":
 				legenda = ''
 		except:
 			pass
@@ -1348,6 +1368,9 @@ class mrpiracy:
 						nome = i['nome_ingles'].encode('utf-8')
 					pt = ''
 					br = ''
+					semLegenda = ''
+					if i['legenda'] == "semlegenda":
+						semLegenda = '[COLOR red][B]S/ LEGENDA [/B][/COLOR]'
 					if 'Brasileiro' in categoria:
 						br = '[B][COLOR green]B[/COLOR][COLOR yellow]R[/COLOR]: [/B]'
 					if 'Portu' in categoria:
@@ -1382,7 +1405,7 @@ class mrpiracy:
 					else:
 						visto = False
 							
-					controlo.addVideo('[COLOR '+cor+']'+pt+br+nome+' ('+i['ano']+')[/COLOR]', self.API_SITE+'filme/'+str(i['id_video']), 'player', i['foto'],visto, 'filme', 0, 0, infoLabels, self.API+i['background'], trailer=i['trailer'])
+					controlo.addVideo('[COLOR '+cor+']'+pt+br+semLegenda+nome+' ('+i['ano']+')[/COLOR]', self.API_SITE+'filme/'+str(i['id_video']), 'player', i['foto'],visto, 'filme', 0, 0, infoLabels, self.API+i['background'], trailer=i['trailer'])
 			elif tipo == 1 or tipo == 2:
 				for i in resultado['data']:
 					
@@ -1840,9 +1863,9 @@ class mrpiracy:
 			br = ''
 			final = ''
 			semLegenda = ''
-			if resultado['fimtemporada'] == 1:
+			if resultado['fimtemporada'] == "1":
 				final = '[B]Final da Temporada [/B]'
-			if resultado['semlegenda'] == 1:
+			if resultado['semlegenda'] == "1":
 				semLegenda = '[COLOR red][B]S/ LEGENDA [/B][/COLOR]'
 			if 'Brasileiro' in categoria:
 				br = '[B][COLOR green]B[/COLOR][COLOR yellow]R[/COLOR]: [/B]'
@@ -1878,6 +1901,9 @@ class mrpiracy:
 			
 			pt = ''
 			br = ''
+			semLegenda = ''
+			if resultado['legenda'] == "semlegenda":
+				semLegenda = '[COLOR red][B]S/ LEGENDA [/B][/COLOR]'
 			if 'Brasileiro' in categoria:
 				br = '[B][COLOR green]B[/COLOR][COLOR yellow]R[/COLOR]: [/B]'
 			if 'Portu' in categoria:
@@ -1900,7 +1926,7 @@ class mrpiracy:
 				nome = resultado['nome_ingles'].encode('utf-8')
 			if 'http' not in resultado['foto']:
 				resultado['foto'] = self.API+'images/capas/'+resultado['foto'].split('/')[-1]
-			controlo.addVideo(pt+br+nome+' ('+resultado['ano']+')', self.API_SITE+'filme/'+str(resultado['id_video']), 'player', resultado['foto'],visto, 'filme', 0, 0, infoLabels, self.API+resultado['background'], trailer=resultado['trailer'])
+			controlo.addVideo(pt+br+semLegenda+nome+' ('+resultado['ano']+')', self.API_SITE+'filme/'+str(resultado['id_video']), 'player', resultado['foto'],visto, 'filme', 0, 0, infoLabels, self.API+resultado['background'], trailer=resultado['trailer'])
 		self.vista_filmesSeries()
 
 	def watchlistSeries(self):
@@ -2094,6 +2120,9 @@ class mrpiracy:
 				
 				pt = ''
 				br = ''
+				semLegenda = ''
+				if resultado['legenda'] == "semlegenda":
+					semLegenda = '[COLOR red][B]S/ LEGENDA [/B][/COLOR]'
 				if 'Brasileiro' in categoria:
 					br = '[B][COLOR green]B[/COLOR][COLOR yellow]R[/COLOR]: [/B]'
 				if 'Portu' in categoria:
@@ -2116,7 +2145,7 @@ class mrpiracy:
 					nome = resultado['nome_ingles'].encode('utf-8')
 				if 'http' not in resultado['foto']:
 					resultado['foto'] = self.API+'images/capas/'+resultado['foto'].split('/')[-1]
-				controlo.addVideo(pt+br+nome+' ('+resultado['ano']+')', self.API_SITE+'filme/'+str(resultado['id_video']), 'player', resultado['foto'],visto, 'filme', 0, 0, infoLabels, self.API+resultado['background'], trailer=resultado['trailer'])
+				controlo.addVideo(pt+br+semLegenda+nome+' ('+resultado['ano']+')', self.API_SITE+'filme/'+str(resultado['id_video']), 'player', resultado['foto'],visto, 'filme', 0, 0, infoLabels, self.API+resultado['background'], trailer=resultado['trailer'])
 			elif s['type'] == 'show':
 				if s["show"]["ids"]["imdb"] is None:
 					continue
