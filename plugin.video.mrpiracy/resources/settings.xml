@@ -14,15 +14,20 @@
         <setting id="tokenMrpiracy" type="text" option="hidden" visible="false" label="" default="" />
         <setting id="refreshMrpiracy" type="text" option="hidden" visible="false" label="" default="" />
         <setting id="loggedin" type="text" option="hidden" visible="false" label="" default="" />
-        <setting type="sep" />
-        <setting id="trailer-filmes" type="bool" label="Procurar Trailers para Filmes" default="false"/>
-        <setting id="nao-visto-episodios" type="bool" label="Próximo episódio automaticamente?" default="true"/>
+    </category>
+    <category label="Filmes e Séries">
         <setting id="melhor-fonte" type="bool" label="Escolher melhor fonte automaticamente?" default="false"/>
+        <setting label="Filmes" type="lsep" />
+        <setting id="qualidadeFilmes" type="enum" label="Qualidade para os Filmes" values="HD|DVD|SD" default="2"/>
+        <setting id="trailer-filmes" type="bool" label="Procurar Trailers para Filmes" default="false"/>
+        <setting label="Séries" type="lsep" />
+        <setting id="nao-visto-episodios" type="bool" label="Próximo episódio automaticamente?" default="true"/>
     </category>
     <category label="Download">
     	<setting label="Pasta para download:" type="lsep" />
     	<setting label="" type="folder" id="pastaDownloads" source="auto" option="writeable" default="Escolha a pasta para Download" enable="!eq(-2,false)"/>
     </category>
+
     <!--<category label="Biblioteca">
         <setting id="bibliotecaFilmes" type="folder" label="Filmes" default="special://userdata/addon_data/plugin.video.mrpiracy/Filmes"/>
         <setting id="bibliotecaSeries" type="folder" label="Series" default="special://userdata/addon_data/plugin.video.mrpiracy/Series"/>
