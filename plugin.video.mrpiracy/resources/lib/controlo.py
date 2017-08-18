@@ -25,7 +25,9 @@ teclado = xbmc.Keyboard
 pastaDados = Addon(addonInfo("id")).get_profile().decode("utf-8")
 headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.11; rv:43.0) Gecko/20100101 Firefox/43.0', 'Accept-Charset': 'utf-8;q=0.7,*;q=0.7', 'Content-Type': 'application/json'}
 dataHoras = datetime.now()
-
+API = base64.urlsafe_b64decode('aHR0cDovL21wYXBpLm1sLw==')
+API_SITE = base64.urlsafe_b64decode('aHR0cDovL21wYXBpLm1sL2FwaS8=')
+SITE = base64.urlsafe_b64decode('aHR0cDovL21ycGlyYWN5LmdxLw==')
 try:
     import ssl
     context = ssl.SSLContext(ssl.PROTOCOL_TLSv1)
@@ -218,7 +220,7 @@ def abrir_url(url, post=None, header=None, code=False, erro=False):
     
 def log(msg, level=xbmc.LOGNOTICE):
     level = xbmc.LOGNOTICE
-    print('[MRPIRACY]: %s' % (msg))
+    #print('[MRPIRACY]: %s' % (msg))
 
     try:
         if isinstance(msg, unicode):

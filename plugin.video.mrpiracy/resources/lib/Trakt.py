@@ -20,7 +20,7 @@ import StringIO
 import Database
 from t0mm0.common.net import Net
 
-
+import controlo
 
 __ADDON_ID__   = xbmcaddon.Addon().getAddonInfo("id")
 __ADDON__   = xbmcaddon.Addon(__ADDON_ID__)
@@ -422,12 +422,12 @@ def getTVDBByEpSe(idIMDB, temporada, episodio, slug=None):
 
 def markwatchedFilmeTrakt(imdb):
     if not imdb.startswith('tt'): imdb = 'tt' + imdb
-    return getTrakt('/sync/history', post={"movies": [{"ids": {"imdb": imdb}}]}, login=True)
+    return getTrakt(__TRAKT_API__+'/sync/history', post={"movies": [{"ids": {"imdb": imdb}}]}, login=True)
 
 
 def marknotwatchedFilmeTrakt(imdb):
     if not imdb.startswith('tt'): imdb = 'tt' + imdb
-    return getTrakt('/sync/history/remove', post={"movies": [{"ids": {"imdb": imdb}}]}, login=True)
+    return getTrakt(__TRAKT_API__+'/sync/history/remove', post={"movies": [{"ids": {"imdb": imdb}}]}, login=True)
 
 def markwatchedEpisodioTrakt(imdb, temporada, episodio):
     #temporada, episodio = int('%01d' % int(temporada)), int('%01d' % int(episodio))

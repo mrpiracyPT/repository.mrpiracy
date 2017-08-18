@@ -120,6 +120,12 @@ class mrpiracy:
 				
 				resultado = json.loads(resultado)
 				#colocar o loggedin
+				try:
+					if resultado['error'] == 'invalid_credentials':
+						controlo.alerta('MrPiracy', 'Email ou password errados. Verifica os dados inseridos.')
+						return False
+				except:
+					pass
 				token = resultado['access_token']
 				refresh = resultado['refresh_token']
 				headersN = controlo.headers

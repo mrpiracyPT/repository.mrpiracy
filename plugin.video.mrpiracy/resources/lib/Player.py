@@ -28,6 +28,7 @@ class Player(xbmc.Player):
     def __init__(self, url, idFilme, pastaData, temporada, episodio, nome, logo):
         xbmc.Player.__init__(self)
         self.url=url
+
         self.temporada=temporada
         self.episodio=episodio
         self.playing = True
@@ -37,7 +38,7 @@ class Player(xbmc.Player):
         self.pastaData = xbmc.translatePath(pastaData)
         self.nome = nome
         self.logo = logo
-        self.API_SITE = base64.urlsafe_b64decode('aHR0cDovL215YXBpbXAudGsvYXBpLw==')
+        self.API_SITE = controlo.API_SITE
 
         if not xbmcvfs.exists(os.path.join(pastaData,'tracker')):
             xbmcvfs.mkdirs(os.path.join(pastaData,'tracker'))
@@ -154,11 +155,11 @@ class Player(xbmc.Player):
             colocar = 1
 
         if opcao == '1' or opcao == '2': 
+            
             resultado = controlo.abrir_url(url, post=json.dumps(post), header=controlo.headers)
             if resultado == 'DNS':
                 controlo.alerta('MrPiracy', 'Tem de alterar os DNS para poder usufruir do addon')
                 return False
-            
             resultado = json.loads(resultado)
             if resultado['codigo'] == 200:
                 colocar = 1
@@ -167,6 +168,8 @@ class Player(xbmc.Player):
             elif resultado['codigo'] == 204:
                 colocar = 3
         if Trakt.loggedIn():
+            if 'PT' in imdb:
+                imdb = re.compile('(.+?)PT').findall(imdb)[0]
             if tipo == 2 or tipo == 1:
                 if '/' in episodios:
                     ep = episodio.split('/')
@@ -179,6 +182,8 @@ class Player(xbmc.Player):
                 else:
                     Trakt.markwatchedEpisodioTrakt(imdb, temporadas, episodios)
             elif tipo == 0:
+                controlo.log('Filme: Marcar visto no Trakt')
+                controlo.log(imdb)
                 Trakt.markwatchedFilmeTrakt(imdb)
             mrpiracy.mrpiracy().getTrakt()
         if colocar == 1:
