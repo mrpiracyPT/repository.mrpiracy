@@ -28,6 +28,8 @@ dataHoras = datetime.now()
 API = base64.urlsafe_b64decode('aHR0cDovL21wYXBpLm1sLw==')
 API_SITE = base64.urlsafe_b64decode('aHR0cDovL21wYXBpLm1sL2FwaS8=')
 SITE = base64.urlsafe_b64decode('aHR0cDovL21ycGlyYWN5LmdxLw==')
+
+ = os.path.join(__PASTA_TRAKT__, 'progresso.mrpiracy')
 try:
     import ssl
     context = ssl.SSLContext(ssl.PROTOCOL_TLSv1)
@@ -230,6 +232,17 @@ def log(msg, level=xbmc.LOGNOTICE):
         try:
             a=1
         except: pass 
+
+
+def escrever_ficheiro(ficheiro, conteudo):
+    f = open(ficheiro, mode="w")
+    f.write(conteudo)
+    f.close()
+def ler_ficheiro(ficheiro):
+    f = open(ficheiro, "r")
+    conteudo =  f.read()
+    f.close()
+    return conteudo
 
 class Thread(threading.Thread):
     def __init__(self, target, *args):

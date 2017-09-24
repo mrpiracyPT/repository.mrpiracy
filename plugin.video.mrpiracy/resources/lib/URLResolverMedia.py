@@ -52,6 +52,64 @@ def log(msg, level=xbmc.LOGNOTICE):
 			a=1
 		except: pass  
 
+class Vidoza():
+	def __init__(self, url):
+		self.url = url
+		self.net = Net()
+		self.headers = {"User-Agent": "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3"}
+		self.legenda = ''
+
+	def getId(self):
+		return urlparse.urlparse(self.url).path.split("/")[-1]
+	def abrirVidoza(self, url):
+		headers = { 'User-Agent' : 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)' }
+		req = urllib2.Request('https://ooops.rf.gd/url.php?url=' + url, headers=headers)
+		response = urllib2.urlopen(req)
+		link=response.read()
+		response.close()
+		return link
+	
+
+	def getMediaUrl(self):
+		sourceCode = self.net.http_GET(self.url, headers=self.headers).content.decode('unicode_escape')
+		
+		
+		videoUrl = ''
+
+		sPattern =  'file:"([^"]+)",label:"([0-9]+)p.+?'
+		aResult = self.parse(sourceCode, sPattern)
+		
+		self.legenda = ''
+		if aResult[0]:
+			links = []
+			qualidades = []
+			for aEntry in aResult[1]:
+				links.append(aEntry[0])
+				if aEntry[1] == '2160':
+					qualidades.append('4K')
+				else:
+					qualidades.append(aEntry[1]+'p')
+
+			if len(links) == 1:
+				videoUrl = links[0]
+			elif len(links) > 1:
+				qualidade = xbmcgui.Dialog().select('Escolha a qualidade', qualidades)
+				videoUrl = links[qualidade]
+		videoUrl = videoUrl+'|%s' % '&'.join(['%s=%s' % (key, urllib.quote_plus(self.headers[key])) for key in self.headers])
+		log(videoUrl)
+		return videoUrl
+	def getLegenda(self):
+		return self.legenda
+	def parse(self, sHtmlContent, sPattern, iMinFoundValue = 1):
+		sHtmlContent = self.replaceSpecialCharacters(str(sHtmlContent))
+		aMatches = re.compile(sPattern, re.IGNORECASE).findall(sHtmlContent)
+		if (len(aMatches) >= iMinFoundValue):
+			return True, aMatches
+		return False, aMatches
+	def replaceSpecialCharacters(self, sString):
+		return sString.replace('\\/','/').replace('&amp;','&').replace('\xc9','E').replace('&#8211;', '-').replace('&#038;', '&').replace('&rsquo;','\'').replace('\r','').replace('\n','').replace('\t','').replace('&#039;',"'")
+
+
 class RapidVideo():
 	def __init__(self, url):
 		self.url = url
@@ -387,7 +445,7 @@ class OpenLoad():
 			except: pass
 
 			TabUrl = []
-			sPattern = '<span id="([^"]+)">([^<>]+)<\/span>'
+			sPattern = '<span style="".+?id="([^"]+)">([^<]+)<\/span>'
 			aResult = self.parse(html, sPattern)
 			if (aResult[0]):
 				TabUrl = aResult[1]

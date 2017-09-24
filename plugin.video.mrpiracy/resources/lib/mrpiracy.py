@@ -90,22 +90,7 @@ class mrpiracy:
 		definicoes.vista_menu()
 	
 	def login(self):
-		"""if controlo.addon.getSetting('loggedin') != '':
-			xbmc.executebuiltin("XBMC.Notification(MrPiracy, Sessão iniciada: "+controlo.addon.getSetting('loggedin')+", '10000', "+controlo.addonFolder+"/icon.png)")
-			return True"""
-		"""ficheiro = os.path.join(controlo.pastaDados,'login.mrpiracy')
-		dias = 1
-		username = controlo.addon.getSetting('loggedin')
-		if xbmcvfs.exists(ficheiro):
-			f = open(ficheiro, "r")
-			texto = f.read()
-			f.close()
-			a = datetime.strptime(texto, controlo.date_format)
-			b = datetime.now()
-			
-			diff = b - a
-			dias = diff.days
-		if dias > 0:"""
+		
 		if controlo.addon.getSetting('email') == '' or controlo.addon.getSetting('password') == '':
 			controlo.alerta('MrPiracy', 'Precisa de definir o seu email e password')
 			return False
@@ -132,6 +117,7 @@ class mrpiracy:
 				headersN['Authorization'] = 'Bearer %s' % token
 				
 				resultado = controlo.abrir_url(self.API_SITE+'me', header=headersN)
+				controlo.escrever_ficheiro(os.path.join(controlo.pastaDados,'definicoes.mrpiracy'), resultado)
 				resultado = json.loads(resultado)
 				try:
 					username = resultado['username'].decode('utf-8')
@@ -144,14 +130,7 @@ class mrpiracy:
 					controlo.addon.setSetting('tokenMrpiracy', token)
 					controlo.addon.setSetting('refreshMrpiracy', refresh)
 					controlo.addon.setSetting('loggedin', username)
-					"""try:
-						hoje = datetime.now().strftime(controlo.date_format)
-						f = open(ficheiro, "w")
-						f.write(hoje)
-						f.close()
-					except:
-						#traceback.print_exc()
-						controlo.log("Não gravou o conteudo em %s" % ficheiro)"""
+					
 					return True
 			except:
 				controlo.alerta('MrPiracy', 'Não foi possível abrir a página. Por favor tente novamente')
@@ -1230,7 +1209,6 @@ class mrpiracy:
 		servidores = []
 		titulos = []
 		nome = ''
-
 		if resultado['URL'] != '':
 			i+=1
 			if 'openload' in resultado['URL']:
@@ -1253,6 +1231,10 @@ class mrpiracy:
 				nome = 'Raptu'
 				servidores.append(resultado['URL'])
 				titulos.append('Servidor #%s: %s' % (i, nome))
+			elif 'vidoza.net' in resultado['URL']:
+				nome = 'Vidoza'
+				servidores.append(resultado['URL'])
+				titulos.append('Servidor #%s: %s' % (i, nome))
 		if resultado['URL2'] != '':
 			i+=1
 			if 'openload' in resultado['URL2']:
@@ -1273,6 +1255,10 @@ class mrpiracy:
 				titulos.append('Servidor #%s: %s' % (i, nome))
 			elif 'rapidvideo.com' in resultado['URL2'] or 'raptu' in resultado['URL2']:
 				nome = 'Raptu'
+				servidores.append(resultado['URL2'])
+				titulos.append('Servidor #%s: %s' % (i, nome))
+			elif 'vidoza.net' in resultado['URL2']:
+				nome = 'Vidoza'
 				servidores.append(resultado['URL2'])
 				titulos.append('Servidor #%s: %s' % (i, nome))
 		try:
@@ -1298,6 +1284,10 @@ class mrpiracy:
 					nome = 'Raptu'
 					servidores.append(resultado['URL3'])
 					titulos.append('Servidor #%s: %s' % (i, nome))
+				elif 'vidoza.net' in resultado['URL3']:
+					nome = 'Vidoza'
+					servidores.append(resultado['URL3'])
+					titulos.append('Servidor #%s: %s' % (i, nome))
 		except:
 			pass
 		try:
@@ -1321,6 +1311,10 @@ class mrpiracy:
 					titulos.append('Servidor #%s: %s' % (i, nome))
 				elif 'rapidvideo.com' in resultado['URL4'] or 'raptu' in resultado['URL4']:
 					nome = 'Raptu'
+					servidores.append(resultado['URL4'])
+					titulos.append('Servidor #%s: %s' % (i, nome))
+				elif 'vidoza.net' in resultado['URL4']:
+					nome = 'Vidoza'
 					servidores.append(resultado['URL4'])
 					titulos.append('Servidor #%s: %s' % (i, nome))
 		except:
@@ -1349,6 +1343,9 @@ class mrpiracy:
 		if controlo.addon.getSetting('melhor-fonte') == 'true':
 			i = 0
 			for nome in titulos:
+				if 'MrPiracy' in nome:
+					servidor = i
+					break
 				if 'OpenLoad' in nome:
 					servidor = i
 				i = i+1
@@ -1380,6 +1377,10 @@ class mrpiracy:
 			rapid = URLResolverMedia.RapidVideo(servidores[servidor])
 			stream = rapid.getMediaUrl()
 			legenda = rapid.getLegenda()
+		elif 'vidoza.net' in servidores[servidor]:
+			vidoz = URLResolverMedia.Vidoza(servidores[servidor])
+			stream = vidoz.getMediaUrl()
+			legenda = vidoz.getLegenda()
 
 		if coiso == 'filme':
 			legenda = legendaAux
@@ -1849,11 +1850,12 @@ class mrpiracy:
 
 		if ext_g != 'coiso':
 			extensaoStream = ext_g
+
 		extensaoStream = 'mp4'
 
 		nomeStream = name+'.'+extensaoStream	
 
-		Downloader.Downloader().download(os.path.join(folder.decode("utf-8"), nomeStream), stream, name)
+		Downloader.Downloader().download(os.path.join(folder.decode("utf-8"), nomeStream), stream, nomeStream)
 		
 		if legendasOn:
 			legendaAux = self.clean(legenda.split('/')[-1])
