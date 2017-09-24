@@ -1,3 +1,6 @@
+v0.8.3(24/09/2017)
+- Force update
+
 v0.8.2(24/09/2017)
 - Correcao de OpenLoad
 - Correcao de extensao no download
