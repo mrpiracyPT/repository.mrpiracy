@@ -129,7 +129,7 @@ class mrpiracy:
 					username = resultado['username'].encode('utf-8')
 				
 
-				if resultado['email'] == controlo.addon.getSetting('email'):
+				if resultado['email'].upper() == controlo.addon.getSetting('email').upper():
 					xbmc.executebuiltin("XBMC.Notification(MrPiracy, Sessão iniciada: "+username+", '10000', "+controlo.addonFolder+"/icon.png)")
 					controlo.addon.setSetting('tokenMrpiracy', token)
 					controlo.addon.setSetting('refreshMrpiracy', refresh)
