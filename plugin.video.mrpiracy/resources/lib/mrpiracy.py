@@ -69,6 +69,8 @@ class mrpiracy:
 		controlo.addDir('Filmes em Destaque', self.API_SITE+'filmes/destaque', 'filmes', os.path.join(controlo.artFolder, controlo.skin, 'filmes.png'))
 		controlo.addDir('Filmes por Ano', self.API_SITE+'filmes/ano', 'listagemAnos', os.path.join(controlo.artFolder, controlo.skin, 'ano.png'))
 		controlo.addDir('Filmes por Genero', self.API_SITE+'filmes/categoria', 'listagemGeneros', os.path.join(controlo.artFolder, controlo.skin, 'generos.png'))
+		controlo.addDir('Filmes por Ranking IMDB', self.API_SITE+'filmes/imdbRank/qualidade/'+definicoes.getQualidade(), 'filmes', os.path.join(controlo.artFolder, controlo.skin, 'filmes.png'))
+		controlo.addDir('Filmes para Crianças', self.API_SITE+'filmes/pt/qualidade/'+definicoes.getQualidade(), 'filmes', os.path.join(controlo.artFolder, controlo.skin, 'filmes.png'))
 		definicoes.vista_menu()
 	def menuTrakt(self):
 		controlo.addDir('Progresso', self.API_SITE+'filmes', 'progressoTrakt', os.path.join(controlo.artFolder, controlo.skin, 'trakt.png'))
@@ -81,12 +83,14 @@ class mrpiracy:
 		controlo.addDir('Séries em Destaque', self.API_SITE+'series/destaque', 'series', os.path.join(controlo.artFolder, controlo.skin, 'series.png'))
 		controlo.addDir('Séries por Ano', self.API_SITE+'series/ano', 'listagemAnos', os.path.join(controlo.artFolder, controlo.skin, 'ano.png'))
 		controlo.addDir('Séries por Genero', self.API_SITE+'series/categoria', 'listagemGeneros', os.path.join(controlo.artFolder, controlo.skin, 'generos.png'))
+		controlo.addDir('Séries por Ranking IMDB', self.API_SITE+'series/imdbRank', 'series', os.path.join(controlo.artFolder, controlo.skin, 'series.png'))
 		definicoes.vista_menu()
 	def menuAnimes(self):
 		controlo.addDir('Todos os Animes', self.API_SITE+'animes', 'animes', os.path.join(controlo.artFolder, controlo.skin, 'animes.png'))
 		controlo.addDir('Animes em Destaque', self.API_SITE+'animes/destaque', 'animes', os.path.join(controlo.artFolder, controlo.skin, 'animes.png'))
 		controlo.addDir('Animes por Ano', self.API_SITE+'animes/ano', 'listagemAnos', os.path.join(controlo.artFolder, controlo.skin, 'ano.png'))
 		controlo.addDir('Animes por Genero', self.API_SITE+'animes/categoria', 'listagemGeneros', os.path.join(controlo.artFolder, controlo.skin, 'generos.png'))
+		controlo.addDir('Animes por Ranking IMDB', self.API_SITE+'animes/imdbRank', 'animes', os.path.join(controlo.artFolder, controlo.skin, 'generos.png'))
 		definicoes.vista_menu()
 	
 	def login(self):
@@ -1159,11 +1163,13 @@ class mrpiracy:
 			temporada = 0
 			episodio = 0
 			coiso = 'filme'
+			_imdb = resultado['IMBD']
 		else:
 			idVideo = resultado['id_serie']
 			nome = resultado['nome_episodio']
 			temporada = resultado['temporada']
 			episodio = resultado['episodio']
+			_imdb = resultado['imdbSerie']
 			coiso = 'outro'
 
 		controlo.mensagemprogresso.create('MrPiracy', u'Abrir emissão','Por favor aguarde...')
@@ -1193,7 +1199,7 @@ class mrpiracy:
 			controlo.alerta('MrPiracy', 'O servidor escolhido não disponível, escolha outro ou tente novamente mais tarde.')
 		else:
 
-			player_mr = Player.Player(url=url, idFilme=idVideo, pastaData=controlo.pastaDados, temporada=temporada, episodio=episodio, nome=nome, logo=os.path.join(controlo.addonFolder,'icon.png'))
+			player_mr = Player.Player(url=url, idFilme=idVideo, pastaData=controlo.pastaDados, temporada=temporada, episodio=episodio, nome=nome, logo=os.path.join(controlo.addonFolder,'icon.png'), imdb=_imdb)
 
 			controlo.mensagemprogresso.close()
 			player_mr.play(playlist)
@@ -1235,6 +1241,10 @@ class mrpiracy:
 				nome = 'Vidoza'
 				servidores.append(resultado['URL'])
 				titulos.append('Servidor #%s: %s' % (i, nome))
+			elif 'streamango.' in resultado['URL']:
+				nome = 'Streamango'
+				servidores.append(resultado['URL'])
+				titulos.append('Servidor #%s: %s' % (i, nome))
 		if resultado['URL2'] != '':
 			i+=1
 			if 'openload' in resultado['URL2']:
@@ -1259,6 +1269,10 @@ class mrpiracy:
 				titulos.append('Servidor #%s: %s' % (i, nome))
 			elif 'vidoza.net' in resultado['URL2']:
 				nome = 'Vidoza'
+				servidores.append(resultado['URL2'])
+				titulos.append('Servidor #%s: %s' % (i, nome))
+			elif 'streamango.' in resultado['URL2']:
+				nome = 'Streamango'
 				servidores.append(resultado['URL2'])
 				titulos.append('Servidor #%s: %s' % (i, nome))
 		try:
@@ -1288,6 +1302,10 @@ class mrpiracy:
 					nome = 'Vidoza'
 					servidores.append(resultado['URL3'])
 					titulos.append('Servidor #%s: %s' % (i, nome))
+				elif 'streamango.' in resultado['URL3']:
+					nome = 'Streamango'
+					servidores.append(resultado['URL3'])
+					titulos.append('Servidor #%s: %s' % (i, nome))
 		except:
 			pass
 		try:
@@ -1315,6 +1333,10 @@ class mrpiracy:
 					titulos.append('Servidor #%s: %s' % (i, nome))
 				elif 'vidoza.net' in resultado['URL4']:
 					nome = 'Vidoza'
+					servidores.append(resultado['URL4'])
+					titulos.append('Servidor #%s: %s' % (i, nome))
+				elif 'streamango.' in resultado['URL4']:
+					nome = 'Streamango'
 					servidores.append(resultado['URL4'])
 					titulos.append('Servidor #%s: %s' % (i, nome))
 		except:
@@ -1381,6 +1403,10 @@ class mrpiracy:
 			vidoz = URLResolverMedia.Vidoza(servidores[servidor])
 			stream = vidoz.getMediaUrl()
 			legenda = vidoz.getLegenda()
+		elif 'streamango.' in servidores[servidor]:
+			streaman = URLResolverMedia.Streamango(servidores[servidor])
+			stream = streaman.getMediaUrl()
+			legenda = streaman.getLegenda()
 
 		if coiso == 'filme':
 			legenda = legendaAux

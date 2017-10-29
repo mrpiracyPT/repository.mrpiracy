@@ -51,6 +51,92 @@ def log(msg, level=xbmc.LOGNOTICE):
 		try:
 			a=1
 		except: pass  
+		
+class Streamango():
+	def __init__(self, url):
+		self.url = url
+		self.net = Net()
+		self.headers = {"User-Agent": "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:52.0) Gecko/20100101 Firefox/52.0"}
+		self.legenda = ''
+
+	def getId(self):
+		return urlparse.urlparse(self.url).path.split("/")[-2]
+	def abrirStreamango(self, url):
+		headers = { 'User-Agent' : 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)' }
+		req = urllib2.Request('https://ooops.rf.gd/url.php?url=' + url, headers=headers)
+		response = urllib2.urlopen(req)
+		link=response.read()
+		response.close()
+		return link
+	def decode(self, encoded, code):
+		#from https://github.com/jsergio123/script.module.urlresolver - kodi vstream
+		_0x59b81a = ""
+		k = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/='
+		k = k[::-1]
+
+		count = 0
+
+		for index in range(0, len(encoded) - 1):
+			while count <= len(encoded) - 1:
+				_0x4a2f3a = k.index(encoded[count])
+				count += 1
+				_0x29d5bf = k.index(encoded[count])
+				count += 1
+				_0x3b6833 = k.index(encoded[count])
+				count += 1
+				_0x426d70 = k.index(encoded[count])
+				count += 1
+
+				_0x2e4782 = ((_0x4a2f3a << 2) | (_0x29d5bf >> 4))
+				_0x2c0540 = (((_0x29d5bf & 15) << 4) | (_0x3b6833 >> 2))
+				_0x5a46ef = ((_0x3b6833 & 3) << 6) | _0x426d70
+				_0x2e4782 = _0x2e4782 ^ code
+
+				_0x59b81a = str(_0x59b81a) + chr(_0x2e4782)
+
+				if _0x3b6833 != 64:
+					_0x59b81a = str(_0x59b81a) + chr(_0x2c0540)
+				if _0x3b6833 != 64:
+					_0x59b81a = str(_0x59b81a) + chr(_0x5a46ef)
+
+		return _0x59b81a
+
+	def getMediaUrl(self):
+		sourceCode = self.net.http_GET(self.url, headers=self.headers).content.decode('unicode_escape')
+		
+		videoUrl = ''
+		resultado = re.search('''srces\.push\({type:"video/mp4",src:\w+\('([^']+)',(\d+)''', sourceCode)
+
+		if resultado:
+			source = self.decode(resultado.group(1), int(resultado.group(2)))
+			if source:
+				source = "http:%s" % source if source.startswith("//") else source
+				source = source.split("/")
+				if not source[-1].isdigit():
+					source[-1] = re.sub('[^\d]', '', source[-1])
+				videoUrl = "/".join(source)
+
+		return videoUrl
+			
+		"""r1 = re.search("srces\.push\({type:\"video/mp4\",src:\w+\('([^']+)',(\d+)", sourceCode)
+		if (r1):
+			videoUrl = self.decode(r1.group(1), int(r1.group(2)))
+			videoUrl = 'http:' + videoUrl
+			
+		return videoUrl"""
+
+		
+	def parse(self, sHtmlContent, sPattern, iMinFoundValue = 1):
+		sHtmlContent = self.replaceSpecialCharacters(str(sHtmlContent))
+		aMatches = re.compile(sPattern, re.IGNORECASE).findall(sHtmlContent)
+		if (len(aMatches) >= iMinFoundValue):
+			return True, aMatches
+		return False, aMatches
+	def getLegenda(self):
+		return self.legenda
+	def replaceSpecialCharacters(self, sString):
+		return sString.replace('\\/','/').replace('&amp;','&').replace('\xc9','E').replace('&#8211;', '-').replace('&#038;', '&').replace('&rsquo;','\'').replace('\r','').replace('\n','').replace('\t','').replace('&#039;',"'")
+
 
 class Vidoza():
 	def __init__(self, url):

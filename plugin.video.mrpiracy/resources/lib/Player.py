@@ -25,7 +25,7 @@ __HEADERS__ = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.11; rv:4
 #enen92 class (RatoTv) adapted for MrPiracy.xyz addon
 
 class Player(xbmc.Player):
-    def __init__(self, url, idFilme, pastaData, temporada, episodio, nome, logo):
+    def __init__(self, url, idFilme, pastaData, temporada, episodio, nome, logo, imdb):
         xbmc.Player.__init__(self)
         self.url=url
 
@@ -38,6 +38,7 @@ class Player(xbmc.Player):
         self.pastaData = xbmc.translatePath(pastaData)
         self.nome = nome
         self.logo = logo
+        self.imdb = imdb
         self.API_SITE = controlo.API_SITE
 
         if not xbmcvfs.exists(os.path.join(pastaData,'tracker')):
@@ -57,7 +58,10 @@ class Player(xbmc.Player):
         #print '=======> player Start'
         self.tempoTotal = self.getTotalTime()
         #print '==========> total time'+str(self.tempoTotal)
-
+        if self.content == 'episode':
+            Trakt.checkInEpisodioTrakt(self.imdb, self.temporada, self.episodio)
+        elif self.content == 'movie':
+            Trakt.checkInFilmeTrakt(self.imdb)
         if xbmcvfs.exists(self.pastaVideo):
             #print "Ja existe um ficheiro do filme"
 
@@ -92,6 +96,9 @@ class Player(xbmc.Player):
             except:
                 print "Não apagou"
                 pass
+        else:
+            Trakt.checkOutTrakt()
+
 
     def adicionarVistoSite(self):
         controlo.headers['Authorization'] = 'Bearer %s' % controlo.addon.getSetting('tokenMrpiracy')

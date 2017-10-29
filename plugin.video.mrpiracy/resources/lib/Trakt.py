@@ -44,6 +44,8 @@ def abrir_url(url, post=None, header=None, code=False, erro=False):
         req = urllib2.Request(url, data=post, headers=header)
     else:
         req = urllib2.Request(url, headers=header)
+    
+
 
     try:
         response = urllib2.urlopen(req)
@@ -447,3 +449,31 @@ def marknotwatchedEpisodioTrakt(imdb, temporada, episodio):
     if not imdb.startswith('tt'): imdb = 'tt' + imdb
     post = {"shows": [{"ids": {"imdb": imdb},"seasons": [{"number": int(temporada),"episodes": [{"number": int(episodio)}]}]}]}
     coiso =  getTrakt(__TRAKT_API__+'/sync/history/remove', post=post)
+
+def checkInFilmeTrakt(imdb):
+    if not imdb.startswith('tt'): imdb = 'tt' + imdb
+    return getTrakt(__TRAKT_API__+'/checkin', post={"movies": [{"ids": {"imdb": imdb}}]}, login=True)
+def checkInEpisodioTrakt(imdb, temporada, episodio):
+    if not imdb.startswith('tt'): imdb = 'tt' + imdb
+
+    post = {"shows": [{"ids": {"imdb": imdb},"seasons": [{"number": int(temporada),"episodes": [{"number": int(episodio)}]}]}]}
+    coiso = getTrakt(__TRAKT_API__+'/checkin', post=post)
+
+def checkOutTrakt():
+    req = urllib2.Request(__TRAKT_API__+'/checkin', headers=__HEADERS__)
+    req.get_method = lambda: 'DELETE'
+
+    try:
+        response = urllib2.urlopen(req)
+    except urllib2.HTTPError as response:
+        if erro == True:
+            return str(response.code), "asd"
+
+    link=response.read()
+
+    if code:
+        return str(response.code), link
+
+    response.close()
+    return link
+
