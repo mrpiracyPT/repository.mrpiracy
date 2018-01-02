@@ -1,3 +1,7 @@
+v0.8.6(02/01/2018)
+- Opção para remover favoritos (filmes e series/animes)
+- OpenLoad corrigido
+
 v0.8.4(29/10/2017)
 - Novo Servidor (Streamango)
 - Fimes para Putos (menu novo)

@@ -297,15 +297,16 @@ class mrpiracy:
 					visto=True
 				else:
 					visto=False
-				if i['verdepois'] == 1:
+				if str(i['verdepois']) == '1':
 					menuVerDepois = True
 				else:
-					menuVerDepois = False
+					menuVerDepois = True #False - TODO:: alterar api
 
-				if i['favorito'] == 1:
+				if str(i['favorito']) == '1':
 					menuFavorito = True
 				else:
-					menuFavorito = False
+					menuFavorito = True #False - TODO:: alterar api
+					
 				controlo.addDir('[COLOR '+cor+']'+pt+br+nome+' ('+i['ano']+')[/COLOR]', self.API_SITE+link+'/'+str(i['id_video']), 'temporadas', i['foto'], tipo='serie', infoLabels=infoLabels,poster=self.API+i['background'],visto=visto, menuO=True, favorito=menuFavorito, agendado=menuVerDepois)
 		current = resultado['meta']['pagination']['current_page']
 		total = resultado['meta']['pagination']['total_pages']

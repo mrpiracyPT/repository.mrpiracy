@@ -572,7 +572,7 @@ class OpenLoad():
 
 			try:
 				JP.ProcessJS(code, Liste_var)
-				url = JP.GetVarHack("#streamurl")
+				url = JP.GetVarHack("#streamuri")
 			except:
 				raise ResolverError('No Encoded Section Found. Deleted?')
 
