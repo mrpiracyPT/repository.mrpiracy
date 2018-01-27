@@ -1,3 +1,7 @@
+v0.8.7(27/01/2018)
+- Trakt username fix, ja aceita usernames com .
+- OpenLoad corrigido
+
 v0.8.6(02/01/2018)
 - Opção para remover favoritos (filmes e series/animes)
 - OpenLoad corrigido

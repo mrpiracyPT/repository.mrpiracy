@@ -52,16 +52,16 @@ class mrpiracy:
 	def loginTrakt(self):
 		Trakt.traktAuth()
 	def getTrakt(self):
-		url = 'https://api-v2launch.trakt.tv/users/%s/watched/movies' % controlo.addon.getSetting('utilizadorTrakt')
+		url = 'https://api-v2launch.trakt.tv/users/%s/watched/movies' % controlo.addon.getSetting('utilizadorTrakt').replace('.', '-')
 		filmes = Trakt.getTrakt(url, login=False)
-		url = 'https://api-v2launch.trakt.tv/users/%s/watched/shows' % controlo.addon.getSetting('utilizadorTrakt')
+		url = 'https://api-v2launch.trakt.tv/users/%s/watched/shows' % controlo.addon.getSetting('utilizadorTrakt').replace('.', '-')
 		series = Trakt.getTrakt(url, login=False)
 		#insertTraktDB(filmes, series, data)
 		url = 'https://api-v2launch.trakt.tv/sync/watchlist/movies'
 		watchlistFilmes = Trakt.getTrakt(url)
 		url = 'https://api-v2launch.trakt.tv/sync/watchlist/shows'
 		watchlistSeries = Trakt.getTrakt(url)
-		url = 'https://api-v2launch.trakt.tv/users/%s/watched/shows' % controlo.addon.getSetting('utilizadorTrakt')
+		url = 'https://api-v2launch.trakt.tv/users/%s/watched/shows' % controlo.addon.getSetting('utilizadorTrakt').replace('.', '-')
 		progresso = Trakt.getTrakt(url, login=False)
 		Database.insertTraktDB(filmes, series, watchlistFilmes, watchlistSeries, progresso, controlo.dataHoras)
 	def menuFilmes(self):
@@ -2344,7 +2344,7 @@ class mrpiracy:
 			xbmc.executebuiltin("Container.Refresh")
 
 	def traktListas(self):
-		url = 'https://api.trakt.tv/users/%s/lists' % controlo.addon.getSetting('utilizadorTrakt')
+		url = 'https://api.trakt.tv/users/%s/lists' % controlo.addon.getSetting('utilizadorTrakt').replace('.', '-')
 		listas = Trakt.getTrakt(url, login=False)
 		
 		for s in json.loads(listas):
