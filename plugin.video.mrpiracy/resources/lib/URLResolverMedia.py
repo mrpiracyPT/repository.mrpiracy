@@ -287,7 +287,7 @@ class CloudMailRu():
 		streamAux = clean(ext.split('/')[-1])
 		extensaoStream = clean(streamAux.split('.')[-1])
 		token = re.compile('"tokens"\s*:\s*{\s*"download"\s*:\s*"([^"]+)').findall(conteudo)[0]
-		mediaLink = re.compile('"weblink_get"\s*:\s*\[.+?"url"\s*:\s*"([^"]+)').findall(conteudo)[0]
+		mediaLink = re.compile('(https\:\/\/[a-zA-Z0-9\-\.]+cldmail+\.[a-zA-Z]{2,3}\/\S*)"').findall(conteudo)[0]
 		videoUrl = '%s/%s?key=%s' % (mediaLink, self.getId(), token)
 		return videoUrl, extensaoStream
 
@@ -426,7 +426,10 @@ class OpenLoad():
 
 		return ret
 
-
+	def __getHost(self):
+		parts = self.url.split('//', 1)
+		host = parts[0]+'//'+parts[1].split('/', 1)[0]
+		return host
 	def SubHexa(self, g):
 		return g.group(1) + self.Hexa(g.group(2))
     
@@ -531,7 +534,7 @@ class OpenLoad():
 			except: pass
 
 			TabUrl = []
-			sPattern = '<span style="".+?id="([^"]+)">([^<]+)<\/span>'
+			sPattern = '<p style=""[^"]+id="([^"]+)">([^<]+)<\/p>'
 			aResult = self.parse(html, sPattern)
 			if (aResult[0]):
 				TabUrl = aResult[1]
@@ -551,6 +554,16 @@ class OpenLoad():
 				sHtmlContent3 = self.CheckAADecoder(sHtmlContent3)
 				maxboucle = maxboucle - 1
 			code = sHtmlContent3
+			
+			id_final = ""
+			sPattern = 'var srclink.*?\/stream\/.*?(#[^\'"]+).*?mime=true'
+			aResult = re.findall(sPattern, code)
+
+			if (aResult):
+				id_final = aResult[0]
+			else:
+				raise ResolverError('No Encoded Section Found. Deleted?')
+
 			if not (code):
 				#log("No Encoded Section Found. Deleted?")
 				raise ResolverError('No Encoded Section Found. Deleted?')
@@ -569,20 +582,18 @@ class OpenLoad():
 			JP = JsParser()
 			Liste_var = []
 			JP.AddHackVar(Item_url, Coded_url)
-
+			JP.ProcessJS(code,Liste_var)
 			url = None
 			try:
-				JP.ProcessJS(code, Liste_var)
-				for name in ['#streamurl', '#streamuri', '#streamurj']:
-					if JP.IsVar(JP.HackVars, name):
-						url = JP.GetVarHack(name)
-						break
+				url = JP.GetVarHack(id_final)
 			except:
 				raise ResolverError('No Encoded Section Found. Deleted?')
+			
 
 			if not(url):
 				raise ResolverError('No Encoded Section Found. Deleted?')
-			api_call =  "https://openload.co/stream/" + url + "?mime=true" 
+			api_call =  self.__getHost()+"/stream/" + url + "?mime=true" 
+			
 
 			if 'KDA_8nZ2av4/x.mp4' in api_call:
 				#log('Openload.co resolve failed')
