@@ -16,8 +16,9 @@ import Trakt
 import Database
 from t0mm0.common.net import Net
 import mrpiracy
-
+import definicoes
 import controlo
+import ast
 
 __HEADERS__ = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.11; rv:43.0) Gecko/20100101 Firefox/43.0', 'Accept-Charset': 'ISO-8859-1,utf-8;q=0.7,*;q=0.7'}
 
@@ -101,47 +102,34 @@ class Player(xbmc.Player):
 
 
     def adicionarVistoSite(self):
-        controlo.headers['Authorization'] = 'Bearer %s' % controlo.addon.getSetting('tokenMrpiracy')
         links = self.url.split('/')
         opcao = controlo.addon.getSetting('marcarVisto')
         colocar = 0
+        resultado = controlo.abrir_url(self.url, header=controlo.headers, cookie=definicoes.getCookie())
+        resultado = json.loads(resultado)[0]
         if 'filme' in self.url:
-            id_video = links[-1]
-            resultado = controlo.abrir_url(self.url, header=controlo.headers)
-            if resultado == 'DNS':
-                controlo.alerta('MrPiracy', 'Tem de alterar os DNS para poder usufruir do addon')
-                return False
-            resultado = json.loads(resultado)
+            id_video = resultado['id_video']
             imdb = resultado['IMBD']
             post = {'id_filme': id_video}
-            url = self.API_SITE+'filmes/marcar-visto'
+            url = self.API_SITE+'index.php?action=marcar-visto-filme&idFilme='+id_video
             tipo = 0
         elif 'serie' in self.url:
-            resultado = controlo.abrir_url(self.url, header=controlo.headers)
-            if resultado == 'DNS':
-                controlo.alerta('MrPiracy', 'Tem de alterar os DNS para poder usufruir do addon')
-                return False
-            resultado = json.loads(resultado)
-            imdb = resultado['imdbSerie']
+            imdb = resultado['fotoSerie'].split('/')[-1].split('.')[0]
             id_video = resultado['id_serie']
             temporadas = resultado['temporada']
             episodios = resultado['episodio']
             post = {'id_serie': id_video, 'temporada': temporadas, 'episodio':episodios}
-            url = self.API_SITE+'series/marcar-visto'
+            url = (self.API_SITE+'index.php?action=marcar-visto-episodio&idSerie=%s&temporada=%s&episodio=%s' % (id_video, temporadas, episodios) )
             tipo = 1
         elif 'anime' in self.url:
-            resultado = controlo.abrir_url(self.url, header=controlo.headers)
-            if resultado == 'DNS':
-                controlo.alerta('MrPiracy', 'Tem de alterar os DNS para poder usufruir do addon')
-                return False
-            resultado = json.loads(resultado)
-            imdb = resultado['imdbSerie']
+            imdb = resultado['fotoSerie'].split('/')[-1].split('.')[0]
             id_video = resultado['id_serie']
             temporadas = resultado['temporada']
             episodios = resultado['episodio']
             post = {'id_anime': id_video, 'temporada': temporadas, 'episodio':episodios}
-            url = self.API_SITE+'animes/marcar-visto'
+            url = (self.API_SITE+'index.php?action=marcar-visto-episodio&idSerie=%s&temporada=%s&episodio=%s' % (id_video, temporadas, episodios) )
             tipo = 2
+            
         if opcao == '0' or opcao == '2': 
             pastaVisto=os.path.join(self.pastaData,'vistos')
             try:
@@ -163,20 +151,33 @@ class Player(xbmc.Player):
 
         if opcao == '1' or opcao == '2': 
             
-            resultado = controlo.abrir_url(url, post=json.dumps(post), header=controlo.headers)
-            if resultado == 'DNS':
-                controlo.alerta('MrPiracy', 'Tem de alterar os DNS para poder usufruir do addon')
-                return False
+            resultado = controlo.abrir_url(url, header=controlo.headers, cookie=definicoes.getCookie())
+            
             resultado = json.loads(resultado)
-            if resultado['codigo'] == 200:
+            if resultado['mensagem']['codigo'] == 200:
                 colocar = 1
-            if resultado['codigo'] == 201:
+            if resultado['mensagem']['codigo'] == 201:
                 colocar = 2
-            elif resultado['codigo'] == 204:
+            elif resultado['mensagem']['codigo'] == 204:
                 colocar = 3
+            userVistos = resultado['userVistos']
+
+            if userVistos != "" or userVistos != []:
+                try:
+                    vistos_filmes = ','.join(ast.literal_eval(userVistos).values())
+                except:
+                    vistos_filmes = str(0)
+            else:
+                vistos_filmes = str(0)
+            if tipo == 0:
+                controlo.escrever_ficheiro(os.path.join(controlo.pastaDados,'vistos_filmes.mrpiracy'), vistos_filmes)
+            if tipo == 1 or tipo == 2:
+                controlo.escrever_ficheiro(os.path.join(controlo.pastaDados,'vistos_series.mrpiracy'), vistos_filmes)
         if Trakt.loggedIn():
             if 'PT' in imdb:
                 imdb = re.compile('(.+?)PT').findall(imdb)[0]
+            if 'pt' in imdb:
+                imdb = re.compile('(.+?)pt').findall(imdb)[0]
             if tipo == 2 or tipo == 1:
                 if '/' in episodios:
                     ep = episodio.split('/')

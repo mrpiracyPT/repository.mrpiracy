@@ -462,7 +462,7 @@ def checkInEpisodioTrakt(imdb, temporada, episodio):
 def checkOutTrakt():
     req = urllib2.Request(__TRAKT_API__+'/checkin', headers=__HEADERS__)
     req.get_method = lambda: 'DELETE'
-
+    erro = False
     try:
         response = urllib2.urlopen(req)
     except urllib2.HTTPError as response:
@@ -470,9 +470,6 @@ def checkOutTrakt():
             return str(response.code), "asd"
 
     link=response.read()
-
-    if code:
-        return str(response.code), link
 
     response.close()
     return link

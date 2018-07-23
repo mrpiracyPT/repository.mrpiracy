@@ -105,25 +105,20 @@ class Streamango():
 		sourceCode = self.net.http_GET(self.url, headers=self.headers).content.decode('unicode_escape')
 		
 		videoUrl = ''
-		resultado = re.search('''srces\.push\({type:"video/mp4",src:\w+\('([^']+)',(\d+)''', sourceCode)
+		resultado = re.search("{type:\"video/mp4\",src:\w+\('([^']+)',(\d+)", sourceCode)
 
 		if resultado:
 			source = self.decode(resultado.group(1), int(resultado.group(2)))
-			if source:
-				source = "http:%s" % source if source.startswith("//") else source
-				source = source.split("/")
-				if not source[-1].isdigit():
-					source[-1] = re.sub('[^\d]', '', source[-1])
-				videoUrl = "/".join(source)
+			
+			if source.endswith('@'):
+				source = source[:-1]
+			source = "http:%s" % source # if source.startswith("//") else source
+			#source = source.split("/")
+			"""if not source[-1].isdigit():
+				source[-1] = re.sub('[^\d]', '', source[-1])
+			videoUrl = "/".join(source)"""
 
-		return videoUrl
-			
-		"""r1 = re.search("srces\.push\({type:\"video/mp4\",src:\w+\('([^']+)',(\d+)", sourceCode)
-		if (r1):
-			videoUrl = self.decode(r1.group(1), int(r1.group(2)))
-			videoUrl = 'http:' + videoUrl
-			
-		return videoUrl"""
+		return source
 
 		
 	def parse(self, sHtmlContent, sPattern, iMinFoundValue = 1):
@@ -162,9 +157,8 @@ class Vidoza():
 		
 		videoUrl = ''
 
-		sPattern =  'file:"([^"]+)",label:"([0-9]+)p.+?'
+		sPattern =  'src: "([^"]+)"[^\}]+label:"([^\']+)"'
 		aResult = self.parse(sourceCode, sPattern)
-		
 		self.legenda = ''
 		if aResult[0]:
 			links = []
@@ -181,8 +175,7 @@ class Vidoza():
 			elif len(links) > 1:
 				qualidade = xbmcgui.Dialog().select('Escolha a qualidade', qualidades)
 				videoUrl = links[qualidade]
-		videoUrl = videoUrl+'|%s' % '&'.join(['%s=%s' % (key, urllib.quote_plus(self.headers[key])) for key in self.headers])
-		log(videoUrl)
+		videoUrl = videoUrl#+'|%s' % '&'.join(['%s=%s' % (key, urllib.quote_plus(self.headers[key])) for key in self.headers])
 		return videoUrl
 	def getLegenda(self):
 		return self.legenda

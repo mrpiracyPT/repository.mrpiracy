@@ -26,7 +26,7 @@ pastaDados = Addon(addonInfo("id")).get_profile().decode("utf-8")
 headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.11; rv:43.0) Gecko/20100101 Firefox/43.0', 'Accept-Charset': 'utf-8;q=0.7,*;q=0.7', 'Content-Type': 'application/json'}
 dataHoras = datetime.now()
 API = base64.urlsafe_b64decode('aHR0cDovL21wYXBpLm1sLw==')
-API_SITE = base64.urlsafe_b64decode('aHR0cDovL21wYXBpLm1sL2FwaS8=')
+API_SITE = base64.urlsafe_b64decode('aHR0cDovL21wYXBpLm1sL2FwaW5ldy8=')
 SITE = base64.urlsafe_b64decode('aHR0cDovL21ycGlyYWN5LmdxLw==')
 
 try:
@@ -48,14 +48,14 @@ def addDir(name,url,modo,iconimage,pagina=False,tipo=False,infoLabels=False,post
     overlay = 6
     playcount = 0
     if menuO:
-        if favorito:
+        """if favorito:
             menu.append(('Remover dos Favoritos', 'XBMC.RunPlugin(%s?modo=remover-favoritos&url=%s)' % (sys.argv[0], urllib.quote_plus(url))))
         else:
             menu.append(('Adicionar aos Favoritos', 'XBMC.RunPlugin(%s?modo=adicionar-favoritos&url=%s)' % (sys.argv[0], urllib.quote_plus(url))))
         if agendado:
             menu.append(('Remover dos Agendados (ver mais tarde)', 'XBMC.RunPlugin(%s?modo=remover-agendar&url=%s)' % (sys.argv[0], urllib.quote_plus(url))))    
         else:
-            menu.append(('Agendar (ver mais tarde)', 'XBMC.RunPlugin(%s?modo=adicionar-agendar&url=%s)' % (sys.argv[0], urllib.quote_plus(url))))
+            menu.append(('Agendar (ver mais tarde)', 'XBMC.RunPlugin(%s?modo=adicionar-agendar&url=%s)' % (sys.argv[0], urllib.quote_plus(url))))"""
         if visto == True:
             menu.append(('Marcar como não visto', 'XBMC.RunPlugin(%s?modo=marcar-visto&url=%s)' % (sys.argv[0], urllib.quote_plus(url))))
             overlay = 7
@@ -91,14 +91,14 @@ def addVideo(name,url,modo,iconimage,visto,tipo,temporada,episodio,infoLabels,po
     if tipo == 'filme':
         xbmcplugin.setContent(int(sys.argv[1]), 'Movies')
         #visto = checkVisto(url)
-        if favorito:
+        """if favorito:
             menu.append(('Remover dos Favoritos', 'XBMC.RunPlugin(%s?modo=remover-favoritos&url=%s)' % (sys.argv[0], urllib.quote_plus(url))))
         else:
             menu.append(('Adicionar aos Favoritos', 'XBMC.RunPlugin(%s?modo=adicionar-favoritos&url=%s)' % (sys.argv[0], urllib.quote_plus(url))))
         if agendado:
             menu.append(('Remover dos Agendados (ver mais tarde)', 'XBMC.RunPlugin(%s?modo=remover-agendar&url=%s)' % (sys.argv[0], urllib.quote_plus(url))))
         else:
-            menu.append(('Agendar (ver mais tarde)', 'XBMC.RunPlugin(%s?modo=adicionar-agendar&url=%s)' % (sys.argv[0], urllib.quote_plus(url))))
+            menu.append(('Agendar (ver mais tarde)', 'XBMC.RunPlugin(%s?modo=adicionar-agendar&url=%s)' % (sys.argv[0], urllib.quote_plus(url))))"""
         if addon.getSetting('trailer-filmes') == 'true':
             try:
                 idYoutube = trailer.split('?v=')[-1].split('/')[-1].split('?')[0].split('&')[0]
@@ -158,12 +158,15 @@ def to_unicode(text):
 	nfkd_form = unicodedata.normalize('NFKD', text)
 	return u"".join([c for c in nfkd_form if not unicodedata.combining(c)])
 
-def abrir_url(url, post=None, header=None, code=False, erro=False):
+def abrir_url(url, post=None, header=None, code=False, erro=False, cookie=None):
 
     if header == None:
         header = headers
-
+    if cookie:
+        header['Cookie'] = cookie
+    
     if post:
+        header['Content-Type'] ='application/x-www-form-urlencoded'
         req = urllib2.Request(url, data=post, headers=header)
     else:
         req = urllib2.Request(url, headers=header)
@@ -177,7 +180,7 @@ def abrir_url(url, post=None, header=None, code=False, erro=False):
             if erro == True:
                 log(str(response.code))
                 return str(response.code), "asd"
-
+    
     link=response.read()
 
     """if 'myapimp.tk' in url:
@@ -242,6 +245,16 @@ def ler_ficheiro(ficheiro):
     conteudo =  f.read()
     f.close()
     return conteudo
+def getCategoria(categoria):
+    lista = json.loads(addon.getSetting('categorias'))
+    return lista.get(categoria)
+def getVistosFilmes(id):
+    lista = json.loads(addon.getSetting('vistos_filmes'))
+    return lista[id]
+def getVistosSeries(id):
+    lista = json.loads(addon.getSetting('vistos_series'))
+    return lista[id]
+
 
 class Thread(threading.Thread):
     def __init__(self, target, *args):

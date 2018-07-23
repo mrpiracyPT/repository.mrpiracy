@@ -14,6 +14,13 @@
         <setting id="tokenMrpiracy" type="text" option="hidden" visible="false" label="" default="" />
         <setting id="refreshMrpiracy" type="text" option="hidden" visible="false" label="" default="" />
         <setting id="loggedin" type="text" option="hidden" visible="false" label="" default="" />
+        <setting id="vistos_filmes" type="text" option="hidden" visible="false" label="" default="" />
+        <setting id="vistos_series" type="text" option="hidden" visible="false" label="" default="" />
+        <setting id="ver_depois" type="text" option="hidden" visible="false" label="" default="" />
+        <setting id="favoritos" type="text" option="hidden" visible="false" label="" default="" />
+        <setting id="categorias" type="text" option="hidden" visible="false" label="" default="" />
+        <setting id="notificacoes" type="text" option="hidden" visible="false" label="" default="0" />
+        <setting id="mensagens" type="text" option="hidden" visible="false" label="" default="0" />
     </category>
     <category label="Filmes e Séries">
         <setting id="melhor-fonte" type="bool" label="Escolher melhor fonte automaticamente?" default="false"/>
