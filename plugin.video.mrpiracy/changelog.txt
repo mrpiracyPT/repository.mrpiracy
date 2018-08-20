@@ -1,3 +1,6 @@
+v0.9.0(20/08/2018)
+- Correção de legendas nos filmes mais recentes.
+
 v0.8.9(24/07/2018)
 - Restruturação parcial do addon
 - Opções temporariamente desativadas: Favoritos, Agendados, Mensagens, Notificações e Trakt (só está em funcionamento o marcar e desmarcar como visto)

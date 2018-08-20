@@ -985,10 +985,10 @@ class mrpiracy:
 			stream = streaman.getMediaUrl()
 			legenda = streaman.getLegenda()
 
-		if coiso == 'filme':
+		"""if coiso == 'filme':
 			legenda = legendaAux
 			if resultado['IMBD'] not in legenda:
-				legenda = self.API+'subs/%s.srt' % resultado['IMBD']
+				legenda = self.API+'subs/%s.srt' % resultado['IMBD']"""
 
 		if legenda == '':
 			legenda = legendaAux
