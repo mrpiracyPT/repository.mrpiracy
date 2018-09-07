@@ -48,14 +48,14 @@ def addDir(name,url,modo,iconimage,pagina=False,tipo=False,infoLabels=False,post
     overlay = 6
     playcount = 0
     if menuO:
-        """if favorito:
+        if favorito:
             menu.append(('Remover dos Favoritos', 'XBMC.RunPlugin(%s?modo=remover-favoritos&url=%s)' % (sys.argv[0], urllib.quote_plus(url))))
         else:
             menu.append(('Adicionar aos Favoritos', 'XBMC.RunPlugin(%s?modo=adicionar-favoritos&url=%s)' % (sys.argv[0], urllib.quote_plus(url))))
         if agendado:
             menu.append(('Remover dos Agendados (ver mais tarde)', 'XBMC.RunPlugin(%s?modo=remover-agendar&url=%s)' % (sys.argv[0], urllib.quote_plus(url))))    
         else:
-            menu.append(('Agendar (ver mais tarde)', 'XBMC.RunPlugin(%s?modo=adicionar-agendar&url=%s)' % (sys.argv[0], urllib.quote_plus(url))))"""
+            menu.append(('Agendar (ver mais tarde)', 'XBMC.RunPlugin(%s?modo=adicionar-agendar&url=%s)' % (sys.argv[0], urllib.quote_plus(url))))
         if visto == True:
             menu.append(('Marcar como não visto', 'XBMC.RunPlugin(%s?modo=marcar-visto&url=%s)' % (sys.argv[0], urllib.quote_plus(url))))
             overlay = 7
@@ -91,14 +91,14 @@ def addVideo(name,url,modo,iconimage,visto,tipo,temporada,episodio,infoLabels,po
     if tipo == 'filme':
         xbmcplugin.setContent(int(sys.argv[1]), 'Movies')
         #visto = checkVisto(url)
-        """if favorito:
+        if favorito:
             menu.append(('Remover dos Favoritos', 'XBMC.RunPlugin(%s?modo=remover-favoritos&url=%s)' % (sys.argv[0], urllib.quote_plus(url))))
         else:
             menu.append(('Adicionar aos Favoritos', 'XBMC.RunPlugin(%s?modo=adicionar-favoritos&url=%s)' % (sys.argv[0], urllib.quote_plus(url))))
         if agendado:
             menu.append(('Remover dos Agendados (ver mais tarde)', 'XBMC.RunPlugin(%s?modo=remover-agendar&url=%s)' % (sys.argv[0], urllib.quote_plus(url))))
         else:
-            menu.append(('Agendar (ver mais tarde)', 'XBMC.RunPlugin(%s?modo=adicionar-agendar&url=%s)' % (sys.argv[0], urllib.quote_plus(url))))"""
+            menu.append(('Agendar (ver mais tarde)', 'XBMC.RunPlugin(%s?modo=adicionar-agendar&url=%s)' % (sys.argv[0], urllib.quote_plus(url))))
         if addon.getSetting('trailer-filmes') == 'true':
             try:
                 idYoutube = trailer.split('?v=')[-1].split('/')[-1].split('?')[0].split('&')[0]
