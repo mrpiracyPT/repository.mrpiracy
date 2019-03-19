@@ -1,3 +1,9 @@
+v0.9.2(19/03/2019)
+- Adicionado ano 2019
+- Fix Openload
+- Fix anos com limite
+- Fix se já foi visto não remove visto do episodio/filme
+
 v0.9.1(07/09/2018)
 - Menu Favoritos, Agendados.
 

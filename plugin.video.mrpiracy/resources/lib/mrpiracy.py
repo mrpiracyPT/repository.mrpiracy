@@ -140,9 +140,10 @@ class mrpiracy:
 					pass
 				token = resultado['cookie']
 				refresh = resultado['expira']
+				controlo.log(resultado['favoritos']) 
 				if resultado['vistos_filmes'] != "" or resultado['vistos_filmes'] != []:
 					try:
-						vistos_filmes = ','.join(ast.literal_eval(resultado['vistos_filmes']).values())
+						vistos_filmes = ','.join(ast.literal_eval(resultado['vistos_filmes'].replace('"', "'")).values())
 					except:
 						vistos_filmes = str(0)
 				else:
@@ -157,14 +158,17 @@ class mrpiracy:
 					vistos_series=str(0)
 				if resultado['ver_depois'] != "" or resultado['ver_depois'] != []:
 					try:
-						ver_depois = ','.join(ast.literal_eval(resultado['ver_depois']).values())
+						#ver_depois = ','.join(ast.literal_eval(json.dumps(resultado['ver_depois'])).values())
+						ver_depois = ','.join(map(str, resultado['ver_depois']))
+
 					except:
 						ver_depois = str(0)
 				else:
 					ver_depois = str(0)
 				if resultado['favoritos'] != "" or resultado['favoritos'] != []:
 					try:
-						favoritos = ','.join(ast.literal_eval(resultado['favoritos']).values())
+						#favoritos = ','.join(ast.literal_eval(json.dumps(resultado['favoritos'])).values())
+						favoritos = ','.join(map(str, resultado['favoritos']))
 					except:
 						favoritos = str(0)
 				else:
@@ -516,6 +520,7 @@ class mrpiracy:
 		
 	def listagemAnos(self, url):
 		anos = [
+			'2019',
 			'2018',
 			'2017',
 			'2016',
@@ -1582,20 +1587,31 @@ class mrpiracy:
 			resultado = controlo.abrir_url(self.API_SITE+'favoritos.php?action=adicionar&idVideo='+id_video, header=controlo.headers, cookie=definicoes.getCookie())
 		elif 'serie' in url:
 			resultado = controlo.abrir_url(url, header=controlo.headers,cookie=definicoes.getCookie())
-			resultado = json.loads(resultado)[0]
+			resultado = json.loads(resultado)['data'][0]
 			id_video = resultado['id_video']
 			tipo = 1
 			nome = resultado['nome_ingles']
 			resultado = controlo.abrir_url(self.API_SITE+'favoritos.php?action=adicionar&idVideo='+id_video, header=controlo.headers, cookie=definicoes.getCookie())
 		elif 'anime' in url:
 			resultado = controlo.abrir_url(url, header=controlo.headers,cookie=definicoes.getCookie())
-			resultado = json.loads(resultado)[0]
+			resultado = json.loads(resultado)['data'][0]
 			id_video = resultado['id_video']
 			tipo = 2
 			nome = resultado['nome_ingles']
 			resultado = controlo.abrir_url(self.API_SITE+'favoritos.php?action=adicionar&idVideo='+id_video, header=controlo.headers, cookie=definicoes.getCookie())
 		resultado = json.loads(resultado)
-		if resultado['codigo'] == 200:
+
+		if resultado['favoritos'] != "" or resultado['favoritos'] != []:
+			try:
+				favoritos = ','.join(map(str, resultado['favoritos']))
+			except:
+				favoritos = str(0)
+		else:
+			favoritos = str(0)
+
+		controlo.escrever_ficheiro(os.path.join(controlo.pastaDados,'favoritos.mrpiracy'), favoritos)
+
+		if resultado['mensagem']['codigo'] == 200:
 			xbmc.executebuiltin("XBMC.Notification(MrPiracy,"+nome+": Adicionado aos Favoritos"+","+"6000"+","+ os.path.join(controlo.addonFolder,'icon.png')+")")
 			xbmc.executebuiltin("Container.Refresh")
 	def removerFavoritos(self, url):
@@ -1623,7 +1639,17 @@ class mrpiracy:
 			nome = resultado['nome_ingles']
 			resultado = controlo.abrir_url(self.API_SITE+'favoritos.php?action=remover&idVideo='+id_video, header=controlo.headers, cookie=definicoes.getCookie())
 		resultado = json.loads(resultado)
-		if resultado['codigo'] == 200:
+
+		if resultado['favoritos'] != "" or resultado['favoritos'] != []:
+			try:
+				favoritos = ','.join(map(str, resultado['favoritos']))
+			except:
+				favoritos = str(0)
+		else:
+			favoritos = str(0)
+				
+		controlo.escrever_ficheiro(os.path.join(controlo.pastaDados,'favoritos.mrpiracy'), favoritos)
+		if resultado['mensagem']['codigo'] == 200:
 			xbmc.executebuiltin("XBMC.Notification(MrPiracy,"+nome+": Removido dos Favoritos"+","+"6000"+","+ os.path.join(controlo.addonFolder,'icon.png')+")")
 			xbmc.executebuiltin("Container.Refresh")
 
@@ -1638,21 +1664,29 @@ class mrpiracy:
 			resultado = controlo.abrir_url(self.API_SITE+'verdepois.php?action=adicionar&idVideo='+id_video, header=controlo.headers, cookie=definicoes.getCookie())
 		elif 'serie' in url:
 			resultado = controlo.abrir_url(url, header=controlo.headers, cookie=definicoes.getCookie())
-			resultado = json.loads(resultado)[0]
+			resultado = json.loads(resultado)['data'][0]
 			id_video = resultado['id_video']
 			tipo = 1
 			nome = resultado['nome_ingles']
 			resultado = controlo.abrir_url(self.API_SITE+'verdepois.php?action=adicionar&idVideo='+id_video, header=controlo.headers, cookie=definicoes.getCookie())
 		elif 'anime' in url:
 			resultado = controlo.abrir_url(url, header=controlo.headers, cookie=definicoes.getCookie())
-			resultado = json.loads(resultado)[0]
+			resultado = json.loads(resultado)['data'][0]
 			id_video = resultado['id_video']
 			tipo = 2
 			nome = resultado['nome_ingles']
 			resultado = controlo.abrir_url(self.API_SITE+'verdepois.php?action=adicionar&idVideo='+id_video, header=controlo.headers, cookie=definicoes.getCookie())
-
 		resultado = json.loads(resultado)
-		if resultado['codigo'] == 200:
+		if resultado['ver_depois'] != "" or resultado['ver_depois'] != []:
+			try:
+				ver_depois = ','.join(map(str, resultado['ver_depois']))
+			except:
+				ver_depois = str(0)
+		else:
+			ver_depois = str(0)
+				
+		controlo.escrever_ficheiro(os.path.join(controlo.pastaDados,'ver_depois.mrpiracy'), ver_depois)
+		if resultado['mensagem']['codigo'] == 200:
 			xbmc.executebuiltin("XBMC.Notification(MrPiracy,"+nome+": Agendado"+","+"6000"+","+ os.path.join(controlo.addonFolder,'icon.png')+")")
 			xbmc.executebuiltin("Container.Refresh")
 
@@ -1660,28 +1694,36 @@ class mrpiracy:
 		
 		if 'filme' in url:
 			resultado = controlo.abrir_url(url, header=controlo.headers, cookie=definicoes.getCookie())
-			resultado = json.loads(resultado)
+			resultado = json.loads(resultado)[0]
 			id_video = resultado['id_video']
 			tipo = 0
 			nome = resultado['nome_ingles']
 			resultado = controlo.abrir_url(self.API_SITE+'verdepois.php?action=remover&idVideo='+id_video, header=controlo.headers, cookie=definicoes.getCookie())
 		elif 'serie' in url:
 			resultado = controlo.abrir_url(url, header=controlo.headers, cookie=definicoes.getCookie())
-			resultado = json.loads(resultado)
+			resultado = json.loads(resultado)['data'][0]
 			id_video = resultado['id_video']
 			tipo = 1
 			nome = resultado['nome_ingles']
 			resultado = controlo.abrir_url(self.API_SITE+'verdepois.php?action=remover&idVideo='+id_video, header=controlo.headers, cookie=definicoes.getCookie())
 		elif 'anime' in url:
 			resultado = controlo.abrir_url(url, header=controlo.headers, cookie=definicoes.getCookie())
-			resultado = json.loads(resultado)
+			resultado = json.loads(resultado)['data'][0]
 			id_video = resultado['id_video']
 			tipo = 2
 			nome = resultado['nome_ingles']
 			resultado = controlo.abrir_url(self.API_SITE+'verdepois.php?action=remover&idVideo='+id_video, header=controlo.headers, cookie=definicoes.getCookie())
-
 		resultado = json.loads(resultado)
-		if resultado['codigo'] == 200:
+		if resultado['ver_depois'] != "" or resultado['ver_depois'] != []:
+			try:
+				ver_depois = ','.join(map(str, resultado['ver_depois']))
+			except:
+				ver_depois = str(0)
+		else:
+			ver_depois = str(0)
+				
+		controlo.escrever_ficheiro(os.path.join(controlo.pastaDados,'ver_depois.mrpiracy'), ver_depois)
+		if resultado['mensagem']['codigo'] == 200:
 			xbmc.executebuiltin("XBMC.Notification(MrPiracy,"+nome+": Removido dos Agendados"+","+"6000"+","+ os.path.join(controlo.addonFolder,'icon.png')+")")
 			xbmc.executebuiltin("Container.Refresh")
 
