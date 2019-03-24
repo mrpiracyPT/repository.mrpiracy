@@ -17,8 +17,8 @@ sys.setdefaultencoding('utf8')
 class mrpiracy:
 
 	def __init__(self):
-		self.API = base64.urlsafe_b64decode('aHR0cDovL21wYXBpLm1sLw==')
-		self.API_SITE = base64.urlsafe_b64decode('aHR0cDovL21wYXBpLm1sL2FwaW5ldy8=')#aHR0cDovL21wYXBpLm1sL2FwaS8=
+		self.API = base64.urlsafe_b64decode('aHR0cDovL2FwaS5tcnBpcmFjeS5jbHViLw==')
+		self.API_SITE = base64.urlsafe_b64decode('aHR0cDovL2FwaS5tcnBpcmFjeS5jbHViL2FwaW5ldy8=')#aHR0cDovL21wYXBpLm1sL2FwaS8=
 		self.SITE = base64.urlsafe_b64decode('aHR0cDovL21ycGlyYWN5LmdxLw==')
 	def definicoes(self):
 		controlo.addon.openSettings()
@@ -140,7 +140,7 @@ class mrpiracy:
 					pass
 				token = resultado['cookie']
 				refresh = resultado['expira']
-				controlo.log(resultado['favoritos']) 
+
 				if resultado['vistos_filmes'] != "" or resultado['vistos_filmes'] != []:
 					try:
 						vistos_filmes = ','.join(ast.literal_eval(resultado['vistos_filmes'].replace('"', "'")).values())
@@ -397,7 +397,6 @@ class mrpiracy:
 			resultado['temporadas'] = resultado['temporadas'].replace('especial', '999')
 		except:
 			pass
-		#controlo.log(resultado['temporadas'])
 		if resultado['temporadas'] == "":
 			return False
 		for c, i in sorted(json.loads(resultado['temporadas']).iteritems(), key=lambda i: int(i[0])):
