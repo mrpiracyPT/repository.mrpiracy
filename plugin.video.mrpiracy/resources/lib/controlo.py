@@ -25,8 +25,8 @@ teclado = xbmc.Keyboard
 pastaDados = Addon(addonInfo("id")).get_profile().decode("utf-8")
 headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.11; rv:43.0) Gecko/20100101 Firefox/43.0', 'Accept-Charset': 'utf-8;q=0.7,*;q=0.7', 'Content-Type': 'application/json'}
 dataHoras = datetime.now()
-API = base64.urlsafe_b64decode('aHR0cDovL2FwaS5tcnBpcmFjeS5jbHViLw==')
-API_SITE = base64.urlsafe_b64decode('aHR0cDovL2FwaS5tcnBpcmFjeS5jbHViL2FwaW5ldy8=')
+API = base64.urlsafe_b64decode('aHR0cDovL21yYXBpLnh5ei8=')
+API_SITE = base64.urlsafe_b64decode('aHR0cDovL21yYXBpLnh5ei9hcGluZXcv')
 SITE = base64.urlsafe_b64decode('aHR0cDovL21ycGlyYWN5LmdxLw==')
 
 try:
