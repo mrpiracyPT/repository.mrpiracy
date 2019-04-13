@@ -529,6 +529,9 @@ class OpenLoad():
 			TabUrl = []
 			sPattern = '<p id="([^"]+)" *style=\"\">([^<]+)<\/p>'
 			aResult = self.parse(html, sPattern)
+			if not aResult[0]:
+				sPattern = '<p style="" *id="([^"]+)" *>([^<]+)<\/p>'
+				aResult = self.parse(html, sPattern)
 			if (aResult[0]):
 				TabUrl = aResult[1]
 			else:

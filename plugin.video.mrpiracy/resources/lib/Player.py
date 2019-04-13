@@ -85,7 +85,7 @@ class Player(xbmc.Player):
     def onPlayBackStopped(self):
         #print 'player Stop'
         self.playing = False
-        tempo = int(self.tempo)
+        
         #print 'self.time/self.totalTime='+str(self.tempo/self.tempoTotal)
         if (self.tempo/self.tempoTotal > 0.90):
 
@@ -94,6 +94,7 @@ class Player(xbmc.Player):
 
             try:
                 xbmcvfs.delete(self.pastaVideo)
+                xbmcvfs.delete(self.pastaVideoTotal)
             except:
                 print "Não apagou"
                 pass
@@ -109,9 +110,9 @@ class Player(xbmc.Player):
         resultado = json.loads(resultado)[0]
 
         if self.content == 'episode':
-            WasAlreadySeen = mrpiracy.getVistoEpisodio(self.idFilme)
+            WasAlreadySeen = mrpiracy.mrpiracy().getVistoEpisodio(self.idFilme)
         elif self.content == 'movie':
-            WasAlreadySeen = mrpiracy.getVistoFilme(self.idFilme)
+            WasAlreadySeen = mrpiracy.mrpiracy().getVistoFilme(self.idFilme)
 
         if 'filme' in self.url:
             id_video = resultado['id_video']
@@ -196,8 +197,6 @@ class Player(xbmc.Player):
                 else:
                     Trakt.markwatchedEpisodioTrakt(imdb, temporadas, episodios)
             elif tipo == 0:
-                controlo.log('Filme: Marcar visto no Trakt')
-                controlo.log(imdb)
                 Trakt.markwatchedFilmeTrakt(imdb)
             mrpiracy.mrpiracy().getTrakt()
         if colocar == 1:
@@ -253,6 +252,7 @@ class Player(xbmc.Player):
 
     def trackerTempo(self):
         try:
+            self.tempoTotal = self.getTotalTime()
             self.tempo = self.getTime()
             f = open(self.pastaVideo, mode="w")
             f.write(str(self.tempo))

@@ -1,3 +1,7 @@
+v0.9.5(13/04/2019)
+- Fix Openload
+- Fix marcar como visto
+
 v0.9.4(27/03/2019)
 - Novo url
 
