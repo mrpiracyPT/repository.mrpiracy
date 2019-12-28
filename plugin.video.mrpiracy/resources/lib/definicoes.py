@@ -60,7 +60,7 @@ def getCategoria(id):
 def vista_menu():
 	opcao = controlo.addon.getSetting('menuView')
 	if opcao == '0': xbmc.executebuiltin("Container.SetViewMode(50)")
-	elif opcao == '1': xbmc.executebuiltin("Container.SetViewMode(51")
+	elif opcao == '1': xbmc.executebuiltin("Container.SetViewMode(51)")
 
 def vista_filmesSeries():
 	opcao = controlo.addon.getSetting('filmesSeriesView')

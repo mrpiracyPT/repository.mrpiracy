@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 import json,zlib,hashlib,time,re,os,sys,xbmc,xbmcgui,xbmcplugin,xbmcvfs,pprint, base64,urllib
-import urllib.parse
 import unicodedata
 import controlo
 import Player
@@ -125,7 +124,7 @@ class mrpiracy:
                 else:
                         try:
                                 # username=$user&password=$pass
-                                postRequest = urllib.parse.urlencode({'username': controlo.addon.getSetting('email'), 'password': controlo.addon.getSetting('password') })
+                                postRequest = urllib.urlencode({'username': controlo.addon.getSetting('email'), 'password': controlo.addon.getSetting('password') })
 
                                 # http://mrapi.xyz/apinew/login.php
                                 # Post username and password
@@ -148,6 +147,7 @@ class mrpiracy:
                                 try:
                                         if resultado['codigo'] == 204:
                                                 controlo.alerta('MrPiracy', resultado['mensagem'])
+                                                return False
                                 except:
                                         pass
 
