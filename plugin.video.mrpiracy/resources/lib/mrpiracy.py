@@ -40,24 +40,33 @@ class mrpiracy:
                         #if evento:
                                 #controlo.addDir('[B]'+evento+'[/B]', self.API_SITE+'evento/1', 'filmes', os.path.join(controlo.artFolder, controlo.skin, 'filmes.png'))
                                 #controlo.addDir('', '', '', os.path.join(controlo.artFolder, controlo.skin, 'nada.png'))
+
+                        # Create selection menu
                         controlo.addDir('Filmes', self.API_SITE+'filmes', 'menuFilmes', os.path.join(controlo.artFolder, controlo.skin, 'filmes.png'))
                         controlo.addDir('Séries', self.API_SITE+'series', 'menuSeries', os.path.join(controlo.artFolder, controlo.skin, 'series.png'))
                         controlo.addDir('Animes', self.API_SITE+'animes', 'menuAnimes', os.path.join(controlo.artFolder, controlo.skin, 'animes.png'))
                         controlo.addDir('Pesquisa', self.API_SITE+'pesquisa.php', 'pesquisa', os.path.join(controlo.artFolder, controlo.skin, 'procurar.png'))
+                        
                         controlo.addDir('', '', '', os.path.join(controlo.artFolder, controlo.skin, 'nada.png'))
+
                         if Trakt.loggedIn():
                                 self.getTrakt()
                                 #+ self.getNumNotificacoes()   ---- controlo.addDir('Trakt', self.API_SITE+'me', 'menuTrakt', os.path.join(controlo.artFolder, controlo.skin, 'trakt.png'))
+                                
                         controlo.addDir('A Minha Conta ', self.API_SITE+'me', 'conta', os.path.join(controlo.artFolder, controlo.skin, 'definicoes.png'))
                         controlo.addDir('Definições', self.API_SITE, 'definicoes', os.path.join(controlo.artFolder, controlo.skin, 'definicoes.png'))
-                        
                         
                 else:
                         controlo.addDir('Alterar Definições', 'url', 'definicoes', os.path.join(controlo.artFolder, controlo.skin, 'definicoes.png'))
                         controlo.addDir('Entrar novamente', 'url', 'inicio', os.path.join(controlo.artFolder, controlo.skin, 'retroceder.png'))
+
+                # Display Menu
                 definicoes.vista_menu()
+                
+        # Trakt API
         def loginTrakt(self):
                 Trakt.traktAuth()
+
         def getTrakt(self):
                 url = 'https://api-v2launch.trakt.tv/users/%s/watched/movies' % controlo.addon.getSetting('utilizadorTrakt').replace('.', '-')
                 filmes = Trakt.getTrakt(url, login=False)
@@ -71,51 +80,80 @@ class mrpiracy:
                 url = 'https://api-v2launch.trakt.tv/users/%s/watched/shows' % controlo.addon.getSetting('utilizadorTrakt').replace('.', '-')
                 progresso = Trakt.getTrakt(url, login=False)
                 Database.insertTraktDB(filmes, series, watchlistFilmes, watchlistSeries, progresso, controlo.dataHoras)
+
+        # Movie type menu
         def menuFilmes(self):
                 controlo.addDir('Todos os Filmes', self.API_SITE+'filmes.php?qualidade='+definicoes.getQualidade(), 'filmes', os.path.join(controlo.artFolder, controlo.skin, 'filmes.png'))
+                
                 #controlo.addDir('Filmes em Destaque', self.API_SITE+'filmes/destaque', 'filmes', os.path.join(controlo.artFolder, controlo.skin, 'filmes.png'))
+                
                 controlo.addDir('Filmes por Ano', self.API_SITE+'filmes.php?action=ano', 'listagemAnos', os.path.join(controlo.artFolder, controlo.skin, 'ano.png'))
                 controlo.addDir('Filmes por Genero', self.API_SITE+'filmes.php?action=categoria', 'listagemGeneros', os.path.join(controlo.artFolder, controlo.skin, 'generos.png'))
+                
                 #controlo.addDir('Filmes por Ranking IMDB', self.API_SITE+'filmes/imdbRank/qualidade/'+definicoes.getQualidade(), 'filmes', os.path.join(controlo.artFolder, controlo.skin, 'filmes.png'))
                 #controlo.addDir('Filmes para Crianças', self.API_SITE+'filmes/pt/qualidade/'+definicoes.getQualidade(), 'filmes', os.path.join(controlo.artFolder, controlo.skin, 'filmes.png'))
+                
                 definicoes.vista_menu()
+
+        # Trakt menu
         def menuTrakt(self):
                 controlo.addDir('Progresso', self.API_SITE+'filmes', 'progressoTrakt', os.path.join(controlo.artFolder, controlo.skin, 'trakt.png'))
                 controlo.addDir('Watchlist Filmes', self.API_SITE+'filmes/destaque', 'traktWatchlistFilmes', os.path.join(controlo.artFolder, controlo.skin, 'trakt.png'))
                 controlo.addDir('Watchlist Series', self.API_SITE+'filmes/ano', 'traktWatchlistSeries', os.path.join(controlo.artFolder, controlo.skin, 'trakt.png'))
                 controlo.addDir('Listas Pessoais', self.API_SITE+'filmes/ano', 'traktListas', os.path.join(controlo.artFolder, controlo.skin, 'trakt.png'))
                 definicoes.vista_menu()
+
+        # Series type menu
         def menuSeries(self):
                 controlo.addDir('Todas as Séries', self.API_SITE+'series.php', 'series', os.path.join(controlo.artFolder, controlo.skin, 'series.png'))
+                
                 #controlo.addDir('Séries em Destaque', self.API_SITE+'series/destaque', 'series', os.path.join(controlo.artFolder, controlo.skin, 'series.png'))
+                
                 controlo.addDir('Séries por Ano', self.API_SITE+'series.php?action=ano', 'listagemAnos', os.path.join(controlo.artFolder, controlo.skin, 'ano.png'))
                 controlo.addDir('Séries por Genero', self.API_SITE+'series.php?action=categoria', 'listagemGeneros', os.path.join(controlo.artFolder, controlo.skin, 'generos.png'))
+                
                 #controlo.addDir('Séries por Ranking IMDB', self.API_SITE+'series/imdbRank', 'series', os.path.join(controlo.artFolder, controlo.skin, 'series.png'))
+                
                 definicoes.vista_menu()
+
+        # Animes type menu
         def menuAnimes(self):
                 controlo.addDir('Todos os Animes', self.API_SITE+'animes.php', 'animes', os.path.join(controlo.artFolder, controlo.skin, 'animes.png'))
+                
                 #controlo.addDir('Animes em Destaque', self.API_SITE+'animes/destaque', 'animes', os.path.join(controlo.artFolder, controlo.skin, 'animes.png'))
+                
                 controlo.addDir('Animes por Ano', self.API_SITE+'animes.php?action=ano', 'listagemAnos', os.path.join(controlo.artFolder, controlo.skin, 'ano.png'))
                 controlo.addDir('Animes por Genero', self.API_SITE+'animes.php?action=categoria', 'listagemGeneros', os.path.join(controlo.artFolder, controlo.skin, 'generos.png'))
+                
                 #controlo.addDir('Animes por Ranking IMDB', self.API_SITE+'animes/imdbRank', 'animes', os.path.join(controlo.artFolder, controlo.skin, 'generos.png'))
+                
                 definicoes.vista_menu()
+
+        # Account menu
         def conta(self):
                 controlo.addDir('Favoritos', self.API_SITE+'favoritos.php', 'favoritosMenu', os.path.join(controlo.artFolder, controlo.skin, 'favoritos.png'))
                 controlo.addDir('Agendados', self.API_SITE+'verdepois.php', 'verdepoisMenu', os.path.join(controlo.artFolder, controlo.skin, 'agendados.png'))
+                
                 #controlo.addDir('Notificações', self.API_SITE+'index.php?action=notificacoes', 'notificacoes', os.path.join(controlo.artFolder, controlo.skin, 'notificacoes.png'))
                 #controlo.addDir('Mensagens', self.API_SITE+'index.php?action=mensagens', 'mensagens', os.path.join(controlo.artFolder, controlo.skin, 'notificacoes.png'))
+                
                 definicoes.vista_menu()
+
+        # Favorites menu
         def favoritosMenu(self):
                 controlo.addDir('Filmes Favoritos', self.API_SITE+'favoritos.php?action=filmes&qualidade='+definicoes.getQualidade(), 'favoritos', os.path.join(controlo.artFolder, controlo.skin, 'favoritos.png'))
                 controlo.addDir('Séries Favoritas', self.API_SITE+'favoritos.php?action=series', 'favoritos', os.path.join(controlo.artFolder, controlo.skin, 'agendados.png'))
                 controlo.addDir('Animes Favoritos', self.API_SITE+'favoritos.php?action=animes', 'favoritos', os.path.join(controlo.artFolder, controlo.skin, 'notificacoes.png'))
                 definicoes.vista_menu()
+
+        # Watch later menu
         def verdepoisMenu(self):
                 controlo.addDir('Filmes Agendados', self.API_SITE+'verdepois.php?action=filmes&qualidade='+definicoes.getQualidade(), 'verdepois', os.path.join(controlo.artFolder, controlo.skin, 'agendados.png'))
                 controlo.addDir('Séries Agendadas', self.API_SITE+'verdepois.php?action=series', 'verdepois', os.path.join(controlo.artFolder, controlo.skin, 'agendados.png'))
                 controlo.addDir('Animes Agendados', self.API_SITE+'verdepois.php?action=animes', 'verdepois', os.path.join(controlo.artFolder, controlo.skin, 'agendados.png'))
                 definicoes.vista_menu()
 
+        # Login handle
         def login(self):
                 # Check if empty email and password
                 if controlo.addon.getSetting('email') == '' or controlo.addon.getSetting('password') == '':
@@ -155,6 +193,7 @@ class mrpiracy:
                                 token = resultado['cookie']
                                 refresh = resultado['expira']
 
+                                # Get user data
                                 if resultado['vistos_filmes'] != "" or resultado['vistos_filmes'] != []:
                                         try:
                                                 vistos_filmes = ','.join(ast.literal_eval(resultado['vistos_filmes'].replace('"', "'")).values())
@@ -203,7 +242,8 @@ class mrpiracy:
                                 controlo.addon.setSetting('tokenMrpiracy', token)
                                 controlo.addon.setSetting('refreshMrpiracy', refresh)
                                 controlo.addon.setSetting('loggedin', username)
-                                
+
+                                # Write user data to file
                                 controlo.escrever_ficheiro(os.path.join(controlo.pastaDados,'vistos_filmes.mrpiracy'), vistos_filmes)
                                 controlo.escrever_ficheiro(os.path.join(controlo.pastaDados,'vistos_series.mrpiracy'), vistos_series)
                                 controlo.escrever_ficheiro(os.path.join(controlo.pastaDados,'ver_depois.mrpiracy'), ver_depois)
@@ -218,6 +258,7 @@ class mrpiracy:
                 """else:
                         xbmc.executebuiltin("XBMC.Notification(MrPiracy, Sessão iniciada: "+username+", '10000', "+controlo.addonFolder+"/icon.png)")
                         return True"""
+                
         def getEventos(self):
                 controlo.headers['Authorization'] = 'Bearer %s' % controlo.addon.getSetting('tokenMrpiracy')
                 resultado = controlo.abrir_url(self.API_SITE+'eventos', header=controlo.headers)
@@ -228,6 +269,7 @@ class mrpiracy:
                 except:
                         pass
                 return resultado['data']['nome']
+        
         def getNumNotificacoes(self):
                 """controlo.headers['Authorization'] = 'Bearer %s' % controlo.addon.getSetting('tokenMrpiracy')
                 resultado = controlo.abrir_url(self.API_SITE+'me', header=controlo.headers)
@@ -306,6 +348,7 @@ class mrpiracy:
                 if int(current) < int(total):
                         controlo.addDir('Proxima pagina ('+str(current)+'/'+str(total)+')', proximo, 'favoritos', os.path.join(controlo.artFolder, controlo.skin, 'proximo.png'))
                 definicoes.vista_filmesSeries()
+                
         def verdepois(self, url):
                 resultado = controlo.abrir_url(url, header=controlo.headers, cookie=definicoes.getCookie())
                 resultado = json.loads(resultado)
@@ -371,6 +414,7 @@ class mrpiracy:
                 if current < total:
                         controlo.addDir('Próxima página ('+str(current)+'/'+str(total)+')', proximo, 'mensagens', os.path.join(controlo.artFolder, controlo.skin, 'proximo.png'))"""
                 definicoes.vista_menu()
+                
         def filmes(self, url):
                 resultado = controlo.abrir_url(url, header=controlo.headers, cookie=definicoes.getCookie())
                 resultado = json.loads(resultado)
@@ -385,6 +429,7 @@ class mrpiracy:
                 if int(current) < int(total):
                         controlo.addDir('Próxima página ('+str(current)+'/'+str(total)+')', proximo, 'filmes', os.path.join(controlo.artFolder, controlo.skin, 'proximo.png'))
                 definicoes.vista_filmesSeries()
+                
         def series(self, url):
                 resultado = controlo.abrir_url(url, header=controlo.headers, cookie=definicoes.getCookie())
                 resultado = json.loads(resultado)
@@ -403,6 +448,7 @@ class mrpiracy:
                 if int(current) < int(total):
                         controlo.addDir('Proxima pagina ('+str(current)+'/'+str(total)+')', proximo, 'series', os.path.join(controlo.artFolder, controlo.skin, 'proximo.png'))
                 definicoes.vista_filmesSeries()
+                
         def temporadas(self, url):
                 resultado = controlo.abrir_url(url, header=controlo.headers, cookie=definicoes.getCookie())
                 resultado = json.loads(resultado)['data'][0]
@@ -425,6 +471,7 @@ class mrpiracy:
                                 controlo.addDir("[B]Temporada Especial[/B]", (url % '999'), 'episodios', os.path.join(controlo.artFolder, controlo.skin,'temporadas', 'temporadaEspecial.png'),poster=self.API+resultado['background'])
 
                 definicoes.vista_temporadas()
+                
         def episodios(self, url):
                 resultado = controlo.abrir_url(url, header=controlo.headers, cookie=definicoes.getCookie())
                 resultado = json.loads(resultado)
@@ -524,11 +571,14 @@ class mrpiracy:
                         controlo.addVideo(pt+br+final+semLegenda+'[COLOR '+cor+'][B]Episodio '+str(i['episodio'])+'[/B][/COLOR] '+nome, self.API_SITE+tipo+'.php?action=episodio&idSerie='+str(i['id_serie'])+'&idEpisodio='+str(i['id_episodio']), 'player', imagem, visto, 'episodio', i['temporada'], i['episodio'], infoLabels, self.API+i['background'])
                 current = resultado['meta']['current']
                 total = resultado['meta']['total']
-                try: proximo = resultado['meta']['paginacao']['next']
-                except: pass 
+                try:
+                        proximo = resultado['meta']['paginacao']['next']
+                except:
+                        pass 
                 if int(current) < int(total):
                         controlo.addDir('Proxima pagina ('+str(current)+'/'+str(total)+')', proximo, 'episodios', os.path.join(controlo.artFolder, controlo.skin, 'proximo.png'))
                 definicoes.vista_episodios()
+                
                 if naoVisto == True:
                         if controlo.addon.getSetting('nao-visto-episodios') == 'true':
                                 if contagem > 0:
@@ -572,6 +622,7 @@ class mrpiracy:
                 for i in anos:
                         controlo.addDir(i, url+'&ano='+i+qualidade, 'anos', os.path.join(controlo.artFolder, controlo.skin, 'ano.png'))
                 definicoes.vista_menu()
+                
         def listagemGeneros(self, url):
                 lista = definicoes.getListCategoria()
                 if 'filmes' in url:
@@ -593,6 +644,7 @@ class mrpiracy:
                                 cat = c['categorias'].encode('utf-8')
                         controlo.addDir(cat, url+'&categoria='+str(c['id_categoria'])+qualidade, 'categorias', os.path.join(controlo.artFolder, controlo.skin, 'generos.png'))
                 definicoes.vista_menu()
+                
         def anos(self, url):
                 resultado = controlo.abrir_url(url, header=controlo.headers, cookie=definicoes.getCookie())
                 resultadoa = json.loads(resultado)
@@ -609,8 +661,10 @@ class mrpiracy:
                                 self.setSeries(i, vistos, opcao, tipo)
                 current = resultadoa['meta']['current']
                 total = resultadoa['meta']['total']
-                try: proximo = resultadoa['meta']['paginacao']['next']
-                except: pass 
+                try:
+                        proximo = resultadoa['meta']['paginacao']['next']
+                except:
+                        pass 
                 if int(current) < int(total):
                         controlo.addDir('Próxima página ('+str(current)+'/'+str(total)+')', proximo, 'anos', os.path.join(controlo.artFolder, controlo.skin, 'proximo.png'))
                 definicoes.vista_filmesSeries()
@@ -631,8 +685,10 @@ class mrpiracy:
                                 self.setSeries(i, vistos, opcao, tipo)
                 current = resultadoa['meta']['current']
                 total = resultadoa['meta']['total']
-                try: proximo = resultadoa['meta']['paginacao']['next']
-                except: pass 
+                try:
+                        proximo = resultadoa['meta']['paginacao']['next']
+                except:
+                        pass 
                 if int(current) < int(total):
                         controlo.addDir('Próxima página ('+str(current)+'/'+str(total)+')', proximo, 'categorias', os.path.join(controlo.artFolder, controlo.skin, 'proximo.png'))
 
@@ -1020,6 +1076,7 @@ class mrpiracy:
                         if int(current) < int(total):
                                 controlo.addDir('Proxima pagina ('+str(current)+'/'+str(total)+')', proximo, 'pesquisa', os.path.join(controlo.artFolder, controlo.skin, 'proximo.png'))
                         definicoes.vista_filmesSeries()
+                        
         def marcarVisto(self, url):
                 
                 resultado = controlo.abrir_url(url, header=controlo.headers, cookie=definicoes.getCookie())
@@ -1317,10 +1374,12 @@ class mrpiracy:
                         fh.write(contents)
                         fh.close()
                 return
+        
         def clean(self, text):
                 command={'&#8220;':'"','&#8221;':'"', '&#8211;':'-','&amp;':'&','&#8217;':"'",'&#8216;':"'"}
                 regex = re.compile("|".join(map(re.escape, command.keys())))
                 return regex.sub(lambda mo: command[mo.group(0)], text)
+        
         def progressoTrakt(self):
 
                 vistos = Database.selectProgresso()
@@ -1451,6 +1510,7 @@ class mrpiracy:
                         controlo.addVideo(pt+br+semLegenda+final+'[B]'+resultado['nomeSerie']+'[/B] '+temporadaNumero+'x'+episodioN+' . '+nome, self.API_SITE+tipo+'/'+str(resultado['id_serie'])+'/temporada/'+str(resultado['temporada'])+'/episodio/'+str(resultado['episodio']), 'player', imagem, False, 'episodio', resultado['temporada'], resultado['episodio'], infoLabels, self.API+resultado['background'])
                 definicoes.vista_filmesSeries()
                 xbmc.executebuiltin("Container.SetViewMode(50)")
+                
         def watchlistFilmes(self):
                 vistos = Database.selectWatchFilmes()
                 controlo.headers['Authorization'] = 'Bearer %s' % controlo.addon.getSetting('tokenMrpiracy')
@@ -1576,6 +1636,7 @@ class mrpiracy:
                                 menuFavorito = False
                         controlo.addDir(nome+' ('+resultado['ano']+')', self.API_SITE+tipo+'/'+str(resultado['id_video']), 'temporadas', resultado['foto'], tipo='serie', infoLabels=infoLabels,poster=self.API+resultado['background'],visto=visto, menuO=True, favorito=menuFavorito, agendado=menuVerDepois)
                 definicoes.vista_filmesSeries()
+                
         def remove_accents(self, input_str):
                 input_str = input_str.replace("/", "")
                 nkfd_form = unicodedata.normalize('NFKD', unicode(self.clean(input_str)))
