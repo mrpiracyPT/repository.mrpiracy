@@ -24,7 +24,9 @@ mensagemprogresso = xbmcgui.DialogProgress()
 teclado = xbmc.Keyboard
 pastaDados = Addon(addonInfo("id")).get_profile().decode("utf-8")
 
-headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.11; rv:43.0) Gecko/20100101 Firefox/43.0', 'Accept-Charset': 'utf-8;q=0.7,*;q=0.7', 'Content-Type': 'application/json'}
+headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.11; rv:43.0) Gecko/20100101 Firefox/43.0',
+           'Accept-Charset': 'utf-8;q=0.7,*;q=0.7',
+           'Content-Type': 'application/json'}
 
 dataHoras = datetime.now()
 
@@ -37,19 +39,26 @@ try:
     context = ssl.SSLContext(ssl.PROTOCOL_TLSv1)
 except:
     pass
-def addDir(name,url,modo,iconimage,pagina=False,tipo=False,infoLabels=False,poster=False,visto=False, menuO=False,favorito=False, agendado=False):
+
+def addDir(name, url, modo, iconimage, pagina=False, tipo=False, infoLabels=False, poster=False, visto=False, menuO=False, favorito=False, agendado=False):
     menu = []
-    if infoLabels: infoLabelsAux = infoLabels
-    else: infoLabelsAux = {'Title': name}
+    if infoLabels:
+        infoLabelsAux = infoLabels
+    else:
+        infoLabelsAux = {'Title': name}
 
-    if poster: posterAux = poster
-    else: posterAux = iconimage
+    if poster:
+        posterAux = poster
+    else:
+        posterAux = iconimage
 
-    u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&modo="+modo
-    ok=True
+    u = sys.argv[0] + "?url=" + urllib.quote_plus(url) + "&modo=" + modo
+    ok = True
     fan = fanart
     overlay = 6
     playcount = 0
+
+    # Check if options menu
     if menuO:
         if favorito:
             menu.append(('Remover dos Favoritos', 'XBMC.RunPlugin(%s?modo=remover-favoritos&url=%s)' % (sys.argv[0], urllib.quote_plus(url))))
@@ -80,11 +89,13 @@ def addDir(name,url,modo,iconimage,pagina=False,tipo=False,infoLabels=False,post
 
     infoLabelsAux["overlay"] = overlay
     infoLabelsAux["playcount"] = playcount
-    liz=xbmcgui.ListItem(name, iconImage=iconimage, thumbnailImage=iconimage)
+    liz = xbmcgui.ListItem(name, iconImage = iconimage, thumbnailImage = iconimage)
     liz.setProperty('fanart_image', fan)
-    liz.setInfo( type="Video", infoLabels=infoLabelsAux )
-    liz.addContextMenuItems(menu, replaceItems=True)
-    ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
+    liz.setInfo(type = "Video", infoLabels = infoLabelsAux)
+    liz.addContextMenuItems(menu, replaceItems = True)
+    
+    ok = xbmcplugin.addDirectoryItem(handle = int(sys.argv[1]), url = u, listitem = liz, isFolder = True)
+    
     return ok
 
 def addVideo(name,url,modo,iconimage,visto,tipo,temporada,episodio,infoLabels,poster, trailer=False,serieNome=False,favorito=False,agendado=False):
@@ -162,7 +173,6 @@ def to_unicode(text):
 	return u"".join([c for c in nfkd_form if not unicodedata.combining(c)])
 
 def abrir_url(url, post=None, header=None, code=False, erro=False, cookie=None):
-
     if header == None:
         header = headers
     if cookie:
@@ -170,7 +180,7 @@ def abrir_url(url, post=None, header=None, code=False, erro=False, cookie=None):
     
     if post:
         header['Content-Type'] ='application/x-www-form-urlencoded'
-        req = urllib2.Request(url, data=post, headers=header)
+        req = urllib2.Request(url, data = post, headers = header)
     else:
         req = urllib2.Request(url, headers=header)
 
