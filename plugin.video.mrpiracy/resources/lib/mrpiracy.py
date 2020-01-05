@@ -25,13 +25,13 @@ class mrpiracy:
         self.API_SITE = base64.urlsafe_b64decode('aHR0cDovL21yYXBpLnh5ei9hcGluZXcv')#aHR0cDovL21wYXBpLm1sL2FwaS8= http://mpapi.ml/api/
         # http://mrpiracy.gq/
         self.SITE = base64.urlsafe_b64decode('aHR0cDovL21ycGlyYWN5LmdxLw==')
-        
+
     def definicoes(self):
         controlo.addon.openSettings()
         controlo.addDir('Entrar novamente','url', 'inicio', os.path.join(controlo.artFolder, controlo.skin, 'retroceder.png'))
         #vista_menu()
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
-        
+
     def menu(self):
         login = self.login()
         database = Database.criarFicheiros()
@@ -47,23 +47,23 @@ class mrpiracy:
             controlo.addDir('Séries', self.API_SITE+'series', 'menuSeries', os.path.join(controlo.artFolder, controlo.skin, 'series.png'))
             controlo.addDir('Animes', self.API_SITE+'animes', 'menuAnimes', os.path.join(controlo.artFolder, controlo.skin, 'animes.png'))
             controlo.addDir('Pesquisa', self.API_SITE+'pesquisa.php', 'pesquisa', os.path.join(controlo.artFolder, controlo.skin, 'procurar.png'))
-            
+
             controlo.addDir('', '', '', os.path.join(controlo.artFolder, controlo.skin, 'nada.png'))
 
             if Trakt.loggedIn():
                 self.getTrakt()
                 #+ self.getNumNotificacoes()   ---- controlo.addDir('Trakt', self.API_SITE+'me', 'menuTrakt', os.path.join(controlo.artFolder, controlo.skin, 'trakt.png'))
-                
+
             controlo.addDir('A Minha Conta ', self.API_SITE+'me', 'conta', os.path.join(controlo.artFolder, controlo.skin, 'definicoes.png'))
             controlo.addDir('Definições', self.API_SITE, 'definicoes', os.path.join(controlo.artFolder, controlo.skin, 'definicoes.png'))
-            
+
         else:
             controlo.addDir('Alterar Definições', 'url', 'definicoes', os.path.join(controlo.artFolder, controlo.skin, 'definicoes.png'))
             controlo.addDir('Entrar novamente', 'url', 'inicio', os.path.join(controlo.artFolder, controlo.skin, 'retroceder.png'))
 
         # Display Menu
         definicoes.vista_menu()
-        
+
     # Trakt API
     def loginTrakt(self):
         Trakt.traktAuth()
@@ -85,15 +85,15 @@ class mrpiracy:
     # Movie type menu
     def menuFilmes(self):
         controlo.addDir('Todos os Filmes', self.API_SITE+'filmes.php?qualidade='+definicoes.getQualidade(), 'filmes', os.path.join(controlo.artFolder, controlo.skin, 'filmes.png'))
-        
+
         #controlo.addDir('Filmes em Destaque', self.API_SITE+'filmes/destaque', 'filmes', os.path.join(controlo.artFolder, controlo.skin, 'filmes.png'))
-        
+
         controlo.addDir('Filmes por Ano', self.API_SITE+'filmes.php?action=ano', 'listagemAnos', os.path.join(controlo.artFolder, controlo.skin, 'ano.png'))
         controlo.addDir('Filmes por Genero', self.API_SITE+'filmes.php?action=categoria', 'listagemGeneros', os.path.join(controlo.artFolder, controlo.skin, 'generos.png'))
-        
+
         #controlo.addDir('Filmes por Ranking IMDB', self.API_SITE+'filmes/imdbRank/qualidade/'+definicoes.getQualidade(), 'filmes', os.path.join(controlo.artFolder, controlo.skin, 'filmes.png'))
         #controlo.addDir('Filmes para Crianças', self.API_SITE+'filmes/pt/qualidade/'+definicoes.getQualidade(), 'filmes', os.path.join(controlo.artFolder, controlo.skin, 'filmes.png'))
-        
+
         definicoes.vista_menu()
 
     # Trakt menu
@@ -107,37 +107,37 @@ class mrpiracy:
     # Series type menu
     def menuSeries(self):
         controlo.addDir('Todas as Séries', self.API_SITE+'series.php', 'series', os.path.join(controlo.artFolder, controlo.skin, 'series.png'))
-        
+
         #controlo.addDir('Séries em Destaque', self.API_SITE+'series/destaque', 'series', os.path.join(controlo.artFolder, controlo.skin, 'series.png'))
-        
+
         controlo.addDir('Séries por Ano', self.API_SITE+'series.php?action=ano', 'listagemAnos', os.path.join(controlo.artFolder, controlo.skin, 'ano.png'))
         controlo.addDir('Séries por Genero', self.API_SITE+'series.php?action=categoria', 'listagemGeneros', os.path.join(controlo.artFolder, controlo.skin, 'generos.png'))
-        
+
         #controlo.addDir('Séries por Ranking IMDB', self.API_SITE+'series/imdbRank', 'series', os.path.join(controlo.artFolder, controlo.skin, 'series.png'))
-        
+
         definicoes.vista_menu()
 
     # Animes type menu
     def menuAnimes(self):
         controlo.addDir('Todos os Animes', self.API_SITE+'animes.php', 'animes', os.path.join(controlo.artFolder, controlo.skin, 'animes.png'))
-        
+
         #controlo.addDir('Animes em Destaque', self.API_SITE+'animes/destaque', 'animes', os.path.join(controlo.artFolder, controlo.skin, 'animes.png'))
-        
+
         controlo.addDir('Animes por Ano', self.API_SITE+'animes.php?action=ano', 'listagemAnos', os.path.join(controlo.artFolder, controlo.skin, 'ano.png'))
         controlo.addDir('Animes por Genero', self.API_SITE+'animes.php?action=categoria', 'listagemGeneros', os.path.join(controlo.artFolder, controlo.skin, 'generos.png'))
-        
+
         #controlo.addDir('Animes por Ranking IMDB', self.API_SITE+'animes/imdbRank', 'animes', os.path.join(controlo.artFolder, controlo.skin, 'generos.png'))
-        
+
         definicoes.vista_menu()
 
     # Account menu
     def conta(self):
         controlo.addDir('Favoritos', self.API_SITE+'favoritos.php', 'favoritosMenu', os.path.join(controlo.artFolder, controlo.skin, 'favoritos.png'))
         controlo.addDir('Agendados', self.API_SITE+'verdepois.php', 'verdepoisMenu', os.path.join(controlo.artFolder, controlo.skin, 'agendados.png'))
-        
+
         #controlo.addDir('Notificações', self.API_SITE+'index.php?action=notificacoes', 'notificacoes', os.path.join(controlo.artFolder, controlo.skin, 'notificacoes.png'))
         #controlo.addDir('Mensagens', self.API_SITE+'index.php?action=mensagens', 'mensagens', os.path.join(controlo.artFolder, controlo.skin, 'notificacoes.png'))
-        
+
         definicoes.vista_menu()
 
     # Favorites menu
@@ -202,7 +202,7 @@ class mrpiracy:
                         vistos_filmes = str(0)
                 else:
                     vistos_filmes = str(0)
-                
+
                 if resultado['vistos_series'] != "" or resultado['vistos_series'] != []:
                     try:
                         vistos_series = ','.join(ast.literal_eval(resultado['vistos_series']).values())
@@ -210,7 +210,7 @@ class mrpiracy:
                         vistos_series= str(0)
                 else:
                     vistos_series=str(0)
-                    
+
                 if resultado['ver_depois'] != "" or resultado['ver_depois'] != []:
                     try:
                         #ver_depois = ','.join(ast.literal_eval(json.dumps(resultado['ver_depois'])).values())
@@ -220,7 +220,7 @@ class mrpiracy:
                         ver_depois = str(0)
                 else:
                     ver_depois = str(0)
-                    
+
                 if resultado['favoritos'] != "" or resultado['favoritos'] != []:
                     try:
                         #favoritos = ','.join(ast.literal_eval(json.dumps(resultado['favoritos'])).values())
@@ -231,12 +231,12 @@ class mrpiracy:
                     favoritos = str(0)
 
                 categorias = resultado['categorias']
-                
+
                 try:
                     username = resultado['username'].decode('utf-8')
                 except:
                     username = resultado['username'].encode('utf-8')
-                
+
                 xbmc.executebuiltin("XBMC.Notification(MrPiracy, Sessão iniciada: "+username+", '10000', "+controlo.addonFolder+"/icon.png)")
 
                 # Set addon settings
@@ -259,7 +259,7 @@ class mrpiracy:
         """else:
             xbmc.executebuiltin("XBMC.Notification(MrPiracy, Sessão iniciada: "+username+", '10000', "+controlo.addonFolder+"/icon.png)")
             return True"""
-        
+
     def getEventos(self):
         controlo.headers['Authorization'] = 'Bearer %s' % controlo.addon.getSetting('tokenMrpiracy')
         resultado = controlo.abrir_url(self.API_SITE+'eventos', header=controlo.headers)
@@ -270,7 +270,7 @@ class mrpiracy:
         except:
             pass
         return resultado['data']['nome']
-    
+
     def getNumNotificacoes(self):
         """controlo.headers['Authorization'] = 'Bearer %s' % controlo.addon.getSetting('tokenMrpiracy')
         resultado = controlo.abrir_url(self.API_SITE+'me', header=controlo.headers)
@@ -282,7 +282,7 @@ class mrpiracy:
         devolve += str(controlo.addon.getSetting('notificacoes'))+' notificacoes e '+str(controlo.addon.getSetting('mensagens'))+' mensagens'
         devolve += '[/COLOR][/B]'
         return devolve
-    
+
     def getFavoritos(self,id):
         lista = controlo.ler_ficheiro(os.path.join(controlo.pastaDados,'favoritos.mrpiracy')).split(",")
         devolve = False
@@ -292,7 +292,7 @@ class mrpiracy:
             if id==x:
                 devolve = True
         return devolve
-    
+
     def getVerDepois(self,id):
         lista = controlo.ler_ficheiro(os.path.join(controlo.pastaDados,'ver_depois.mrpiracy')).split(",")
         devolve = False
@@ -303,7 +303,7 @@ class mrpiracy:
             if id==x:
                 devolve = True
         return devolve
-    
+
     def getVistoEpisodio(self,id):
         lista = controlo.ler_ficheiro(os.path.join(controlo.pastaDados,'vistos_series.mrpiracy')).split(",")
         devolve = False
@@ -313,13 +313,13 @@ class mrpiracy:
             if id==x:
                 devolve = True
         return devolve
-    
+
     def getVistoFilme(self,id):
         lista = controlo.ler_ficheiro(os.path.join(controlo.pastaDados,'vistos_filmes.mrpiracy')).split(",")
         devolve = False
         if lista == "" or lista == [] or lista == '[]':
             return devolve
-        
+
         for x in lista:
             if id==x:
                 devolve = True
@@ -345,11 +345,11 @@ class mrpiracy:
         current = resultado['meta']['current']
         total = resultado['meta']['total']
         try: proximo = resultado['meta']['paginacao']['next']
-        except: pass 
+        except: pass
         if int(current) < int(total):
             controlo.addDir('Proxima pagina ('+str(current)+'/'+str(total)+')', proximo, 'favoritos', os.path.join(controlo.artFolder, controlo.skin, 'proximo.png'))
         definicoes.vista_filmesSeries()
-        
+
     def verdepois(self, url):
         resultado = controlo.abrir_url(url, header=controlo.headers, cookie=definicoes.getCookie())
         resultado = json.loads(resultado)
@@ -364,15 +364,15 @@ class mrpiracy:
         if tipo == 'filmes':
             for i in resultado['data']:
                 self.setFilme(i, vistos, opcao)
-                
+
         elif tipo == 'series' or tipo == 'animes':
             for i in resultado['data']:
                 self.setSeries(i, vistos, opcao, tipo)
-        
+
         current = resultado['meta']['current']
         total = resultado['meta']['total']
         try: proximo = resultado['meta']['paginacao']['next']
-        except: pass 
+        except: pass
         if int(current) < int(total):
             controlo.addDir('Proxima pagina ('+str(current)+'/'+str(total)+')', proximo, 'verdepois', os.path.join(controlo.artFolder, controlo.skin, 'proximo.png'))
         definicoes.vista_filmesSeries()
@@ -396,7 +396,7 @@ class mrpiracy:
         """current = resultadoa['meta']['pagination']['current_page']
         total = resultadoa['meta']['pagination']['total_pages']
         try: proximo = resultadoa['meta']['pagination']['links']['next']
-        except: pass 
+        except: pass
         if current < total:
             controlo.addDir('Próxima página ('+str(current)+'/'+str(total)+')', proximo, 'notificacoes', os.path.join(controlo.artFolder, controlo.skin, 'proximo.png'))"""
         definicoes.vista_menu()
@@ -411,26 +411,26 @@ class mrpiracy:
         """current = resultadoa['meta']['pagination']['current_page']
         total = resultadoa['meta']['pagination']['total_pages']
         try: proximo = resultadoa['meta']['pagination']['links']['next']
-        except: pass 
+        except: pass
         if current < total:
             controlo.addDir('Próxima página ('+str(current)+'/'+str(total)+')', proximo, 'mensagens', os.path.join(controlo.artFolder, controlo.skin, 'proximo.png'))"""
         definicoes.vista_menu()
-        
+
     def filmes(self, url):
         resultado = controlo.abrir_url(url, header=controlo.headers, cookie=definicoes.getCookie())
         resultado = json.loads(resultado)
         vistos = Database.selectFilmes()
         opcao = controlo.addon.getSetting('marcarVisto')
         for i in resultado['data']:
-            self.setFilme(i, vistos, opcao)         
+            self.setFilme(i, vistos, opcao)
         current = resultado['meta']['current']
         total = resultado['meta']['total']
         try: proximo = resultado['meta']['paginacao']['next']
-        except: pass 
+        except: pass
         if int(current) < int(total):
             controlo.addDir('Próxima página ('+str(current)+'/'+str(total)+')', proximo, 'filmes', os.path.join(controlo.artFolder, controlo.skin, 'proximo.png'))
         definicoes.vista_filmesSeries()
-        
+
     def series(self, url):
         resultado = controlo.abrir_url(url, header=controlo.headers, cookie=definicoes.getCookie())
         resultado = json.loads(resultado)
@@ -445,16 +445,16 @@ class mrpiracy:
         current = resultado['meta']['current']
         total = resultado['meta']['total']
         try: proximo = resultado['meta']['paginacao']['next']
-        except: pass 
+        except: pass
         if int(current) < int(total):
             controlo.addDir('Proxima pagina ('+str(current)+'/'+str(total)+')', proximo, 'series', os.path.join(controlo.artFolder, controlo.skin, 'proximo.png'))
         definicoes.vista_filmesSeries()
-        
+
     def temporadas(self, url):
         resultado = controlo.abrir_url(url, header=controlo.headers, cookie=definicoes.getCookie())
         resultado = json.loads(resultado)['data'][0]
         id = url.split('=')[-1]
-        
+
         if 'serie' in url:
             url = self.API_SITE+'series.php?action=temporada&idSerie='+id+'&n=%s'
         elif 'anime' in url:
@@ -472,7 +472,7 @@ class mrpiracy:
                 controlo.addDir("[B]Temporada Especial[/B]", (url % '999'), 'episodios', os.path.join(controlo.artFolder, controlo.skin,'temporadas', 'temporadaEspecial.png'),poster=self.API+resultado['background'])
 
         definicoes.vista_temporadas()
-        
+
     def episodios(self, url):
         resultado = controlo.abrir_url(url, header=controlo.headers, cookie=definicoes.getCookie())
         resultado = json.loads(resultado)
@@ -480,7 +480,7 @@ class mrpiracy:
             tipo = 'series'
         elif 'anime' in url:
             tipo = 'animes'
-        
+
         """controlo.headers['Authorization'] = 'Bearer %s' % controlo.addon.getSetting('tokenMrpiracy')
         resultadoS = controlo.abrir_url(self.API_SITE+tipo+'/'+url.split('/')[5], header=controlo.headers)
         resultadoS = json.loads(resultadoS)"""
@@ -493,7 +493,7 @@ class mrpiracy:
         episodioParaVer = 0
         contagem = 0
         for i in resultado['data']:
-        
+
             pt = ''
             infoLabels = {'Title': i['nome_episodio'], 'Code': i['IMBD'], 'Episode': i['episodio'], 'Season': i['temporada'] }
             try:
@@ -520,8 +520,8 @@ class mrpiracy:
                     vistoa = True
             elif opcao == '0' or opcao == '2':
                 vistoa = self.verificarVistoLocal(i['id_serie'], temporada=i['temporada'], episodio=i['episodio'])
-            
-            if Trakt.loggedIn():            
+
+            if Trakt.loggedIn():
                 ep = i['episodio']
                 if '/' in i['episodio']:
                     ep = i['episodio'].split('/')[0]
@@ -543,12 +543,12 @@ class mrpiracy:
                                         break
                                     else:
                                         vistoe = False
-            
+
             if vistoa:
                 visto = True
             else:
                 visto = False
-                        
+
             if vistoe:
                 visto = True
                 cor = 'blue'
@@ -568,25 +568,25 @@ class mrpiracy:
                 imagem = self.API+'images/series/'+i['IMBD']+'.jpg'
             elif i['imagem'] == "0":
                 imagem = self.API+'images/capas/'+imdbSerie+'.jpg'
-            
+
             controlo.addVideo(pt+br+final+semLegenda+'[COLOR '+cor+'][B]Episodio '+str(i['episodio'])+'[/B][/COLOR] '+nome, self.API_SITE+tipo+'.php?action=episodio&idSerie='+str(i['id_serie'])+'&idEpisodio='+str(i['id_episodio']), 'player', imagem, visto, 'episodio', i['temporada'], i['episodio'], infoLabels, self.API+i['background'])
         current = resultado['meta']['current']
         total = resultado['meta']['total']
         try:
             proximo = resultado['meta']['paginacao']['next']
         except:
-            pass 
+            pass
         if int(current) < int(total):
             controlo.addDir('Proxima pagina ('+str(current)+'/'+str(total)+')', proximo, 'episodios', os.path.join(controlo.artFolder, controlo.skin, 'proximo.png'))
         definicoes.vista_episodios()
-        
+
         if naoVisto == True:
             if controlo.addon.getSetting('nao-visto-episodios') == 'true':
                 if contagem > 0:
                     pergunta = controlo.simNao('MrPiracy', 'Carregar o Episódio #'+str(numeroParaVer)+' da temporada #'+str(temporadaParaVer)+'?')
                     if pergunta:
                         self.player(self.API_SITE+tipo+'.php?action=episodio&idSerie='+str(serieAVer)+'&idEpisodio='+str(episodioParaVer))
-        
+
     def listagemAnos(self, url):
         anos = [
             '2019',
@@ -623,7 +623,7 @@ class mrpiracy:
         for i in anos:
             controlo.addDir(i, url+'&ano='+i+qualidade, 'anos', os.path.join(controlo.artFolder, controlo.skin, 'ano.png'))
         definicoes.vista_menu()
-        
+
     def listagemGeneros(self, url):
         lista = definicoes.getListCategoria()
         if 'filmes' in url:
@@ -635,7 +635,7 @@ class mrpiracy:
         elif 'animes' in url:
             tipo = 2
             qualidade = ''
-        
+
         for c in ast.literal_eval(lista):
             if c['id_categoria'] == "0":
                 continue
@@ -645,7 +645,7 @@ class mrpiracy:
                 cat = c['categorias'].encode('utf-8')
             controlo.addDir(cat, url+'&categoria='+str(c['id_categoria'])+qualidade, 'categorias', os.path.join(controlo.artFolder, controlo.skin, 'generos.png'))
         definicoes.vista_menu()
-        
+
     def anos(self, url):
         resultado = controlo.abrir_url(url, header=controlo.headers, cookie=definicoes.getCookie())
         resultadoa = json.loads(resultado)
@@ -665,11 +665,11 @@ class mrpiracy:
         try:
             proximo = resultadoa['meta']['paginacao']['next']
         except:
-            pass 
+            pass
         if int(current) < int(total):
             controlo.addDir('Próxima página ('+str(current)+'/'+str(total)+')', proximo, 'anos', os.path.join(controlo.artFolder, controlo.skin, 'proximo.png'))
         definicoes.vista_filmesSeries()
-        
+
     def categorias(self, url):
         resultado = controlo.abrir_url(url, header=controlo.headers, cookie=definicoes.getCookie())
         resultadoa = json.loads(resultado)
@@ -689,7 +689,7 @@ class mrpiracy:
         try:
             proximo = resultadoa['meta']['paginacao']['next']
         except:
-            pass 
+            pass
         if int(current) < int(total):
             controlo.addDir('Próxima página ('+str(current)+'/'+str(total)+')', proximo, 'categorias', os.path.join(controlo.artFolder, controlo.skin, 'proximo.png'))
 
@@ -698,7 +698,7 @@ class mrpiracy:
         resultado = controlo.abrir_url(url, header=controlo.headers, cookie=definicoes.getCookie())
         resultado = json.loads(resultado)[0]
         infolabels = dict()
-        
+
         if 'filme' in url:
             tipo = 'filme'
             infolabels['Code'] = resultado['IMBD']
@@ -720,7 +720,7 @@ class mrpiracy:
             episodio = resultado['episodio']
             _imdb = resultado['fotoSerie'].split('/')[-1].split('.')[0]
             coiso = 'outro'
-            
+
 
         controlo.mensagemprogresso.create('MrPiracy', u'Abrir emissão','Por favor aguarde...')
         controlo.mensagemprogresso.update(25, "", u'Obter video e legenda', "")
@@ -777,7 +777,7 @@ class mrpiracy:
         try:
             if resultado['codigo'] == 204:
                 return False, 204, 204
-        except: 
+        except:
             resultado = resultado[0]
 
         i = 0
@@ -941,7 +941,7 @@ class mrpiracy:
                     servidor = i
                 i = i+1
 
-        else:   
+        else:
             if len(titulos) > 1:
                 servidor = controlo.select('Escolha o servidor', titulos)
             else:
@@ -988,9 +988,9 @@ class mrpiracy:
 
     def pesquisa(self, url):
         vistos = Database.selectFilmes()
-        
+
         qualidade = ''
-        
+
         if 'filmes' in url:
             ficheiro = os.path.join(controlo.pastaDados,'filmes_pesquisa.mrpiracy')
             tipo = 0
@@ -1011,9 +1011,9 @@ class mrpiracy:
                 tipo = controlo.select(u'Onde quer pesquisar?', ['Filmes', 'Series', 'Animes'])
             except:
                 return False
-        
+
             teclado = controlo.teclado('', 'O que quer pesquisar?')
-            
+
             if tipo == 0:
                 url = self.API_SITE+'filmes.php?action=pesquisa'
                 ficheiro = os.path.join(controlo.pastaDados,'filmes_pesquisa.mrpiracy')
@@ -1034,7 +1034,7 @@ class mrpiracy:
                 f = open(ficheiro, "r")
                 texto = f.read()
                 f.close()
-                
+
                 teclado.setDefault(texto)
             teclado.doModal()
 
@@ -1081,15 +1081,15 @@ class mrpiracy:
             current = resultado['meta']['current']
             total = resultado['meta']['total']
             try: proximo = resultado['meta']['paginacao']['next']
-            except: pass 
+            except: pass
             if int(current) < int(total):
                 controlo.addDir('Proxima pagina ('+str(current)+'/'+str(total)+')', proximo, 'pesquisa', os.path.join(controlo.artFolder, controlo.skin, 'proximo.png'))
             definicoes.vista_filmesSeries()
-            
+
     def marcarVisto(self, url):
-        
+
         resultado = controlo.abrir_url(url, header=controlo.headers, cookie=definicoes.getCookie())
-        
+
         resultado = json.loads(resultado)[0]
         links = url.split('/')
         opcao = controlo.addon.getSetting('marcarVisto')
@@ -1101,7 +1101,7 @@ class mrpiracy:
             url = self.API_SITE+'index.php?action=marcar-visto-filme&idFilme='+id_video
             tipo = 0
         elif 'serie' in url:
-            
+
             imdb  = resultado['fotoSerie'].split('/')[-1].split('.')[0]
             id_video = resultado['id_serie']
             temporada = resultado['temporada']
@@ -1117,7 +1117,7 @@ class mrpiracy:
             post = {'id_anime': id_video, 'temporada': temporada, 'episodio':episodio}
             url = (self.API_SITE+'index.php?action=marcar-visto-episodio&idSerie=%s&temporada=%s&episodio=%s' % (id_video, temporada, episodio) )
             tipo = 2
-        if opcao == '0' or opcao == '2': 
+        if opcao == '0' or opcao == '2':
             pastaVisto=os.path.join(controlo.pastaDados,'vistos')
             try:
                 os.makedirs(pastaVisto)
@@ -1135,7 +1135,7 @@ class mrpiracy:
                 f.write('')
                 f.close()
             colocar = 1
-        if opcao == '1' or opcao == '2': 
+        if opcao == '1' or opcao == '2':
 
             resultado = controlo.abrir_url(url, header=controlo.headers, cookie=definicoes.getCookie())
             resultado = json.loads(resultado)
@@ -1188,7 +1188,7 @@ class mrpiracy:
     def marcarNaoVisto(self, url):
 
         resultado = controlo.abrir_url(url, header=controlo.headers, cookie=definicoes.getCookie())
-        
+
         resultado = json.loads(resultado)[0]
         links = url.split('/')
         opcao = controlo.addon.getSetting('marcarVisto')
@@ -1215,8 +1215,8 @@ class mrpiracy:
             post = {'id_anime': id_video, 'temporada': temporada, 'episodio':episodio}
             url = (self.API_SITE+'index.php?action=marcar-visto-episodio&idSerie=%s&temporada=%s&episodio=%s' % (id_video, temporada, episodio) )
             tipo = 2
-            
-        if opcao == '0' or opcao == '2': 
+
+        if opcao == '0' or opcao == '2':
             pastaVisto=os.path.join(controlo.pastaDados,'vistos')
             try:
                 os.makedirs(pastaVisto)
@@ -1232,7 +1232,7 @@ class mrpiracy:
             if os.path.exists(ficheiro):
                 os.remove(ficheiro)
             colocar = 1
-        if opcao == '1' or opcao == '2': 
+        if opcao == '1' or opcao == '2':
             resultado = controlo.abrir_url(url, header=controlo.headers, cookie=definicoes.getCookie())
             resultado = json.loads(resultado)
             if resultado['mensagem']['codigo'] == 200:
@@ -1254,7 +1254,7 @@ class mrpiracy:
                 controlo.escrever_ficheiro(os.path.join(controlo.pastaDados,'vistos_filmes.mrpiracy'), vistos)
             if tipo == 1 or tipo == 2:
                 controlo.escrever_ficheiro(os.path.join(controlo.pastaDados,'vistos_series.mrpiracy'), vistos)
-                
+
         if Trakt.loggedIn():
             if 'PT' in imdb:
                 imdb = re.compile('(.+?)PT').findall(imdb)[0]
@@ -1286,7 +1286,7 @@ class mrpiracy:
     def download(self, url):
         controlo.headers['Authorization'] = 'Bearer %s' % controlo.addon.getSetting('tokenMrpiracy')
         links = url.split('/')
-        
+
         if 'filme' in url:
             id_video = links[-1]
             resultado = controlo.abrir_url(url, header=controlo.headers)
@@ -1319,17 +1319,17 @@ class mrpiracy:
             episodio = resultado['episodio']
             tipo = 2
 
-        
+
 
         resultado = controlo.abrir_url(url, header=controlo.headers)
         if resultado == 'DNS':
             controlo.alerta('MrPiracy', 'Tem de alterar os DNS para poder usufruir do addon')
             return False
-        
+
         resultado = json.loads(resultado)
         legendasOn = False
         stream, legenda, ext_g = self.getStreamLegenda(resultado)
-        
+
         folder = xbmc.translatePath(controlo.addon.getSetting('pastaDownloads'))
         if legenda != '':
             legendasOn = True
@@ -1353,7 +1353,7 @@ class mrpiracy:
             folder = os.path.join(folder,'filmes')
             name = self.remove_accents(resultado['nome_ingles'])
 
-    
+
         streamAux = self.clean(stream.split('/')[-1])
         extensaoStream = self.clean(streamAux.split('.')[-1])
 
@@ -1366,10 +1366,10 @@ class mrpiracy:
 
         extensaoStream = 'mp4'
 
-        nomeStream = name+'.'+extensaoStream    
+        nomeStream = name+'.'+extensaoStream
 
         Downloader.Downloader().download(os.path.join(folder.decode("utf-8"), nomeStream), stream, nomeStream)
-        
+
         if legendasOn:
             legendaAux = self.clean(legenda.split('/')[-1])
             extensaoLegenda = self.clean(legendaAux.split('.')[1])
@@ -1383,12 +1383,12 @@ class mrpiracy:
             fh.write(contents)
             fh.close()
         return
-    
+
     def clean(self, text):
         command={'&#8220;':'"','&#8221;':'"', '&#8211;':'-','&amp;':'&','&#8217;':"'",'&#8216;':"'"}
         regex = re.compile("|".join(map(re.escape, command.keys())))
         return regex.sub(lambda mo: command[mo.group(0)], text)
-    
+
     def progressoTrakt(self):
 
         vistos = Database.selectProgresso()
@@ -1400,7 +1400,7 @@ class mrpiracy:
             if data == "asd":
                 continue
             data = json.loads(data)
-        
+
             try:
                 episodioN = str(data["next_episode"]["number"])
                 temporadaNumero = str(data["next_episode"]["season"])
@@ -1410,7 +1410,7 @@ class mrpiracy:
             if serie["show"]["ids"]["imdb"] is None:
                 continue
 
-            
+
             url = self.API_SITE+'serie/%s/temporada/%s/episodio/%s/imdb' % (serie["show"]["ids"]["imdb"],temporadaNumero, episodioN )
             resultado = controlo.abrir_url(url, header=controlo.headers)
             if resultado == 'DNS':
@@ -1428,7 +1428,7 @@ class mrpiracy:
                     controlo.alerta('MrPiracy', 'Tem de alterar os DNS para poder usufruir do addon')
                     return False
                 tipo = 'anime'
-                
+
                 try:
                     resultado = json.loads(resultado)
                 except ValueError:
@@ -1440,7 +1440,7 @@ class mrpiracy:
                     controlo.alerta('MrPiracy', 'Tem de alterar os DNS para poder usufruir do addon')
                     return False
                 tipo = 'anime'
-                
+
                 try:
                     resultado = json.loads(resultado)
                 except ValueError:
@@ -1452,7 +1452,7 @@ class mrpiracy:
                     controlo.alerta('MrPiracy', 'Tem de alterar os DNS para poder usufruir do addon')
                     return False
                 tipo = 'anime'
-                
+
                 try:
                     resultado = json.loads(resultado)
                 except ValueError:
@@ -1476,12 +1476,12 @@ class mrpiracy:
                     controlo.alerta('MrPiracy', 'Tem de alterar os DNS para poder usufruir do addon')
                     return False
                 tipo = 'anime'
-                
+
                 try:
                     resultadoS = json.loads(resultadoS)
                 except ValueError:
                     continue
-        
+
 
             if resultado['URL'] == '' and resultado['URL2'] == '':
                 continue
@@ -1519,7 +1519,7 @@ class mrpiracy:
             controlo.addVideo(pt+br+semLegenda+final+'[B]'+resultado['nomeSerie']+'[/B] '+temporadaNumero+'x'+episodioN+' . '+nome, self.API_SITE+tipo+'/'+str(resultado['id_serie'])+'/temporada/'+str(resultado['temporada'])+'/episodio/'+str(resultado['episodio']), 'player', imagem, False, 'episodio', resultado['temporada'], resultado['episodio'], infoLabels, self.API+resultado['background'])
         definicoes.vista_filmesSeries()
         xbmc.executebuiltin("Container.SetViewMode(50)")
-        
+
     def watchlistFilmes(self):
         vistos = Database.selectWatchFilmes()
         controlo.headers['Authorization'] = 'Bearer %s' % controlo.addon.getSetting('tokenMrpiracy')
@@ -1541,7 +1541,7 @@ class mrpiracy:
                 categoria += ','+resultado['categoria2']
             if resultado['categoria3'] != '':
                 categoria += ','+resultado['categoria3']
-            
+
             pt = ''
             br = ''
             semLegenda = ''
@@ -1562,7 +1562,7 @@ class mrpiracy:
             elif opcao == '0' or opcao == '2':
                 visto = self.verificarVistoLocal(resultado['id_video'])
             infoLabels = {'Title': resultado['nome_ingles'], 'Year': resultado['ano'], 'Genre': categoria, 'Plot': resultado['descricao_video'], 'Cast':resultado['atores'].split(','), 'Trailer': resultado['trailer'], 'Director': resultado['diretor'], 'Rating': resultado['imdbRating'], 'IMDBNumber': resultado['IMBD'] }
-            
+
             try:
                 nome = resultado['nome_ingles'].decode('utf-8')
             except:
@@ -1589,8 +1589,8 @@ class mrpiracy:
             if s["show"]["ids"]["imdb"] is None:
                 continue
             imdb = s["show"]["ids"]["imdb"]
-        
-            
+
+
             url = self.API_SITE+'serie/%s/imdb' % (s["show"]["ids"]["imdb"] )
             resultado = controlo.abrir_url(url, header=controlo.headers)
             if resultado == 'DNS':
@@ -1614,7 +1614,7 @@ class mrpiracy:
                     continue
             if 'codigo' in resultado:
                 continue
-            
+
 
             categoria = resultado['categoria1']
             if resultado['categoria2'] != '':
@@ -1623,7 +1623,7 @@ class mrpiracy:
                 categoria += ','+resultado['categoria3']
 
             infoLabels = {'Title': resultado['nome_ingles'], 'Year': resultado['ano'], 'Genre': categoria, 'Plot': resultado['descricao_video'], 'Cast':resultado['atores'].split(','), 'Trailer': resultado['trailer'], 'Director': resultado['diretor'], 'Rating': resultado['imdbRating'], 'Code': resultado['IMBD'] }
-        
+
             try:
                 nome = resultado['nome_ingles'].decode('utf-8')
             except:
@@ -1645,7 +1645,7 @@ class mrpiracy:
                 menuFavorito = False
             controlo.addDir(nome+' ('+resultado['ano']+')', self.API_SITE+tipo+'/'+str(resultado['id_video']), 'temporadas', resultado['foto'], tipo='serie', infoLabels=infoLabels,poster=self.API+resultado['background'],visto=visto, menuO=True, favorito=menuFavorito, agendado=menuVerDepois)
         definicoes.vista_filmesSeries()
-        
+
     def remove_accents(self, input_str):
         input_str = input_str.replace("/", "")
         nkfd_form = unicodedata.normalize('NFKD', unicode(self.clean(input_str)))
@@ -1665,7 +1665,7 @@ class mrpiracy:
             return False
 
     def adicionarFavoritos(self, url):
-    
+
         if 'filme' in url:
             resultado = controlo.abrir_url(url, header=controlo.headers,cookie=definicoes.getCookie())
             resultado = json.loads(resultado)[0]
@@ -1703,7 +1703,7 @@ class mrpiracy:
             xbmc.executebuiltin("XBMC.Notification(MrPiracy,"+nome+": Adicionado aos Favoritos"+","+"6000"+","+ os.path.join(controlo.addonFolder,'icon.png')+")")
             xbmc.executebuiltin("Container.Refresh")
     def removerFavoritos(self, url):
-        
+
         links = url.split('/')
         if 'filme' in url:
             resultado = controlo.abrir_url(url, header=controlo.headers, cookie=definicoes.getCookie())
@@ -1735,7 +1735,7 @@ class mrpiracy:
                 favoritos = str(0)
         else:
             favoritos = str(0)
-                
+
         controlo.escrever_ficheiro(os.path.join(controlo.pastaDados,'favoritos.mrpiracy'), favoritos)
         if resultado['mensagem']['codigo'] == 200:
             xbmc.executebuiltin("XBMC.Notification(MrPiracy,"+nome+": Removido dos Favoritos"+","+"6000"+","+ os.path.join(controlo.addonFolder,'icon.png')+")")
@@ -1772,14 +1772,14 @@ class mrpiracy:
                 ver_depois = str(0)
         else:
             ver_depois = str(0)
-                
+
         controlo.escrever_ficheiro(os.path.join(controlo.pastaDados,'ver_depois.mrpiracy'), ver_depois)
         if resultado['mensagem']['codigo'] == 200:
             xbmc.executebuiltin("XBMC.Notification(MrPiracy,"+nome+": Agendado"+","+"6000"+","+ os.path.join(controlo.addonFolder,'icon.png')+")")
             xbmc.executebuiltin("Container.Refresh")
 
     def removerAgendar(self, url):
-        
+
         if 'filme' in url:
             resultado = controlo.abrir_url(url, header=controlo.headers, cookie=definicoes.getCookie())
             resultado = json.loads(resultado)[0]
@@ -1809,7 +1809,7 @@ class mrpiracy:
                 ver_depois = str(0)
         else:
             ver_depois = str(0)
-                
+
         controlo.escrever_ficheiro(os.path.join(controlo.pastaDados,'ver_depois.mrpiracy'), ver_depois)
         if resultado['mensagem']['codigo'] == 200:
             xbmc.executebuiltin("XBMC.Notification(MrPiracy,"+nome+": Removido dos Agendados"+","+"6000"+","+ os.path.join(controlo.addonFolder,'icon.png')+")")
@@ -1818,10 +1818,10 @@ class mrpiracy:
     def traktListas(self):
         url = 'https://api.trakt.tv/users/%s/lists' % controlo.addon.getSetting('utilizadorTrakt').replace('.', '-')
         listas = Trakt.getTrakt(url, login=False)
-        
+
         for s in json.loads(listas):
             controlo.addDir(s['name']+' ('+str(s['item_count'])+' items)', url+'/'+str(s['ids']['trakt'])+'/items', 'traktListasItems', os.path.join(controlo.artFolder, controlo.skin, 'trakt.png'))
-        
+
         definicoes.vista_menu()
 
     def traktListasItems(self, url):
@@ -1846,7 +1846,7 @@ class mrpiracy:
                     categoria += ','+resultado['categoria2']
                 if resultado['categoria3'] != '':
                     categoria += ','+resultado['categoria3']
-                
+
                 pt = ''
                 br = ''
                 semLegenda = ''
@@ -1867,7 +1867,7 @@ class mrpiracy:
                 elif opcao == '0' or opcao == '2':
                     visto = self.verificarVistoLocal(resultado['id_video'])
                 infoLabels = {'Title': resultado['nome_ingles'], 'Year': resultado['ano'], 'Genre': categoria, 'Plot': resultado['descricao_video'], 'Cast':resultado['atores'].split(','), 'Trailer': resultado['trailer'], 'Director': resultado['diretor'], 'Rating': resultado['imdbRating'], 'IMDBNumber': resultado['IMBD'] }
-                
+
                 try:
                     nome = resultado['nome_ingles'].decode('utf-8')
                 except:
@@ -1888,8 +1888,8 @@ class mrpiracy:
                 if s["show"]["ids"]["imdb"] is None:
                     continue
                 imdb = s["show"]["ids"]["imdb"]
-            
-                
+
+
                 url = self.API_SITE+'serie/%s/imdb' % (s["show"]["ids"]["imdb"] )
                 resultado = controlo.abrir_url(url, header=controlo.headers)
                 if resultado == 'DNS':
@@ -1913,7 +1913,7 @@ class mrpiracy:
                         continue
                 if 'codigo' in resultado:
                     continue
-                
+
 
                 categoria = resultado['categoria1']
                 if resultado['categoria2'] != '':
@@ -1930,7 +1930,7 @@ class mrpiracy:
                 if 'PT' in resultado['IMBD']:
                     pt = '[B][COLOR green]P[/COLOR][COLOR red]T[/COLOR]: [/B]'
                 infoLabels = {'Title': resultado['nome_ingles'], 'Year': resultado['ano'], 'Genre': categoria, 'Plot': resultado['descricao_video'], 'Cast':resultado['atores'].split(','), 'Trailer': resultado['trailer'], 'Director': resultado['diretor'], 'Rating': resultado['imdbRating'], 'Code': resultado['IMBD'] }
-            
+
                 try:
                     nome = resultado['nome_ingles'].decode('utf-8')
                 except:
@@ -1959,7 +1959,7 @@ class mrpiracy:
             categoria += ','+definicoes.getCategoria(i['categoria2'])
         if int(i['categoria3']) != 0:
             categoria += ','+definicoes.getCategoria(i['categoria3'])
-        
+
         pt = ''
         br = ''
         semLegenda = ''
@@ -1980,7 +1980,7 @@ class mrpiracy:
                 vistoa = True
         elif opcao == '0' or opcao == '2':
             vistoa = self.verificarVistoLocal(i['id_video'])
-        
+
         if Trakt.loggedIn():
             for v in json.loads(vistos):
                 if v["movie"]["ids"]["imdb"] is None:
@@ -2003,9 +2003,9 @@ class mrpiracy:
             i['foto'] = self.API+'images/capas/'+i['foto'].split('/')[-1]
 
         menuVerDepois = self.getVerDepois(i['id_video'])
-        
+
         imdbR = json.loads(i['imdbRating'])
-        
+
         menuFavorito = self.getFavoritos(i['id_video'])
         url = self.API_SITE+'filmes.php?action='+str(i['id_video'])
         infoLabels = {'Title': i['nome_ingles'], 'Year': i['ano'], 'Genre': categoria, 'Plot':i['descricao_video'], 'Cast':i['atores'].split(','), 'Trailer': imdbR['trailer'], 'Director': i['diretor'], 'Rating': imdbR['ranking'], 'IMDBNumber': i['IMBD'] }
@@ -2042,11 +2042,11 @@ class mrpiracy:
             nome = i['nome_ingles'].encode('utf-8')
         if 'http' not in i['foto']:
             i['foto'] = self.API+'images/capas/'+i['foto'].split('/')[-1]
-        
+
         menuVerDepois = self.getVerDepois(i['id_video'])
         imdbR = json.loads(i['imdbRating'])
         menuFavorito = self.getFavoritos(i['id_video'])
-        
+
         infoLabels = {'Title': i['nome_ingles'], 'Year': i['ano'], 'Genre': categoria, 'Plot': i['descricao_video'], 'Cast':i['atores'].split(','), 'Trailer': imdbR['trailer'], 'Director': i['diretor'], 'Rating': imdbR['ranking'], 'Code': i['IMBD'] }
         controlo.addDir(pt+br+nome+' ('+i['ano']+')', self.API_SITE+tipo+'.php?action=id&idSerie='+str(i['id_video']), 'temporadas', i['foto'], tipo='serie', infoLabels=infoLabels,poster=self.API+i['background'],visto=visto, menuO=True, favorito=menuFavorito, agendado=menuVerDepois)
 
