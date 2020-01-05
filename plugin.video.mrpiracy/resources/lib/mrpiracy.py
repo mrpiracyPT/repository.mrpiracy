@@ -249,8 +249,13 @@ class mrpiracy:
                 controlo.escrever_ficheiro(os.path.join(controlo.pastaDados,'vistos_series.mrpiracy'), vistos_series)
                 controlo.escrever_ficheiro(os.path.join(controlo.pastaDados,'ver_depois.mrpiracy'), ver_depois)
                 controlo.escrever_ficheiro(os.path.join(controlo.pastaDados,'favoritos.mrpiracy'), favoritos)
-
                 controlo.escrever_ficheiro(os.path.join(controlo.pastaDados,'categorias.mrpiracy'), str(categorias))
+
+                if os.path.exists(os.path.join(controlo.pastaDados, 'downloads.mrpiracy')):
+                    controlo.addon.setSetting('pastaDownloads', controlo.ler_ficheiro(os.path.join(controlo.pastaDados, 'downloads.mrpiracy')))
+                else:
+                    controlo.escrever_ficheiro(os.path.join(controlo.pastaDados, 'downloads.mrpiracy'), "None")
+                    controlo.addon.setSetting('pastaDownloads', "None")
 
                 return True
             except:
@@ -1319,8 +1324,6 @@ class mrpiracy:
             episodio = resultado['episodio']
             tipo = 2
 
-
-
         resultado = controlo.abrir_url(url, header=controlo.headers)
         if resultado == 'DNS':
             controlo.alerta('MrPiracy', 'Tem de alterar os DNS para poder usufruir do addon')
@@ -1331,6 +1334,10 @@ class mrpiracy:
         stream, legenda, ext_g = self.getStreamLegenda(resultado)
 
         folder = xbmc.translatePath(controlo.addon.getSetting('pastaDownloads'))
+
+        if folder == "None":
+            controlo.alerta('MrPiracy', 'Tem de escolher a pasta para downloads')
+
         if legenda != '':
             legendasOn = True
         if tipo > 0:

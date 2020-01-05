@@ -32,7 +32,7 @@
     </category>
     <category label="Download">
     	<setting label="Pasta para download:" type="lsep" />
-    	<setting label="" type="folder" id="pastaDownloads" source="auto" option="writeable" default="Escolha a pasta para Download" enable="!eq(-2,false)"/>
+    	<setting label="" type="folder" id="pastaDownloads" source="auto" option="writeable" default="Escolha a pasta para Download" enable="None"/>
     </category>
 
     <!--<category label="Biblioteca">
