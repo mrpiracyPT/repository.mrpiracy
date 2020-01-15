@@ -51,7 +51,64 @@ def log(msg, level=xbmc.LOGNOTICE):
 		try:
 			a=1
 		except: pass  
-		
+
+class Mixdrop():
+	def __init__(self, url):
+		self.url = url
+		self.net = Net()
+		self.headers = {"User-Agent": "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:52.0) Gecko/20100101 Firefox/52.0"}
+		self.legenda = ''
+
+	def getId(self):
+		return urlparse.urlparse(self.url).path.split("/")[-1]
+
+	def abrirMixdrop(self):
+		headers = { 'User-Agent' : 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)' }
+		req = urllib2.Request(self.url, headers=self.headers)
+		response = urllib2.urlopen(req)
+		link=response.read()
+		response.close()
+		return link
+
+	def getMediaUrl(self):
+		videoUrl = ''
+		content = self.abrirMixdrop() 
+		pattern = '(\s*eval\s*\(\s*function(?:.|\s)+?)<\/script>'
+		result = self.parse(content,pattern)
+
+		if result[0] == True:
+			content = cPacker().unpack(result[1][0])
+
+			pattern = 'vsrc\d+="([^"]+)"'
+			result = self.parse(content, pattern)
+			if result[0] == True:
+				videoUrl = result[1][0]
+			else:
+				pattern = 'furl="([^"]+)"'
+				result = self.parse(content, pattern)
+				if result[0] == True:
+					videoUrl = result[1][0]
+
+			if videoUrl.startswith('//'):
+				videoUrl = 'https:'+videoUrl
+
+		return videoUrl
+
+	def parse(self, sHtmlContent, sPattern, iMinFoundValue = 1):
+		sHtmlContent = self.replaceSpecialCharacters(str(sHtmlContent))
+		aMatches = re.compile(sPattern, re.IGNORECASE).findall(sHtmlContent)
+		if (len(aMatches) >= iMinFoundValue):
+			return True, aMatches
+		return False, aMatches
+
+	def replaceSpecialCharacters(self, sString):
+		return sString.replace('\\/','/').replace('&amp;','&').replace('\xc9','E').replace('&#8211;', '-').replace('&#038;', '&').replace('&rsquo;','\'').replace('\r','').replace('\n','').replace('\t','').replace('&#039;',"'")
+
+	def getLegenda(self):
+		return self.legenda
+
+
+
 class Streamango():
 	def __init__(self, url):
 		self.url = url

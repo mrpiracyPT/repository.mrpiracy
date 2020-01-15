@@ -108,6 +108,7 @@ class Player(xbmc.Player):
         colocar = 0
         resultado = controlo.abrir_url(self.url, header=controlo.headers, cookie=definicoes.getCookie())
         resultado = json.loads(resultado)[0]
+        controlo.log(self.url)
 
         if self.content == 'episode':
             WasAlreadySeen = mrpiracy.mrpiracy().getVistoEpisodio(self.idFilme)
@@ -136,7 +137,8 @@ class Player(xbmc.Player):
             post = {'id_anime': id_video, 'temporada': temporadas, 'episodio':episodios}
             url = (self.API_SITE+'index.php?action=marcar-visto-episodio&idSerie=%s&temporada=%s&episodio=%s' % (id_video, temporadas, episodios) )
             tipo = 2
-            
+        
+        controlo.log(url)
         if opcao == '0' or opcao == '2': 
             pastaVisto=os.path.join(self.pastaData,'vistos')
             try:

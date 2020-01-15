@@ -1,3 +1,9 @@
+v0.9.6(15/01/2020)
+- Adicionado servidor Mixdrop
+- Adicionado ano 2020
+- Novas imagens
+- Fix favoritos e agendados
+
 v0.9.5(13/04/2019)
 - Fix Openload
 - Fix marcar como visto

@@ -266,6 +266,7 @@ class mrpiracy:
 	def favoritos(self, url):
 		resultado = controlo.abrir_url(url, header=controlo.headers, cookie=definicoes.getCookie())
 		resultado = json.loads(resultado)
+		controlo.log(url)
 		if 'filmes' in url:
 			tipo = 'filmes'
 		elif 'series' in url:
@@ -519,6 +520,7 @@ class mrpiracy:
 		
 	def listagemAnos(self, url):
 		anos = [
+			'2020',
 			'2019',
 			'2018',
 			'2017',
@@ -696,6 +698,7 @@ class mrpiracy:
 		if tipo == 'anime':
 			url = self.API_SITE+tipo+'s.php?action=links&idEpisodio='+id
 
+		controlo.log(url)
 		resultado = controlo.abrir_url(url, header=controlo.headers, cookie=definicoes.getCookie())
 		resultado = json.loads(resultado)
 		try:
@@ -710,93 +713,105 @@ class mrpiracy:
 		nome = ''
 		if resultado['URL'] != '':
 			i+=1
-			if 'openload' in resultado['URL']:
+			if 'openload' in resultado['URL'].lower():
 				nome = "OpenLoad"
 				servidores.append(resultado['URL'])
 				titulos.append('Servidor #%s: %s' % (i, nome))
-			elif 'vidzi' in resultado['URL']:
+			elif 'vidzi' in resultado['URL'].lower():
 				nome = 'Vidzi'
 				servidores.append(resultado['URL'])
 				titulos.append('Servidor #%s: %s' % (i, nome))
-			elif 'google' in resultado['URL'] or 'cloud.mail.ru' in resultado['URL']:
+			elif 'google' in resultado['URL'].lower() or 'cloud.mail.ru' in resultado['URL'].lower():
 				nome = 'MrPiracy'
 				servidores.append(resultado['URL'])
 				titulos.append('Servidor #%s: %s' % (i, nome))
-			elif 'uptostream.com' in resultado['URL']:
+			elif 'uptostream.com' in resultado['URL'].lower():
 				nome = 'UpToStream'
 				servidores.append(resultado['URL'])
 				titulos.append('Servidor #%s: %s' % (i, nome))
-			elif 'rapidvideo.com' in resultado['URL'] or 'raptu' in resultado['URL']:
+			elif 'rapidvideo.com' in resultado['URL'].lower() or 'raptu' in resultado['URL'].lower():
 				nome = 'Raptu'
 				servidores.append(resultado['URL'])
 				titulos.append('Servidor #%s: %s' % (i, nome))
-			elif 'vidoza.net' in resultado['URL']:
+			elif 'vidoza.net' in resultado['URL'].lower():
 				nome = 'Vidoza'
 				servidores.append(resultado['URL'])
 				titulos.append('Servidor #%s: %s' % (i, nome))
-			elif 'streamango.' in resultado['URL']:
+			elif 'streamango.' in resultado['URL'].lower():
 				nome = 'Streamango'
+				servidores.append(resultado['URL'])
+				titulos.append('Servidor #%s: %s' % (i, nome))
+			elif 'mixdrop.to' in resultado['URL'].lower():
+				nome = 'Mixdrop'
 				servidores.append(resultado['URL'])
 				titulos.append('Servidor #%s: %s' % (i, nome))
 		if resultado['URL2'] != '':
 			i+=1
-			if 'openload' in resultado['URL2']:
+			if 'openload' in resultado['URL2'].lower():
 				nome = "OpenLoad"
 				servidores.append(resultado['URL2'])
 				titulos.append('Servidor #%s: %s' % (i, nome))
-			elif 'vidzi' in resultado['URL2']:
+			elif 'vidzi' in resultado['URL2'].lower():
 				nome = 'Vidzi'
 				servidores.append(resultado['URL2'])
 				titulos.append('Servidor #%s: %s' % (i, nome))
-			elif 'google' in resultado['URL2'] or 'cloud.mail.ru' in resultado['URL2']:
+			elif 'google' in resultado['URL2'].lower() or 'cloud.mail.ru' in resultado['URL2'].lower():
 				nome = 'MrPiracy'
 				servidores.append(resultado['URL2'])
 				titulos.append('Servidor #%s: %s' % (i, nome))
-			elif 'uptostream.com' in resultado['URL2']:
+			elif 'uptostream.com' in resultado['URL2'].lower():
 				nome = 'UpToStream'
 				servidores.append(resultado['URL2'])
 				titulos.append('Servidor #%s: %s' % (i, nome))
-			elif 'rapidvideo.com' in resultado['URL2'] or 'raptu' in resultado['URL2']:
+			elif 'rapidvideo.com' in resultado['URL2'].lower() or 'raptu' in resultado['URL2'].lower():
 				nome = 'Raptu'
 				servidores.append(resultado['URL2'])
 				titulos.append('Servidor #%s: %s' % (i, nome))
-			elif 'vidoza.net' in resultado['URL2']:
+			elif 'vidoza.net' in resultado['URL2'].lower():
 				nome = 'Vidoza'
 				servidores.append(resultado['URL2'])
 				titulos.append('Servidor #%s: %s' % (i, nome))
-			elif 'streamango.' in resultado['URL2']:
+			elif 'streamango.' in resultado['URL2'].lower():
 				nome = 'Streamango'
+				servidores.append(resultado['URL2'])
+				titulos.append('Servidor #%s: %s' % (i, nome))
+			elif 'mixdrop.to' in resultado['URL2'].lower():
+				nome = 'Mixdrop'
 				servidores.append(resultado['URL2'])
 				titulos.append('Servidor #%s: %s' % (i, nome))
 		try:
 			if resultado['URL3'] != '':
 				i+=1
-				if 'openload' in resultado['URL3']:
+				if 'openload' in resultado['URL3'].lower():
 					nome = "OpenLoad"
 					servidores.append(resultado['URL3'])
 					titulos.append('Servidor #%s: %s' % (i, nome))
-				elif 'vidzi' in resultado['URL3']:
+				elif 'vidzi' in resultado['URL3'].lower():
 					nome = 'Vidzi'
 					servidores.append(resultado['URL3'])
 					titulos.append('Servidor #%s: %s' % (i, nome))
-				elif 'google' in resultado['URL3'] or 'cloud.mail.ru' in resultado['URL3']:
+				elif 'google' in resultado['URL3'].lower() or 'cloud.mail.ru' in resultado['URL3'].lower():
 					nome = 'MrPiracy'
 					servidores.append(resultado['URL3'])
 					titulos.append('Servidor #%s: %s' % (i, nome))
-				elif 'uptostream.com' in resultado['URL3']:
+				elif 'uptostream.com' in resultado['URL3'].lower():
 					nome = 'UpToStream'
 					servidores.append(resultado['URL3'])
 					titulos.append('Servidor #%s: %s' % (i, nome))
-				elif 'rapidvideo.com' in resultado['URL3'] or 'raptu' in resultado['URL3']:
+				elif 'rapidvideo.com' in resultado['URL3'].lower() or 'raptu' in resultado['URL3'].lower():
 					nome = 'Raptu'
 					servidores.append(resultado['URL3'])
 					titulos.append('Servidor #%s: %s' % (i, nome))
-				elif 'vidoza.net' in resultado['URL3']:
+				elif 'vidoza.net' in resultado['URL3'].lower():
 					nome = 'Vidoza'
 					servidores.append(resultado['URL3'])
 					titulos.append('Servidor #%s: %s' % (i, nome))
-				elif 'streamango.' in resultado['URL3']:
+				elif 'streamango.' in resultado['URL3'].lower():
 					nome = 'Streamango'
+					servidores.append(resultado['URL3'])
+					titulos.append('Servidor #%s: %s' % (i, nome))
+				elif 'mixdrop.to' in resultado['URL3'].lower():
+					nome = 'Mixdrop'
 					servidores.append(resultado['URL3'])
 					titulos.append('Servidor #%s: %s' % (i, nome))
 		except:
@@ -804,37 +819,161 @@ class mrpiracy:
 		try:
 			if resultado['URL4'] != '':
 				i+=1
-				if 'openload' in resultado['URL4']:
+				if 'openload' in resultado['URL4'].lower():
 					nome = "OpenLoad"
 					servidores.append(resultado['URL4'])
 					titulos.append('Servidor #%s: %s' % (i, nome))
-				elif 'vidzi' in resultado['URL4']:
+				elif 'vidzi' in resultado['URL4'].lower():
 					nome = 'Vidzi'
 					servidores.append(resultado['URL4'])
 					titulos.append('Servidor #%s: %s' % (i, nome))
-				elif 'google' in resultado['URL4'] or 'cloud.mail.ru' in resultado['URL4']:
+				elif 'google' in resultado['URL4'].lower() or 'cloud.mail.ru' in resultado['URL4'].lower():
 					nome = 'MrPiracy'
 					servidores.append(resultado['URL4'])
 					titulos.append('Servidor #%s: %s' % (i, nome))
-				elif 'uptostream.com' in resultado['URL4']:
+				elif 'uptostream.com' in resultado['URL4'].lower():
 					nome = 'UpToStream'
 					servidores.append(resultado['URL4'])
 					titulos.append('Servidor #%s: %s' % (i, nome))
-				elif 'rapidvideo.com' in resultado['URL4'] or 'raptu' in resultado['URL4']:
+				elif 'rapidvideo.com' in resultado['URL4'].lower() or 'raptu' in resultado['URL4'].lower():
 					nome = 'Raptu'
 					servidores.append(resultado['URL4'])
 					titulos.append('Servidor #%s: %s' % (i, nome))
-				elif 'vidoza.net' in resultado['URL4']:
+				elif 'vidoza.net' in resultado['URL4'].lower():
 					nome = 'Vidoza'
 					servidores.append(resultado['URL4'])
 					titulos.append('Servidor #%s: %s' % (i, nome))
-				elif 'streamango.' in resultado['URL4']:
+				elif 'streamango.' in resultado['URL4'].lower():
 					nome = 'Streamango'
+					servidores.append(resultado['URL4'])
+					titulos.append('Servidor #%s: %s' % (i, nome))
+				elif 'mixdrop.to' in resultado['URL4'].lower():
+					nome = 'Mixdrop'
 					servidores.append(resultado['URL4'])
 					titulos.append('Servidor #%s: %s' % (i, nome))
 		except:
 			pass
+
+		try:
+			if resultado['URL5'] != '':
+				i+=1
+				if 'openload' in resultado['URL5'].lower():
+					nome = "OpenLoad"
+					servidores.append(resultado['URL5'])
+					titulos.append('Servidor #%s: %s' % (i, nome))
+				elif 'vidzi' in resultado['URL5'].lower():
+					nome = 'Vidzi'
+					servidores.append(resultado['URL5'])
+					titulos.append('Servidor #%s: %s' % (i, nome))
+				elif 'google' in resultado['URL5'].lower() or 'cloud.mail.ru' in resultado['URL5'].lower():
+					nome = 'MrPiracy'
+					servidores.append(resultado['URL5'])
+					titulos.append('Servidor #%s: %s' % (i, nome))
+				elif 'uptostream.com' in resultado['URL5'].lower():
+					nome = 'UpToStream'
+					servidores.append(resultado['URL5'])
+					titulos.append('Servidor #%s: %s' % (i, nome))
+				elif 'rapidvideo.com' in resultado['URL5'].lower() or 'raptu' in resultado['URL5'].lower():
+					nome = 'Raptu'
+					servidores.append(resultado['URL5'])
+					titulos.append('Servidor #%s: %s' % (i, nome))
+				elif 'vidoza.net' in resultado['URL5'].lower():
+					nome = 'Vidoza'
+					servidores.append(resultado['URL5'])
+					titulos.append('Servidor #%s: %s' % (i, nome))
+				elif 'streamango.' in resultado['URL5'].lower():
+					nome = 'Streamango'
+					servidores.append(resultado['URL5'])
+					titulos.append('Servidor #%s: %s' % (i, nome))
+				elif 'mixdrop.to' in resultado['URL5'].lower():
+					nome = 'Mixdrop'
+					servidores.append(resultado['URL5'])
+					titulos.append('Servidor #%s: %s' % (i, nome))
+		except:
+			pass
+
+		try:
+			if resultado['URL6'] != '':
+				i+=1
+				if 'openload' in resultado['URL6'].lower():
+					nome = "OpenLoad"
+					servidores.append(resultado['URL6'])
+					titulos.append('Servidor #%s: %s' % (i, nome))
+				elif 'vidzi' in resultado['URL8'].lower():
+					nome = 'Vidzi'
+					servidores.append(resultado['URL6'])
+					titulos.append('Servidor #%s: %s' % (i, nome))
+				elif 'google' in resultado['URL6'].lower()or 'cloud.mail.ru' in resultado['URL6'].lower():
+					nome = 'MrPiracy'
+					servidores.append(resultado['URL6'])
+					titulos.append('Servidor #%s: %s' % (i, nome))
+				elif 'uptostream.com' in resultado['URL8'].lower():
+					nome = 'UpToStream'
+					servidores.append(resultado['URL6'])
+					titulos.append('Servidor #%s: %s' % (i, nome))
+				elif 'rapidvideo.com' in resultado['URL6'].lower() or 'raptu' in resultado['URL6'].lower():
+					nome = 'Raptu'
+					servidores.append(resultado['URL6'])
+					titulos.append('Servidor #%s: %s' % (i, nome))
+				elif 'vidoza.net' in resultado['URL6'].lower():
+					nome = 'Vidoza'
+					servidores.append(resultado['URL6'])
+					titulos.append('Servidor #%s: %s' % (i, nome))
+				elif 'streamango.' in resultado['URL6'].lower():
+					nome = 'Streamango'
+					servidores.append(resultado['URL6'])
+					titulos.append('Servidor #%s: %s' % (i, nome))
+				elif 'mixdrop.to' in resultado['URL6'].lower():
+					nome = 'Mixdrop'
+					servidores.append(resultado['URL6'])
+					titulos.append('Servidor #%s: %s' % (i, nome))
+		except:
+			pass
+
+		try:
+			if resultado['URL7'] != '':
+				i+=1
+				if 'openload' in resultado['URL7'].lower():
+					nome = "OpenLoad"
+					servidores.append(resultado['URL7'])
+					titulos.append('Servidor #%s: %s' % (i, nome))
+				elif 'vidzi' in resultado['URL7'].lower():
+					nome = 'Vidzi'
+					servidores.append(resultado['URL7'])
+					titulos.append('Servidor #%s: %s' % (i, nome))
+				elif 'google' in resultado['URL7'].lower()or 'cloud.mail.ru' in resultado['URL7'].lower():
+					nome = 'MrPiracy'
+					servidores.append(resultado['URL7'])
+					titulos.append('Servidor #%s: %s' % (i, nome))
+				elif 'uptostream.com' in resultado['URL7'].lower():
+					nome = 'UpToStream'
+					servidores.append(resultado['URL7'])
+					titulos.append('Servidor #%s: %s' % (i, nome))
+				elif 'rapidvideo.com' in resultado['URL7'].lower() or 'raptu' in resultado['URL7'].lower():
+					nome = 'Raptu'
+					servidores.append(resultado['URL7'])
+					titulos.append('Servidor #%s: %s' % (i, nome))
+				elif 'vidoza.net' in resultado['URL7'].lower():
+					nome = 'Vidoza'
+					servidores.append(resultado['URL7'])
+					titulos.append('Servidor #%s: %s' % (i, nome))
+				elif 'streamango.' in resultado['URL7'].lower():
+					nome = 'Streamango'
+					servidores.append(resultado['URL7'])
+					titulos.append('Servidor #%s: %s' % (i, nome))
+				elif 'mixdrop.to' in resultado['URL7'].lower():
+					nome = 'Mixdrop'
+					servidores.append(resultado['URL7'])
+					titulos.append('Servidor #%s: %s' % (i, nome))
+		except:
+			pass
+
 		legenda = ''
+
+		for s in servidores:
+			controlo.log(s)
+		for l in titulos:
+			controlo.log(l)
 
 		if '://' in resultado['legenda'] or resultado['legenda'] == '':
 			legenda = self.API+'subs/%s.srt' % resultado['IMBD']
@@ -900,6 +1039,10 @@ class mrpiracy:
 			streaman = URLResolverMedia.Streamango(servidores[servidor])
 			stream = streaman.getMediaUrl()
 			legenda = streaman.getLegenda()
+		elif 'mixdrop.' in servidores[servidor]:
+			mixdrop = URLResolverMedia.Mixdrop(servidores[servidor])
+			stream = mixdrop.getMediaUrl()
+			legenda = mixdrop.getLegenda()
 
 		"""if coiso == 'filme':
 			legenda = legendaAux
@@ -1004,8 +1147,9 @@ class mrpiracy:
 	def marcarVisto(self, url):
 		
 		resultado = controlo.abrir_url(url, header=controlo.headers, cookie=definicoes.getCookie())
-		
+		controlo.log(url)
 		resultado = json.loads(resultado)[0]
+		
 		links = url.split('/')
 		opcao = controlo.addon.getSetting('marcarVisto')
 		colocar = 0
@@ -1032,6 +1176,7 @@ class mrpiracy:
 			post = {'id_anime': id_video, 'temporada': temporada, 'episodio':episodio}
 			url = (self.API_SITE+'index.php?action=marcar-visto-episodio&idSerie=%s&temporada=%s&episodio=%s' % (id_video, temporada, episodio) )
 			tipo = 2
+		controlo.log(url)
 		if opcao == '0' or opcao == '2': 
 			pastaVisto=os.path.join(controlo.pastaDados,'vistos')
 			try:
