@@ -63,7 +63,8 @@ class Mixdrop():
 		return urlparse.urlparse(self.url).path.split("/")[-1]
 
 	def abrirMixdrop(self):
-		headers = { 'User-Agent' : 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)' }
+		headers = { 'User-Agent' : 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)',
+					'Cookie' : 'hds2=1' }
 		req = urllib2.Request(self.url, headers=self.headers)
 		response = urllib2.urlopen(req)
 		link=response.read()
@@ -79,15 +80,16 @@ class Mixdrop():
 		if result[0] == True:
 			content = cPacker().unpack(result[1][0])
 
-			pattern = 'vsrc\d+="([^"]+)"'
+			#pattern = 'vsrc\d+="([^"]+)"'
+			pattern = 'wurl="([^"]+)"'
 			result = self.parse(content, pattern)
 			if result[0] == True:
 				videoUrl = result[1][0]
-			else:
-				pattern = 'furl="([^"]+)"'
-				result = self.parse(content, pattern)
-				if result[0] == True:
-					videoUrl = result[1][0]
+			#else:
+			#	pattern = 'furl="([^"]+)"'
+			#	result = self.parse(content, pattern)
+			#	if result[0] == True:
+			#		videoUrl = result[1][0]
 
 			if videoUrl.startswith('//'):
 				videoUrl = 'https:'+videoUrl
@@ -214,7 +216,7 @@ class Vidoza():
 		
 		videoUrl = ''
 
-		sPattern =  'src: "([^"]+)"[^\}]+label:"([^\']+)"'
+		sPattern =  'src: *"([^"]+)".+?label:"([^"]+)"'
 		aResult = self.parse(sourceCode, sPattern)
 		self.legenda = ''
 		if aResult[0]:
@@ -336,9 +338,10 @@ class CloudMailRu():
 		ext = re.compile('<meta name=\"twitter:image\" content=\"(.+?)\"/>').findall(conteudo)[0]
 		streamAux = clean(ext.split('/')[-1])
 		extensaoStream = clean(streamAux.split('.')[-1])
-		token = re.compile('"tokens"\s*:\s*{\s*"download"\s*:\s*"([^"]+)').findall(conteudo)[0]
+		#token = re.compile('"tokens"\s*:\s*{\s*"download"\s*:\s*"([^"]+)').findall(conteudo)[0]
 		mediaLink = re.compile('(https\:\/\/[a-zA-Z0-9\-\.]+cldmail+\.[a-zA-Z]{2,3}\/\S*)"').findall(conteudo)[0]
-		videoUrl = '%s/%s?key=%s' % (mediaLink, self.getId(), token)
+		#videoUrl = '%s/%s?key=%s' % (mediaLink, self.getId(), token)
+		videoUrl = '%s/%s' % (mediaLink, self.getId())
 		return videoUrl, extensaoStream
 
 class GoogleVideo():

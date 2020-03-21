@@ -108,7 +108,7 @@ class Player(xbmc.Player):
         colocar = 0
         resultado = controlo.abrir_url(self.url, header=controlo.headers, cookie=definicoes.getCookie())
         resultado = json.loads(resultado)[0]
-        controlo.log(self.url)
+        #controlo.log(self.url)
 
         if self.content == 'episode':
             WasAlreadySeen = mrpiracy.mrpiracy().getVistoEpisodio(self.idFilme)
@@ -138,7 +138,7 @@ class Player(xbmc.Player):
             url = (self.API_SITE+'index.php?action=marcar-visto-episodio&idSerie=%s&temporada=%s&episodio=%s' % (id_video, temporadas, episodios) )
             tipo = 2
         
-        controlo.log(url)
+        #controlo.log(url)
         if opcao == '0' or opcao == '2': 
             pastaVisto=os.path.join(self.pastaData,'vistos')
             try:
@@ -160,24 +160,28 @@ class Player(xbmc.Player):
 
         if opcao == '1' or opcao == '2': 
             if not WasAlreadySeen:
-                resultado = controlo.abrir_url(url, header=controlo.headers, cookie=definicoes.getCookie())
-                
-                resultado = json.loads(resultado)
-                if resultado['mensagem']['codigo'] == 200:
-                    colocar = 1
-                if resultado['mensagem']['codigo'] == 201:
-                    colocar = 2
-                elif resultado['mensagem']['codigo'] == 204:
-                    colocar = 3
-                userVistos = resultado['userVistos']
+                try:
+                    resultado = controlo.abrir_url(url, header=controlo.headers, cookie=definicoes.getCookie())
+                    
+                    resultado = json.loads(resultado)
+                    if resultado['mensagem']['codigo'] == 200:
+                        colocar = 1
+                    if resultado['mensagem']['codigo'] == 201:
+                        colocar = 2
+                    elif resultado['mensagem']['codigo'] == 204:
+                        colocar = 3
+                    userVistos = resultado['userVistos']
 
-                if userVistos != "" or userVistos != []:
-                    try:
-                        vistos_filmes = ','.join(ast.literal_eval(userVistos).values())
-                    except:
+                    if userVistos != "" or userVistos != []:
+                        try:
+                            vistos_filmes = ','.join(ast.literal_eval(userVistos).values())
+                        except:
+                            vistos_filmes = str(0)
+                    else:
                         vistos_filmes = str(0)
-                else:
-                    vistos_filmes = str(0)
+                except:
+                    colocar = 4
+                    pass
                 if tipo == 0:
                     controlo.escrever_ficheiro(os.path.join(controlo.pastaDados,'vistos_filmes.mrpiracy'), vistos_filmes)
                 if tipo == 1 or tipo == 2:
@@ -201,6 +205,7 @@ class Player(xbmc.Player):
             elif tipo == 0:
                 Trakt.markwatchedFilmeTrakt(imdb)
             mrpiracy.mrpiracy().getTrakt()
+
         if colocar == 1:
             xbmc.executebuiltin("XBMC.Notification(MrPiracy,"+"Marcado como visto"+","+"6000"+","+ os.path.join(controlo.addonFolder,'icon.png')+")")
             xbmc.executebuiltin("Container.Refresh")
@@ -209,6 +214,9 @@ class Player(xbmc.Player):
             xbmc.executebuiltin("Container.Refresh")
         elif colocar == 3:
             controlo.alerta('MrPiracy', 'Ocorreu um erro ao marcar como visto')
+        elif colocar == 4:
+            xbmc.executebuiltin("XBMC.Notification(MrPiracy,"+"Marcado como visto no Trakt"+","+"6000"+","+ os.path.join(controlo.addonFolder,'icon.png')+")")
+            xbmc.executebuiltin("Container.Refresh")
 
     def onPlayBackEnded(self):
         self.onPlayBackStopped()

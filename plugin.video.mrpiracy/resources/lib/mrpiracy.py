@@ -266,7 +266,7 @@ class mrpiracy:
 	def favoritos(self, url):
 		resultado = controlo.abrir_url(url, header=controlo.headers, cookie=definicoes.getCookie())
 		resultado = json.loads(resultado)
-		controlo.log(url)
+		#controlo.log(url)
 		if 'filmes' in url:
 			tipo = 'filmes'
 		elif 'series' in url:
@@ -316,7 +316,7 @@ class mrpiracy:
 		definicoes.vista_filmesSeries()
 	def notificacoes(self, url):
 		resultadoa = controlo.abrir_url(url, header=controlo.headers, cookie=definicoes.getCookie())
-		controlo.log(resultadoa)
+		#controlo.log(resultadoa)
 		resultadoa = json.loads(resultadoa)
 		vistosF = Database.selectFilmes()
 		opcao = controlo.addon.getSetting('marcarVisto')
@@ -341,7 +341,7 @@ class mrpiracy:
 
 	def mensagens(self, url):
 		resultadoa = controlo.abrir_url(url, header=controlo.headers, cookie=definicoes.getCookie())
-		controlo.log(resultadoa)
+		#controlo.log(resultadoa)
 		resultadoa = json.loads(resultadoa)
 		for i in resultadoa["data"]:
 			controlo.addDir(i['mensagem'], url, 'mensagens', os.path.join(controlo.artFolder, controlo.skin, 'notificacoes.png'))
@@ -698,7 +698,7 @@ class mrpiracy:
 		if tipo == 'anime':
 			url = self.API_SITE+tipo+'s.php?action=links&idEpisodio='+id
 
-		controlo.log(url)
+		#controlo.log(url)
 		resultado = controlo.abrir_url(url, header=controlo.headers, cookie=definicoes.getCookie())
 		resultado = json.loads(resultado)
 		try:
@@ -970,10 +970,10 @@ class mrpiracy:
 
 		legenda = ''
 
-		for s in servidores:
-			controlo.log(s)
+		"""for s in servidores:
+			#controlo.log(s)
 		for l in titulos:
-			controlo.log(l)
+			#controlo.log(l)"""
 
 		if '://' in resultado['legenda'] or resultado['legenda'] == '':
 			legenda = self.API+'subs/%s.srt' % resultado['IMBD']
@@ -1147,7 +1147,7 @@ class mrpiracy:
 	def marcarVisto(self, url):
 		
 		resultado = controlo.abrir_url(url, header=controlo.headers, cookie=definicoes.getCookie())
-		controlo.log(url)
+		#controlo.log(url)
 		resultado = json.loads(resultado)[0]
 		
 		links = url.split('/')
@@ -1176,7 +1176,7 @@ class mrpiracy:
 			post = {'id_anime': id_video, 'temporada': temporada, 'episodio':episodio}
 			url = (self.API_SITE+'index.php?action=marcar-visto-episodio&idSerie=%s&temporada=%s&episodio=%s' % (id_video, temporada, episodio) )
 			tipo = 2
-		controlo.log(url)
+		#controlo.log(url)
 		if opcao == '0' or opcao == '2': 
 			pastaVisto=os.path.join(controlo.pastaDados,'vistos')
 			try:
@@ -1197,27 +1197,33 @@ class mrpiracy:
 			colocar = 1
 		if opcao == '1' or opcao == '2': 
 
-			resultado = controlo.abrir_url(url, header=controlo.headers, cookie=definicoes.getCookie())
-			resultado = json.loads(resultado)
-			if resultado['mensagem']['codigo'] == 200:
-				colocar = 1
-			if resultado['mensagem']['codigo'] == 201:
-				colocar = 2
-			elif resultado['mensagem']['codigo'] == 204:
-				colocar = 3
-			userVistos = resultado['userVistos']
+			try:
+				resultado = controlo.abrir_url(url, header=controlo.headers, cookie=definicoes.getCookie())
+				resultado = json.loads(resultado)
+				if resultado['mensagem']['codigo'] == 200:
+					colocar = 1
+				if resultado['mensagem']['codigo'] == 201:
+					colocar = 2
+				elif resultado['mensagem']['codigo'] == 204:
+					colocar = 3
+				userVistos = resultado['userVistos']
 
-			if userVistos != "" or userVistos != []:
-				try:
-					vistos_filmes = ','.join(ast.literal_eval(userVistos).values())
-				except:
+				if userVistos != "" or userVistos != []:
+					try:
+						vistos_filmes = ','.join(ast.literal_eval(userVistos).values())
+					except:
+						vistos_filmes = str(0)
+				else:
 					vistos_filmes = str(0)
-			else:
-				vistos_filmes = str(0)
-			if tipo == 0:
-				controlo.escrever_ficheiro(os.path.join(controlo.pastaDados,'vistos_filmes.mrpiracy'), vistos_filmes)
-			if tipo == 1 or tipo == 2:
-				controlo.escrever_ficheiro(os.path.join(controlo.pastaDados,'vistos_series.mrpiracy'), vistos_filmes)
+			
+
+				if tipo == 0:
+					controlo.escrever_ficheiro(os.path.join(controlo.pastaDados,'vistos_filmes.mrpiracy'), vistos_filmes)
+				if tipo == 1 or tipo == 2:
+					controlo.escrever_ficheiro(os.path.join(controlo.pastaDados,'vistos_series.mrpiracy'), vistos_filmes)
+			except:
+				colocar = 4
+				pass
 		if Trakt.loggedIn():
 			if 'PT' in imdb:
 				imdb = re.compile('(.+?)PT').findall(imdb)[0]
@@ -1245,6 +1251,9 @@ class mrpiracy:
 			xbmc.executebuiltin("Container.Refresh")
 		elif colocar == 3:
 			controlo.alerta('MrPiracy', 'Ocorreu um erro ao marcar como visto')
+		elif colocar == 4:
+			xbmc.executebuiltin("XBMC.Notification(MrPiracy,"+"Marcado como visto no Trakt"+","+"6000"+","+ os.path.join(controlo.addonFolder,'icon.png')+")")
+			xbmc.executebuiltin("Container.Refresh")
 	def marcarNaoVisto(self, url):
 
 		resultado = controlo.abrir_url(url, header=controlo.headers, cookie=definicoes.getCookie())
@@ -1293,28 +1302,31 @@ class mrpiracy:
 				os.remove(ficheiro)
 			colocar = 1
 		if opcao == '1' or opcao == '2': 
-			resultado = controlo.abrir_url(url, header=controlo.headers, cookie=definicoes.getCookie())
-			resultado = json.loads(resultado)
-			if resultado['mensagem']['codigo'] == 200:
-				colocar = 1
-			if resultado['mensagem']['codigo'] == 201:
-				colocar = 2
-			elif resultado['mensagem']['codigo'] == 204:
-				colocar = 3
-			userVistos = resultado['userVistos']
+			try:
+				resultado = controlo.abrir_url(url, header=controlo.headers, cookie=definicoes.getCookie())
+				resultado = json.loads(resultado)
+				if resultado['mensagem']['codigo'] == 200:
+					colocar = 1
+				if resultado['mensagem']['codigo'] == 201:
+					colocar = 2
+				elif resultado['mensagem']['codigo'] == 204:
+					colocar = 3
+				userVistos = resultado['userVistos']
 
-			if userVistos != "" or userVistos != []:
-				try:
-					vistos = ','.join(ast.literal_eval(userVistos).values())
-				except:
+				if userVistos != "" or userVistos != []:
+					try:
+						vistos = ','.join(ast.literal_eval(userVistos).values())
+					except:
+						vistos = str(0)
+				else:
 					vistos = str(0)
-			else:
-				vistos = str(0)
-			if tipo == 0:
-				controlo.escrever_ficheiro(os.path.join(controlo.pastaDados,'vistos_filmes.mrpiracy'), vistos)
-			if tipo == 1 or tipo == 2:
-				controlo.escrever_ficheiro(os.path.join(controlo.pastaDados,'vistos_series.mrpiracy'), vistos)
-				
+				if tipo == 0:
+					controlo.escrever_ficheiro(os.path.join(controlo.pastaDados,'vistos_filmes.mrpiracy'), vistos)
+				if tipo == 1 or tipo == 2:
+					controlo.escrever_ficheiro(os.path.join(controlo.pastaDados,'vistos_series.mrpiracy'), vistos)
+			except:
+				colocar = 4
+				pass		
 		if Trakt.loggedIn():
 			if 'PT' in imdb:
 				imdb = re.compile('(.+?)PT').findall(imdb)[0]
@@ -1342,6 +1354,9 @@ class mrpiracy:
 			xbmc.executebuiltin("Container.Refresh")
 		if colocar == 3:
 			controlo.alerta('MrPiracy', 'Ocorreu um erro ao marcar como visto')
+		elif colocar == 4:
+			xbmc.executebuiltin("XBMC.Notification(MrPiracy,"+"Marcado como não visto no Trakt"+","+"6000"+","+ os.path.join(controlo.addonFolder,'icon.png')+")")
+			xbmc.executebuiltin("Container.Refresh")
 
 	def download(self, url):
 		controlo.headers['Authorization'] = 'Bearer %s' % controlo.addon.getSetting('tokenMrpiracy')
@@ -2047,7 +2062,7 @@ class mrpiracy:
 					break
 				else:
 					visto = False
-		if vistoa:
+		if vistoa or visto:
 			visto = True
 		else:
 			visto = False
