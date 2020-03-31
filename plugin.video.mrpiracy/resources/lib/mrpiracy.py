@@ -100,14 +100,14 @@ class mrpiracy:
 		#controlo.addDir('Mensagens', self.API_SITE+'index.php?action=mensagens', 'mensagens', os.path.join(controlo.artFolder, controlo.skin, 'notificacoes.png'))
 		definicoes.vista_menu()
 	def favoritosMenu(self):
-		controlo.addDir('Filmes Favoritos', self.API_SITE+'favoritos.php?action=filmes&qualidade='+definicoes.getQualidade(), 'favoritos', os.path.join(controlo.artFolder, controlo.skin, 'favoritos.png'))
-		controlo.addDir('Séries Favoritas', self.API_SITE+'favoritos.php?action=series', 'favoritos', os.path.join(controlo.artFolder, controlo.skin, 'agendados.png'))
-		controlo.addDir('Animes Favoritos', self.API_SITE+'favoritos.php?action=animes', 'favoritos', os.path.join(controlo.artFolder, controlo.skin, 'notificacoes.png'))
+		controlo.addDir('Filmes Favoritos', self.API_SITE+'favoritos.php?action=filmes&qualidade='+definicoes.getQualidade(), 'favoritos', os.path.join(controlo.artFolder, controlo.skin, 'fifav.png'))
+		controlo.addDir('Séries Favoritas', self.API_SITE+'favoritos.php?action=series', 'favoritos', os.path.join(controlo.artFolder, controlo.skin, 'sefav.png'))
+		controlo.addDir('Animes Favoritos', self.API_SITE+'favoritos.php?action=animes', 'favoritos', os.path.join(controlo.artFolder, controlo.skin, 'anfav.png'))
 		definicoes.vista_menu()
 	def verdepoisMenu(self):
-		controlo.addDir('Filmes Agendados', self.API_SITE+'verdepois.php?action=filmes&qualidade='+definicoes.getQualidade(), 'verdepois', os.path.join(controlo.artFolder, controlo.skin, 'agendados.png'))
-		controlo.addDir('Séries Agendadas', self.API_SITE+'verdepois.php?action=series', 'verdepois', os.path.join(controlo.artFolder, controlo.skin, 'agendados.png'))
-		controlo.addDir('Animes Agendados', self.API_SITE+'verdepois.php?action=animes', 'verdepois', os.path.join(controlo.artFolder, controlo.skin, 'agendados.png'))
+		controlo.addDir('Filmes Agendados', self.API_SITE+'verdepois.php?action=filmes&qualidade='+definicoes.getQualidade(), 'verdepois', os.path.join(controlo.artFolder, controlo.skin, 'fiagend.png'))
+		controlo.addDir('Séries Agendadas', self.API_SITE+'verdepois.php?action=series', 'verdepois', os.path.join(controlo.artFolder, controlo.skin, 'seagend.png'))
+		controlo.addDir('Animes Agendados', self.API_SITE+'verdepois.php?action=animes', 'verdepois', os.path.join(controlo.artFolder, controlo.skin, 'anagend.png'))
 		definicoes.vista_menu()
 
 	def login(self):

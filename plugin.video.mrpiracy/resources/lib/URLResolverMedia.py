@@ -334,12 +334,21 @@ class CloudMailRu():
 	def getId(self):
 		return re.compile('(?:\/\/|\.)cloud\.mail\.ru\/public\/(.+)').findall(self.url)[0]
 	def getMediaUrl(self):
-		conteudo = self.net.http_GET(self.url).content
-		ext = re.compile('<meta name=\"twitter:image\" content=\"(.+?)\"/>').findall(conteudo)[0]
+
+		headers = { 'Accept': ' text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+		  'Host': ' cloud.mail.ru',
+		  'User-Agent': ' Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36' }
+		   
+		req = urllib2.Request(self.url, headers=headers)
+		response = urllib2.urlopen(req)  
+		sourceCode = response.read()
+		response.close()
+
+		ext = re.compile('<meta name=\"twitter:image\" content=\"(.+?)\"/>').findall(sourceCode)[0]
 		streamAux = clean(ext.split('/')[-1])
 		extensaoStream = clean(streamAux.split('.')[-1])
 		#token = re.compile('"tokens"\s*:\s*{\s*"download"\s*:\s*"([^"]+)').findall(conteudo)[0]
-		mediaLink = re.compile('(https\:\/\/[a-zA-Z0-9\-\.]+cldmail+\.[a-zA-Z]{2,3}\/\S*)"').findall(conteudo)[0]
+		mediaLink = re.compile('(https\:\/\/[a-zA-Z0-9\-\.]+cldmail+\.[a-zA-Z]{2,3}\/\S*)"').findall(sourceCode)[0]
 		#videoUrl = '%s/%s?key=%s' % (mediaLink, self.getId(), token)
 		videoUrl = '%s/%s' % (mediaLink, self.getId())
 		return videoUrl, extensaoStream
