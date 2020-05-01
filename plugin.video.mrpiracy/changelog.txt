@@ -1,3 +1,9 @@
+v0.9.9(01/05/2020)
+- Nova zona infantil
+- Novos menus filtragem por lingua
+- Download
+- Novo Servidor
+
 v0.9.8(31/03/2020)
 - Correção servidor MrPiracy
 - Mudança de imagens

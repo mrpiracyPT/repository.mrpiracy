@@ -52,6 +52,75 @@ def log(msg, level=xbmc.LOGNOTICE):
 			a=1
 		except: pass  
 
+class Fembed():
+	def __init__(self, url):
+		self.oldUrl = url
+		self.id = self.getId(url)
+		self.net = Net()
+		self.headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:61.0) Gecko/20100101 Firefox/61.0"}
+		self.legenda = ''
+		req = urllib2.Request(url, headers=self.headers)
+		response = urllib2.urlopen(req)
+		self.url = response.geturl()
+		response.close()
+		self.host = re.findall(r'(?://|\.)([^/]+)', self.url)[0]
+		self.headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:61.0) Gecko/20100101 Firefox/61.0", "Referer": self.get_url(self.host,self.id)}
+
+	def get_url(self, host, media_id):
+		return 'https://{host}/v/{media_id}'.format(host=host, media_id=media_id)
+
+	def getId(self, url):
+		return urlparse.urlparse(url).path.split("/")[-1]
+
+	def abrirMixdrop(self, url):
+		req = urllib2.Request(url, headers=self.headers)
+		response = urllib2.urlopen(req)
+		link=response.read()
+		response.close()
+		return link
+
+	def getMediaUrl(self):
+		videoUrl = ''
+		api_url = 'https://{0}/api/source/{1}'.format(self.host, self.id)
+		post = {'r': '', 'd': self.host}
+		post = json.dumps(post)
+		log(post)
+		log(api_url)
+		req = urllib2.Request(api_url, data=post, headers=self.headers)
+		response = urllib2.urlopen(req)
+		content = response.read()
+		response.close()
+		if response.geturl() != api_url:
+			api_url = 'https://www.{0}/api/source/{1}'.format(self.host, self.id)
+			req = urllib2.Request(api_url, data=post, headers=self.headers)
+			response = urllib2.urlopen(req)
+			content = response.read()
+			response.close()
+		if content:
+			js_data = json.loads(content)
+			if js_data.get('success'):
+				sources = [(i.get('label'), i.get('file')) for i in js_data.get('data') if i.get('type') == 'mp4']
+
+				if len(sources) == 1:
+					videoUrl = sources[0][1]
+				elif len(sources) > 1:
+					qualidade = xbmcgui.Dialog().select('Escolha a qualidade', [str(source[0]) if source[0] else 'Unknown' for source in sources])
+					if qualidade == -1:
+						controlo.log("ERRO")
+					videoUrl = sources[qualidade][1]
+
+
+		request = urllib2.Request(videoUrl)
+		request.get_method = lambda: 'HEAD'
+		request.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.3; rv:36.0) Gecko/20100101 Firefox/36.0')
+		for key in self.headers:
+			request.add_header(key, self.headers[key])
+		response = urllib2.urlopen(request)
+
+		return videoUrl+'|%s' % '&'.join(['%s=%s' % (key, urllib.quote_plus(self.headers[key])) for key in self.headers])
+		
+	def getLegenda(self):
+		return self.legenda
 class Mixdrop():
 	def __init__(self, url):
 		self.url = url

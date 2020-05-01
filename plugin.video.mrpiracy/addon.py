@@ -26,6 +26,8 @@ elif modo == 'menuSeries':
 	mrpiracy.mrpiracy().menuSeries()
 elif modo == 'menuAnimes':
 	mrpiracy.mrpiracy().menuAnimes()
+elif modo == 'menuKids':
+	mrpiracy.mrpiracy().menuKids()
 elif modo == 'filmes':
 	mrpiracy.mrpiracy().filmes(url)
 elif modo == 'series':
@@ -42,6 +44,10 @@ elif modo == 'listagemAnos':
 	mrpiracy.mrpiracy().listagemAnos(url)
 elif modo == 'anos':
 	mrpiracy.mrpiracy().anos(url)
+elif modo == 'listagemIdiomas':
+	mrpiracy.mrpiracy().listagemIdiomas(url)
+elif modo == 'idiomas':
+	mrpiracy.mrpiracy().idiomas(url)
 elif modo == 'listagemGeneros':
 	mrpiracy.mrpiracy().listagemGeneros(url)
 elif modo == 'categorias':
