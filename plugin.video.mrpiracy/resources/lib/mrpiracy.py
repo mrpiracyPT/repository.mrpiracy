@@ -38,12 +38,12 @@ class mrpiracy:
 			controlo.addDir('Séries', self.API_SITE+'series', 'menuSeries', os.path.join(controlo.artFolder, controlo.skin, 'series.png'))
 			controlo.addDir('Animes', self.API_SITE+'animes', 'menuAnimes', os.path.join(controlo.artFolder, controlo.skin, 'animes.png'))
 			controlo.addDir('Pesquisa', self.API_SITE+'pesquisa.php', 'pesquisa', os.path.join(controlo.artFolder, controlo.skin, 'procurar.png'))
-			controlo.addDir('Zona Infantil', '', 'menuKids', os.path.join(controlo.artFolder, controlo.skin, 'animes.png'))
+			controlo.addDir('Zona Infantil', '', 'menuKids', os.path.join(controlo.artFolder, controlo.skin, 'zoin.png'))
 			controlo.addDir('', '', '', os.path.join(controlo.artFolder, controlo.skin, 'nada.png'))
 			if Trakt.loggedIn():
 				self.getTrakt()
 				#+ self.getNumNotificacoes()   ---- controlo.addDir('Trakt', self.API_SITE+'me', 'menuTrakt', os.path.join(controlo.artFolder, controlo.skin, 'trakt.png'))
-			controlo.addDir('A Minha Conta ', self.API_SITE+'me', 'conta', os.path.join(controlo.artFolder, controlo.skin, 'definicoes.png'))
+			controlo.addDir('A Minha Conta ', self.API_SITE+'me', 'conta', os.path.join(controlo.artFolder, controlo.skin, 'conta.png'))
 			controlo.addDir('Definições', self.API_SITE, 'definicoes', os.path.join(controlo.artFolder, controlo.skin, 'definicoes.png'))
 			
 			
@@ -72,7 +72,7 @@ class mrpiracy:
 		controlo.addDir('Filmes por Ano', self.API_SITE+'filmes.php?action=ano', 'listagemAnos', os.path.join(controlo.artFolder, controlo.skin, 'ano.png'))
 		controlo.addDir('Filmes por Genero', self.API_SITE+'filmes.php?action=categoria', 'listagemGeneros', os.path.join(controlo.artFolder, controlo.skin, 'generos.png'))
 		controlo.addDir('Filmes Portugueses', self.API_SITE+'filmes.php?action=lingua&locale=PT-PT&kids=2', 'filmes', os.path.join(controlo.artFolder, controlo.skin, 'fipt.png'))
-		controlo.addDir('Filmes por Idioma', self.API_SITE+'filmes.php?action=lingua', 'listagemIdiomas', os.path.join(controlo.artFolder, controlo.skin, 'filmes.png'))
+		controlo.addDir('Filmes por Idioma', self.API_SITE+'filmes.php?action=lingua', 'listagemIdiomas', os.path.join(controlo.artFolder, controlo.skin, 'filid.png'))
 		#controlo.addDir('Filmes por Ranking IMDB', self.API_SITE+'filmes/imdbRank/qualidade/'+definicoes.getQualidade(), 'filmes', os.path.join(controlo.artFolder, controlo.skin, 'filmes.png'))
 		#controlo.addDir('Filmes para Crianças', self.API_SITE+'filmes/pt/qualidade/'+definicoes.getQualidade(), 'filmes', os.path.join(controlo.artFolder, controlo.skin, 'filmes.png'))
 		definicoes.vista_menu()
@@ -88,7 +88,7 @@ class mrpiracy:
 		controlo.addDir('Séries por Ano', self.API_SITE+'series.php?action=ano', 'listagemAnos', os.path.join(controlo.artFolder, controlo.skin, 'ano.png'))
 		controlo.addDir('Séries por Genero', self.API_SITE+'series.php?action=categoria', 'listagemGeneros', os.path.join(controlo.artFolder, controlo.skin, 'generos.png'))
 		controlo.addDir('Séries Portuguesas', self.API_SITE+'series.php?action=lingua&locale=PT-PT&kids=2', 'series', os.path.join(controlo.artFolder, controlo.skin, 'sept.png'))
-		controlo.addDir('Séries por Idioma', self.API_SITE+'series.php?action=lingua', 'listagemIdiomas', os.path.join(controlo.artFolder, controlo.skin, 'series.png'))
+		controlo.addDir('Séries por Idioma', self.API_SITE+'series.php?action=lingua', 'listagemIdiomas', os.path.join(controlo.artFolder, controlo.skin, 'seid.png'))
 		#controlo.addDir('Séries por Ranking IMDB', self.API_SITE+'series/imdbRank', 'series', os.path.join(controlo.artFolder, controlo.skin, 'series.png'))
 		definicoes.vista_menu()
 	def menuAnimes(self):
@@ -564,35 +564,10 @@ class mrpiracy:
 			tipo = 2
 			qualidade = ''
 		for i in anos:
-			controlo.addDir(i, url+'&ano='+i+qualidade, 'anos', os.path.join(controlo.artFolder, controlo.skin, 'ano.png'))
+			controlo.addDir(i, url+'&ano='+i+qualidade, 'anos', os.path.join(controlo.artFolder, controlo.skin, 'ano', i+'.png'))
 		definicoes.vista_menu()
 	def listagemIdiomas(self, url):
-		lista = {
-			'German': 'Alemão',
-			'Korean': 'Coreano',
-			'Danish': 'Dinamarquês',
-			'Spanish': 'Espanhol',
-			'Filipino': 'Filipino',
-			'Finnish': 'Filandês',
-			'French': 'Francês',
-			'Greek': 'Grego',
-			'Dutch': 'Holandês',
-			'Hungarian': 'Húngaro',
-			'Hindi': 'Indiano',
-			'English': 'Inglês',
-			'Italian': 'Italiano',
-			'Japanese': 'Japonês',
-			'Mandarin': 'Mandarim',
-			'Norwegian': 'Norueguês',
-			'Polish': 'Polaco',
-			'PT-PT': 'Português de Portugal',
-			'PT-BR': 'Português do Brasil',
-			'Russian': 'Russo',
-			'Swedish': 'Sueco',
-			'Thai': 'Tailandês',
-			'Turkish': 'Turco',
-			'Ukrainian': 'Ucraniano'
-		}
+		idiomas = definicoes.getIdiomas()
 
 		if 'filmes' in url:
 			tipo = 0
@@ -603,8 +578,15 @@ class mrpiracy:
 		elif 'animes' in url:
 			tipo = 2
 			qualidade = ''
-		for i in sorted(lista.keys()):
-			controlo.addDir(lista[i], url+'&locale='+i+qualidade, 'idiomas', os.path.join(controlo.artFolder, controlo.skin, 'bandeiras',  i+'.png'))
+		
+
+		for i in ast.literal_eval(idiomas):
+			
+			try:
+				idioma = i['label'].decode('utf-8')
+			except:
+				idioma = i['label'].encode('utf-8')
+			controlo.addDir(idioma, url+'&locale='+i['id']+qualidade, 'idiomas', os.path.join(controlo.artFolder, controlo.skin, 'bandeiras',  i['id']+'.png'))
 		definicoes.vista_menu()
 
 	def listagemGeneros(self, url):
@@ -626,7 +608,7 @@ class mrpiracy:
 				cat = c['categorias'].decode('utf-8')
 			except:
 				cat = c['categorias'].encode('utf-8')
-			controlo.addDir(cat, url+'&categoria='+str(c['id_categoria'])+qualidade, 'categorias', os.path.join(controlo.artFolder, controlo.skin, 'generos.png'))
+			controlo.addDir(cat, url+'&categoria='+str(c['id_categoria'])+qualidade, 'categorias', os.path.join(controlo.artFolder, controlo.skin, 'genero', c['id_categoria']+'.png'))
 		definicoes.vista_menu()
 
 	def idiomas(self, url):

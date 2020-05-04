@@ -34,6 +34,9 @@ def getListCategoria():
 	cat = controlo.ler_ficheiro(os.path.join(controlo.pastaDados,'categorias.mrpiracy')).replace('"', "'")
 	return cat
 
+def getIdiomas():
+	return "[{'id':'German','label':'Alemão'},{'id':'Korean','label':'Coreano'},{'id':'Danish','label':'Dinamarquês'},{'id':'Spanish','label':'Espanhol'},{'id':'Filipino','label':'Filipino'},{'id':'Finnish','label':'Filandês'},{'id':'French','label':'Francês'},{'id':'Greek','label':'Grego'},{'id':'Dutch','label':'Holandês'},{'id':'Hungarian','label':'Húngaro'},{'id':'Hindi','label':'Indiano'},{'id':'English','label':'Inglês'},{'id':'Italian','label':'Italiano'},{'id':'Japanese','label':'Japonês'},{'id':'Mandarin','label':'Mandarim'},{'id':'Norwegian','label':'Norueguês'},{'id':'Polish','label':'Polaco'},{'id':'PT-PT','label':'Português de Portugal'},{'id':'PT-BR','label':'Português do Brasil'},{'id':'Russian','label':'Russo'},{'id':'Swedish','label':'Sueco'},{'id':'Thai','label':'Tailandês'},{'id':'Turkish','label':'Turco'},{'id':'Ukrainian','label':'Ucraniano'}]".replace('"', "'")
+
 def getCategoria(id):
 	#cat = controlo.ler_ficheiro(os.path.join(controlo.pastaDados,'categorias.mrpiracy')).replace(": u", ": ").replace("'", '"').replace("{u", "{").replace(", u", ", ").replace('"', "'")
 	#cats = re.compile("'categorias':\s*u?'(.*?)',\s*u?'id_categoria':\s*u?'(.+?)'").findall(cat)

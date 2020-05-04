@@ -1,3 +1,7 @@
+v1.0.0(04/05/2020)
+- Ordenação de idiomas
+- Novas imagens para menus, anos e categorias
+
 v0.9.9(01/05/2020)
 - Nova zona infantil
 - Novos menus filtragem por lingua
