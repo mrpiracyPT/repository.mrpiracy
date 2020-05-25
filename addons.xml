@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addons>
-<addon id="plugin.video.mrpiracy" name="MrPiracy" provider-name="MrPiracy" version="1.0.0">
+<addon id="plugin.video.mrpiracy" name="MrPiracy" provider-name="MrPiracy" version="1.0.1">
  <requires>
   <import addon="xbmc.python" version="2.14.0"/>
   <import addon="script.module.t0mm0.common"/>
@@ -13,7 +13,7 @@
     <summary lang="en">MrPiracy</summary>
     <description lang="en">Addon site MrPiracy</description>
     <description lang="en">Filmes e series no Kodi. </description>
-    <disclaimer lang="en">Como desenvolvedor do addon, nada tenho a haver com site. O site pode ser acedido por um browser. Limito-me a ler o seu conteúdo disponibilizado e converter em addon.</disclaimer>
+    <disclaimer lang="en">Como desenvolvedor do addon, nada tenho a haver com site. O site pode ser acedido por um browser. Limito-me a ler o seu conteudo disponibilizado e converter em addon.</disclaimer>
     <language></language>
     <platform>all</platform>
     <license></license>

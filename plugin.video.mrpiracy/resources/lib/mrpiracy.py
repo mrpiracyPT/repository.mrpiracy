@@ -764,6 +764,7 @@ class mrpiracy:
 		except: 
 			resultado = resultado[0]
 
+		stream = ''
 		i = 0
 		servidores = []
 		titulos = []
@@ -782,7 +783,7 @@ class mrpiracy:
 				nome = 'MrPiracy'
 				servidores.append(resultado['URL'])
 				titulos.append('Servidor #%s: %s' % (i, nome))
-			elif 'uptostream.com' in resultado['URL'].lower():
+			elif 'uptostream' in resultado['URL'].lower():
 				nome = 'UpToStream'
 				servidores.append(resultado['URL'])
 				titulos.append('Servidor #%s: %s' % (i, nome))
@@ -798,12 +799,16 @@ class mrpiracy:
 				nome = 'Streamango'
 				servidores.append(resultado['URL'])
 				titulos.append('Servidor #%s: %s' % (i, nome))
-			elif 'mixdrop.to' in resultado['URL'].lower():
+			elif 'mixdrop.' in resultado['URL'].lower():
 				nome = 'Mixdrop'
 				servidores.append(resultado['URL'])
 				titulos.append('Servidor #%s: %s' % (i, nome))
 			elif 'fembed' in resultado['URL'].lower():
 				nome = 'Fembed'
+				servidores.append(resultado['URL'])
+				titulos.append('Servidor #%s: %s' % (i, nome))
+			elif 'mystream' in resultado['URL'].lower():
+				nome = 'MyStream'
 				servidores.append(resultado['URL'])
 				titulos.append('Servidor #%s: %s' % (i, nome))
 		if resultado['URL2'] != '':
@@ -836,12 +841,16 @@ class mrpiracy:
 				nome = 'Streamango'
 				servidores.append(resultado['URL2'])
 				titulos.append('Servidor #%s: %s' % (i, nome))
-			elif 'mixdrop.to' in resultado['URL2'].lower():
+			elif 'mixdrop.' in resultado['URL2'].lower():
 				nome = 'Mixdrop'
 				servidores.append(resultado['URL2'])
 				titulos.append('Servidor #%s: %s' % (i, nome))
 			elif 'fembed' in resultado['URL2'].lower():
 				nome = 'Fembed'
+				servidores.append(resultado['URL2'])
+				titulos.append('Servidor #%s: %s' % (i, nome))
+			elif 'mystream' in resultado['URL2'].lower():
+				nome = 'MyStream'
 				servidores.append(resultado['URL2'])
 				titulos.append('Servidor #%s: %s' % (i, nome))
 		try:
@@ -875,12 +884,16 @@ class mrpiracy:
 					nome = 'Streamango'
 					servidores.append(resultado['URL3'])
 					titulos.append('Servidor #%s: %s' % (i, nome))
-				elif 'mixdrop.to' in resultado['URL3'].lower():
+				elif 'mixdrop.' in resultado['URL3'].lower():
 					nome = 'Mixdrop'
 					servidores.append(resultado['URL3'])
 					titulos.append('Servidor #%s: %s' % (i, nome))
 				elif 'fembed' in resultado['URL3'].lower():
 					nome = 'Fembed'
+					servidores.append(resultado['URL3'])
+					titulos.append('Servidor #%s: %s' % (i, nome))
+				elif 'mystream' in resultado['URL3'].lower():
+					nome = 'MyStream'
 					servidores.append(resultado['URL3'])
 					titulos.append('Servidor #%s: %s' % (i, nome))
 		except:
@@ -916,12 +929,16 @@ class mrpiracy:
 					nome = 'Streamango'
 					servidores.append(resultado['URL4'])
 					titulos.append('Servidor #%s: %s' % (i, nome))
-				elif 'mixdrop.to' in resultado['URL4'].lower():
+				elif 'mixdrop.' in resultado['URL4'].lower():
 					nome = 'Mixdrop'
 					servidores.append(resultado['URL4'])
 					titulos.append('Servidor #%s: %s' % (i, nome))
 				elif 'fembed' in resultado['URL4'].lower():
 					nome = 'Fembed'
+					servidores.append(resultado['URL4'])
+					titulos.append('Servidor #%s: %s' % (i, nome))
+				elif 'mystream' in resultado['URL4'].lower():
+					nome = 'MyStream'
 					servidores.append(resultado['URL4'])
 					titulos.append('Servidor #%s: %s' % (i, nome))
 		except:
@@ -958,12 +975,16 @@ class mrpiracy:
 					nome = 'Streamango'
 					servidores.append(resultado['URL5'])
 					titulos.append('Servidor #%s: %s' % (i, nome))
-				elif 'mixdrop.to' in resultado['URL5'].lower():
+				elif 'mixdrop.' in resultado['URL5'].lower():
 					nome = 'Mixdrop'
 					servidores.append(resultado['URL5'])
 					titulos.append('Servidor #%s: %s' % (i, nome))
 				elif 'fembed' in resultado['URL5'].lower():
 					nome = 'Fembed'
+					servidores.append(resultado['URL5'])
+					titulos.append('Servidor #%s: %s' % (i, nome))
+				elif 'mystream' in resultado['URL5'].lower():
+					nome = 'MyStream'
 					servidores.append(resultado['URL5'])
 					titulos.append('Servidor #%s: %s' % (i, nome))
 		except:
@@ -1000,12 +1021,16 @@ class mrpiracy:
 					nome = 'Streamango'
 					servidores.append(resultado['URL6'])
 					titulos.append('Servidor #%s: %s' % (i, nome))
-				elif 'mixdrop.to' in resultado['URL6'].lower():
+				elif 'mixdrop.' in resultado['URL6'].lower():
 					nome = 'Mixdrop'
 					servidores.append(resultado['URL6'])
 					titulos.append('Servidor #%s: %s' % (i, nome))
 				elif 'fembed' in resultado['URL6'].lower():
 					nome = 'Fembed'
+					servidores.append(resultado['URL6'])
+					titulos.append('Servidor #%s: %s' % (i, nome))
+				elif 'mystream' in resultado['URL6'].lower():
+					nome = 'MyStream'
 					servidores.append(resultado['URL6'])
 					titulos.append('Servidor #%s: %s' % (i, nome))
 		except:
@@ -1042,12 +1067,16 @@ class mrpiracy:
 					nome = 'Streamango'
 					servidores.append(resultado['URL7'])
 					titulos.append('Servidor #%s: %s' % (i, nome))
-				elif 'mixdrop.to' in resultado['URL7'].lower():
+				elif 'mixdrop.' in resultado['URL7'].lower():
 					nome = 'Mixdrop'
 					servidores.append(resultado['URL7'])
 					titulos.append('Servidor #%s: %s' % (i, nome))
 				elif 'fembed' in resultado['URL7'].lower():
 					nome = 'Fembed'
+					servidores.append(resultado['URL7'])
+					titulos.append('Servidor #%s: %s' % (i, nome))
+				elif 'mystream' in resultado['URL7'].lower():
+					nome = 'MyStream'
 					servidores.append(resultado['URL7'])
 					titulos.append('Servidor #%s: %s' % (i, nome))
 		except:
@@ -1130,6 +1159,10 @@ class mrpiracy:
 			legenda = mixdrop.getLegenda()
 		elif 'fembed' in servidores[servidor]:
 			fembed = URLResolverMedia.Fembed(servidores[servidor])
+			stream = fembed.getMediaUrl()
+			legenda = fembed.getLegenda()
+		elif 'mystream' in servidores[servidor]:
+			fembed = URLResolverMedia.MyStream(servidores[servidor])
 			stream = fembed.getMediaUrl()
 			legenda = fembed.getLegenda()
 

@@ -52,6 +52,84 @@ def log(msg, level=xbmc.LOGNOTICE):
 			a=1
 		except: pass  
 
+class MyStream():
+	def __init__(self, url):
+		self.url = url
+		self.net = Net()
+		self.UA = "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:52.0) Gecko/20100101 Firefox/52.0"
+		self.headers = {"User-Agent": self.UA, "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"}
+		self.legenda = ''
+
+	def getId(self, url):
+		return urlparse.urlparse(url).path.split("/")[-1]
+
+	def abrirMyStream(self):
+		req = urllib2.Request(self.url, headers=self.headers)
+		response = urllib2.urlopen(req)
+		link=response.read()
+		response.close()
+		return link
+
+	def getMediaUrl(self):
+		
+		conteudo = self.abrirMyStream()
+		result = re.findall("([$]=.+?\(\)\)\(\);)", conteudo, re.DOTALL)
+		videoUrl = False
+		if result:
+			for i in result:
+				decoded = self.temp_decode(i)
+				if decoded:
+					r = re.search("setAttribute\(\'src\', *\'([^']+)\'\)", decoded, re.DOTALL)
+					if r:
+						videoUrl = r.group(1)
+		if videoUrl:
+			return videoUrl+'|User-Agent=' + self.UA + '&Referer=' + self.url + '&Origin=https://embed.mystream.to'
+
+		return ''
+
+
+	def temp_decode(self, data):
+		startpos = data.find('"\\""+') + 5
+		endpos = data.find('"\\"")())()')
+		first_group = data[startpos:endpos]
+		l = re.search("(\(!\[\]\+\"\"\)\[.+?\]\+)", first_group, re.DOTALL)
+		if l:
+			first_group = first_group.replace(l.group(1), 'l').replace('$.__+', 't').replace('$._+', 'u').replace('$._$+', 'o')
+			tmplist = []
+			js = re.search('(\$={.+?});', data, re.DOTALL)
+			if js:
+				js_group = js.group(1)[3:][:-1]
+				second_group = js_group.split(',')
+				i = -1
+				for x in second_group:
+					a, b = x.split(':')
+					if b == '++$':
+						i += 1
+						tmplist.append(("{}{}{}".format('$.', a, '+'), i))
+					elif b == '(![]+"")[$]':
+						tmplist.append(("{}{}{}".format('$.', a, '+'), 'false'[i]))
+					elif b == '({}+"")[$]':
+						tmplist.append(("{}{}{}".format('$.', a, '+'), '[object Object]'[i]))
+					elif b == '($[$]+"")[$]':
+						tmplist.append(("{}{}{}".format('$.',a,'+'),'undefined'[i]))
+					elif b == '(!""+"")[$]':
+						tmplist.append(("{}{}{}".format('$.', a, '+'), 'true'[i]))
+
+				tmplist = sorted(tmplist, key=lambda x: x[1])
+				for x in tmplist:
+					first_group = first_group.replace(x[0], str(x[1]))
+
+				first_group = first_group.replace(r'\\"' , '\\').replace("\"\\\\\\\\\"", "\\\\").replace('\\"', '\\').replace('"', '').replace("+", "")
+		try:
+			final_data = unicode(first_group, encoding = 'unicode-escape')
+			return final_data
+		except:
+			return False
+
+	def getLegenda(self):
+		return self.legenda
+
+
 class Fembed():
 	def __init__(self, url):
 		self.oldUrl = url
@@ -84,8 +162,7 @@ class Fembed():
 		api_url = 'https://{0}/api/source/{1}'.format(self.host, self.id)
 		post = {'r': '', 'd': self.host}
 		post = json.dumps(post)
-		log(post)
-		log(api_url)
+
 		req = urllib2.Request(api_url, data=post, headers=self.headers)
 		response = urllib2.urlopen(req)
 		content = response.read()

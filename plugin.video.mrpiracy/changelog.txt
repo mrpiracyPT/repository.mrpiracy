@@ -1,3 +1,7 @@
+v1.0.1(25/05/2020)
+- Correção Mixdrop
+- Adicionado MyStream
+
 v1.0.0(04/05/2020)
 - Ordenação de idiomas
 - Novas imagens para menus, anos e categorias
