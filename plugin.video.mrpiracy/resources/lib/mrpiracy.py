@@ -997,15 +997,15 @@ class mrpiracy:
 					nome = "OpenLoad"
 					servidores.append(resultado['URL6'])
 					titulos.append('Servidor #%s: %s' % (i, nome))
-				elif 'vidzi' in resultado['URL8'].lower():
+				elif 'vidzi' in resultado['URL6'].lower():
 					nome = 'Vidzi'
 					servidores.append(resultado['URL6'])
 					titulos.append('Servidor #%s: %s' % (i, nome))
-				elif 'google' in resultado['URL6'].lower()or 'cloud.mail.ru' in resultado['URL6'].lower():
+				elif 'google' in resultado['URL6'].lower() or 'cloud.mail.ru' in resultado['URL6'].lower():
 					nome = 'MrPiracy'
 					servidores.append(resultado['URL6'])
 					titulos.append('Servidor #%s: %s' % (i, nome))
-				elif 'uptostream.com' in resultado['URL8'].lower():
+				elif 'uptostream.com' in resultado['URL6'].lower():
 					nome = 'UpToStream'
 					servidores.append(resultado['URL6'])
 					titulos.append('Servidor #%s: %s' % (i, nome))
@@ -1047,7 +1047,7 @@ class mrpiracy:
 					nome = 'Vidzi'
 					servidores.append(resultado['URL7'])
 					titulos.append('Servidor #%s: %s' % (i, nome))
-				elif 'google' in resultado['URL7'].lower()or 'cloud.mail.ru' in resultado['URL7'].lower():
+				elif 'google' in resultado['URL7'].lower() or 'cloud.mail.ru' in resultado['URL7'].lower():
 					nome = 'MrPiracy'
 					servidores.append(resultado['URL7'])
 					titulos.append('Servidor #%s: %s' % (i, nome))
@@ -1162,9 +1162,9 @@ class mrpiracy:
 			stream = fembed.getMediaUrl()
 			legenda = fembed.getLegenda()
 		elif 'mystream' in servidores[servidor]:
-			fembed = URLResolverMedia.MyStream(servidores[servidor])
-			stream = fembed.getMediaUrl()
-			legenda = fembed.getLegenda()
+			mystream = URLResolverMedia.MyStream(servidores[servidor])
+			stream = mystream.getMediaUrl()
+			legenda = mystream.getLegenda()
 
 		"""if coiso == 'filme':
 			legenda = legendaAux
