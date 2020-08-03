@@ -494,7 +494,7 @@ class CloudMailRu():
 		streamAux = clean(ext.split('/')[-1])
 		extensaoStream = clean(streamAux.split('.')[-1])
 		#token = re.compile('"tokens"\s*:\s*{\s*"download"\s*:\s*"([^"]+)').findall(conteudo)[0]
-		mediaLink = re.compile('(https\:\/\/[a-zA-Z0-9\-\.]+cloud.+\.[a-zA-Z]{2,3}\/\S*?\/G)').findall(sourceCode)[0]
+		mediaLink = re.compile('(https\:\/\/[a-zA-Z0-9\-\.]+cloud.+\.[a-zA-Z]{2,3}\/\S*?\/G)"').findall(sourceCode)[0]
 		#videoUrl = '%s/%s?key=%s' % (mediaLink, self.getId(), token)
 		videoUrl = '%s/%s' % (mediaLink, self.getId())
 		return videoUrl, extensaoStream
