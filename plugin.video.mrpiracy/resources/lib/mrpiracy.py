@@ -294,7 +294,7 @@ class mrpiracy:
 		total = resultado['meta']['total']
 		try: proximo = resultado['meta']['paginacao']['next']
 		except: pass 
-		self.setPagination(current, total, proximo, 'favoritos')
+		if int(current) < int(total): self.setPagination(current, total, proximo, 'favoritos')
 		definicoes.vista_filmesSeries()
 	def verdepois(self, url):
 		resultado = controlo.abrir_url(url, header=controlo.headers, cookie=definicoes.getCookie())
@@ -319,7 +319,7 @@ class mrpiracy:
 		total = resultado['meta']['total']
 		try: proximo = resultado['meta']['paginacao']['next']
 		except: pass 
-		self.setPagination(current, total, proximo, 'verdepois')
+		if int(current) < int(total): self.setPagination(current, total, proximo, 'verdepois')
 		definicoes.vista_filmesSeries()
 	def notificacoes(self, url):
 		resultadoa = controlo.abrir_url(url, header=controlo.headers, cookie=definicoes.getCookie())
@@ -362,7 +362,7 @@ class mrpiracy:
 		definicoes.vista_menu()
 	def filmes(self, url):
 		resultado = controlo.abrir_url(url, header=controlo.headers, cookie=definicoes.getCookie())
-		controlo.log(url)
+		
 		resultado = json.loads(resultado)
 		vistos = Database.selectFilmes()
 		opcao = controlo.addon.getSetting('marcarVisto')
@@ -372,7 +372,7 @@ class mrpiracy:
 		total = resultado['meta']['total']
 		try: proximo = resultado['meta']['paginacao']['next']
 		except: pass 
-		self.setPagination(current, total, proximo, 'filmes')
+		if int(current) < int(total): self.setPagination(current, total, proximo, 'filmes')
 		definicoes.vista_filmesSeries()
 	def series(self, url):
 		resultado = controlo.abrir_url(url, header=controlo.headers, cookie=definicoes.getCookie())
@@ -389,7 +389,7 @@ class mrpiracy:
 		total = resultado['meta']['total']
 		try: proximo = resultado['meta']['paginacao']['next']
 		except: pass 
-		self.setPagination(current, total, proximo, 'series')
+		if int(current) < int(total): self.setPagination(current, total, proximo, 'series')
 		definicoes.vista_filmesSeries()
 	def temporadas(self, url):
 		resultado = controlo.abrir_url(url, header=controlo.headers, cookie=definicoes.getCookie())
@@ -515,7 +515,7 @@ class mrpiracy:
 		total = resultado['meta']['total']
 		try: proximo = resultado['meta']['paginacao']['next']
 		except: pass 
-		self.setPagination(current, total, proximo, 'episodios')
+		if int(current) < int(total): self.setPagination(current, total, proximo, 'episodios')
 		definicoes.vista_episodios()
 		if naoVisto == True:
 			if controlo.addon.getSetting('nao-visto-episodios') == 'true':
@@ -624,7 +624,7 @@ class mrpiracy:
 		total = resultadoa['meta']['total']
 		try: proximo = resultadoa['meta']['paginacao']['next']
 		except: pass 
-		self.setPagination(current, total, proximo, 'anos')
+		if int(current) < int(total): self.setPagination(current, total, proximo, 'anos')
 		definicoes.vista_filmesSeries()
 
 	def anos(self, url):
@@ -645,7 +645,7 @@ class mrpiracy:
 		total = resultadoa['meta']['total']
 		try: proximo = resultadoa['meta']['paginacao']['next']
 		except: pass 
-		self.setPagination(current, total, proximo, 'anos')
+		if int(current) < int(total): self.setPagination(current, total, proximo, 'anos')
 		definicoes.vista_filmesSeries()
 		
 	def categorias(self, url):
@@ -666,7 +666,7 @@ class mrpiracy:
 		total = resultadoa['meta']['total']
 		try: proximo = resultadoa['meta']['paginacao']['next']
 		except: pass 
-		self.setPagination(current, total, proximo, 'categorias')
+		if int(current) < int(total): self.setPagination(current, total, proximo, 'categorias')
 
 		definicoes.vista_filmesSeries()
 	def player(self, url):
@@ -1255,8 +1255,8 @@ class mrpiracy:
 			total = resultado['meta']['total']
 			try: proximo = resultado['meta']['paginacao']['next']
 			except: pass 
-			self.setPagination(current, total, proximo, 'pesquisa')
-			definicoes.vista_filmesSeries()
+			if int(current) < int(total): self.setPagination(current, total, proximo, 'pesquisa')
+		definicoes.vista_filmesSeries()
 	def marcarVisto(self, url):
 		
 		resultado = controlo.abrir_url(url, header=controlo.headers, cookie=definicoes.getCookie())
@@ -1553,10 +1553,10 @@ class mrpiracy:
 		Downloader.Downloader().download(os.path.join(folder.decode("utf-8"), nomeStream), stream, nomeStream)
 		
 		if legendasOn:
-			controlo.log(legenda)
+			#controlo.log(legenda)
 			legendaAux = self.clean(legenda.split('/')[-1])
 			extensaoLegenda = self.clean(legendaAux.split('.')[-1])
-			controlo.log(extensaoLegenda)
+			#controlo.log(extensaoLegenda)
 			nomeLegenda = name+'.'+extensaoLegenda
 			self.download_legendas(legenda, os.path.join(folder, nomeLegenda))
 
@@ -2251,6 +2251,9 @@ class mrpiracy:
 		controlo.addDir(pt+br+nome+' ('+i['ano']+')', self.API_SITE+tipo+'.php?action=id&idSerie='+str(i['id_video']), 'temporadas', i['foto'], tipo='serie', infoLabels=infoLabels,poster=self.API+i['background'],visto=visto, menuO=True, favorito=menuFavorito, agendado=menuVerDepois)
 
 	def setPagination(self, current, total, proximo, local):
+		
+		currentAux = int(current)+1
+
 		if int(current) < int(total):
 			controlo.addDir('Próxima página ('+str(current)+'/'+str(total)+')', proximo, local, os.path.join(controlo.artFolder, controlo.skin, 'proximo.png'))
 			pagina100 = int(current)
@@ -2260,14 +2263,14 @@ class mrpiracy:
 				pagina10 = (int(current) + 10)
 			else:
 				pagina10 = total
-			if pagina10 != current:
-				proximo10 = proximo.replace('page='+str(current), 'page='+str(pagina10))
-				controlo.addDir('Página '+str(pagina10)+' de '+str(total), proximo10, local, os.path.join(controlo.artFolder, controlo.skin, 'proximo.png'))
+			if pagina10 != current and pagina10 != total:
+				proximo10 = proximo.replace('page='+str(currentAux), 'page='+str(pagina10))
+				controlo.addDir('Ir para a página '+str(pagina10), proximo10, local, os.path.join(controlo.artFolder, controlo.skin, 'proximo.png'))
 
 			if((int(current) + 100) < int(total)):
 				pagina100 = (int(current) + 100)
 			else:
 				pagina100 = total
-			if pagina100 != current:
-				proximo100 = proximo.replace('page='+str(current), 'page='+str(pagina100))
-				controlo.addDir('Página '+str(pagina100)+' de '+str(total), proximo100, local, os.path.join(controlo.artFolder, controlo.skin, 'proximo.png'))
+			if pagina100 != current and pagina100 != total:
+				proximo100 = proximo.replace('page='+str(currentAux), 'page='+str(pagina100))
+				controlo.addDir('Ir para a página '+str(pagina100), proximo100, local, os.path.join(controlo.artFolder, controlo.skin, 'proximo.png'))

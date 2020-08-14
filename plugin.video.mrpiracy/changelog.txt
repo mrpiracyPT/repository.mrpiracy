@@ -1,3 +1,7 @@
+v1.0.5(14/08/2020)
+- Correção Servidor MrPiracy
+- Correção Paginação +10 e +100
+
 v1.0.4(02/08/2020)
 - Correção Servidor MrPiracy
 - Adicionado Paginação +10 e +100
