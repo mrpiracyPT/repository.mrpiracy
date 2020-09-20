@@ -34,7 +34,7 @@ try:
     context = ssl.SSLContext(ssl.PROTOCOL_TLSv1)
 except:
     pass
-def addDir(name,url,modo,iconimage,pagina=False,tipo=False,infoLabels=False,poster=False,visto=False, menuO=False,favorito=False, agendado=False):
+def addDir(name,url,modo,iconimage,pagina=False,tipo=False,infoLabels=False,poster=False,visto=False, menuO=False,favorito=False, agendado=False, aseguir=False):
     menu = []
     if infoLabels: infoLabelsAux = infoLabels
     else: infoLabelsAux = {'Title': name}
@@ -56,6 +56,10 @@ def addDir(name,url,modo,iconimage,pagina=False,tipo=False,infoLabels=False,post
             menu.append(('Remover dos Agendados (ver mais tarde)', 'XBMC.RunPlugin(%s?modo=remover-agendar&url=%s)' % (sys.argv[0], urllib.quote_plus(url))))    
         else:
             menu.append(('Agendar (ver mais tarde)', 'XBMC.RunPlugin(%s?modo=adicionar-agendar&url=%s)' % (sys.argv[0], urllib.quote_plus(url))))
+        if aseguir:
+            menu.append(('Não receber notificação (A Seguir)', 'XBMC.RunPlugin(%s?modo=remover-aseguir&url=%s)' % (sys.argv[0], urllib.quote_plus(url))))
+        else:
+            menu.append(('Receber notificação (A Seguir)', 'XBMC.RunPlugin(%s?modo=adicionar-aseguir&url=%s)' % (sys.argv[0], urllib.quote_plus(url))))
         if visto == True:
             menu.append(('Marcar como não visto', 'XBMC.RunPlugin(%s?modo=marcar-visto&url=%s)' % (sys.argv[0], urllib.quote_plus(url))))
             overlay = 7
@@ -84,7 +88,7 @@ def addDir(name,url,modo,iconimage,pagina=False,tipo=False,infoLabels=False,post
     ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
     return ok
 
-def addVideo(name,url,modo,iconimage,visto,tipo,temporada,episodio,infoLabels,poster, trailer=False,serieNome=False,favorito=False,agendado=False):
+def addVideo(name,url,modo,iconimage,visto,tipo,temporada,episodio,infoLabels,poster, trailer=False,serieNome=False,favorito=False,agendado=False, aseguir=False):
 
     menu = []
 
@@ -99,6 +103,10 @@ def addVideo(name,url,modo,iconimage,visto,tipo,temporada,episodio,infoLabels,po
             menu.append(('Remover dos Agendados (ver mais tarde)', 'XBMC.RunPlugin(%s?modo=remover-agendar&url=%s)' % (sys.argv[0], urllib.quote_plus(url))))
         else:
             menu.append(('Agendar (ver mais tarde)', 'XBMC.RunPlugin(%s?modo=adicionar-agendar&url=%s)' % (sys.argv[0], urllib.quote_plus(url))))
+        if aseguir:
+            menu.append(('Não receber notificação (A Seguir)', 'XBMC.RunPlugin(%s?modo=remover-aseguir&url=%s)' % (sys.argv[0], urllib.quote_plus(url))))
+        else:
+            menu.append(('Receber notificação (A Seguir)', 'XBMC.RunPlugin(%s?modo=adicionar-aseguir&url=%s)' % (sys.argv[0], urllib.quote_plus(url))))
         if addon.getSetting('trailer-filmes') == 'true':
             try:
                 idYoutube = trailer.split('?v=')[-1].split('/')[-1].split('?')[0].split('&')[0]

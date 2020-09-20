@@ -62,6 +62,10 @@ elif modo == 'verdepois':
 	mrpiracy.mrpiracy().verdepois(url)
 elif modo == 'verdepoisMenu':
 	mrpiracy.mrpiracy().verdepoisMenu()
+elif modo == 'aseguir':
+	mrpiracy.mrpiracy().aseguir(url)
+elif modo == 'aseguirMenu':
+	mrpiracy.mrpiracy().aseguirMenu()
 elif modo == 'adicionar-favoritos':
 	mrpiracy.mrpiracy().adicionarFavoritos(url)
 elif modo == 'remover-favoritos':
@@ -70,6 +74,10 @@ elif modo == 'adicionar-agendar':
 	mrpiracy.mrpiracy().adicionarAgendar(url)
 elif modo == 'remover-agendar':
 	mrpiracy.mrpiracy().removerAgendar(url)
+elif modo == 'adicionar-aseguir':
+	mrpiracy.mrpiracy().adicionarAseguir(url)
+elif modo == 'remover-aseguir':
+	mrpiracy.mrpiracy().removerAseguir(url)
 elif modo == 'notificacoes':
 	mrpiracy.mrpiracy().notificacoes(url)
 elif modo == 'mensagens':
