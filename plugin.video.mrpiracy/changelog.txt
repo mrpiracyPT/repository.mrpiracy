@@ -1,3 +1,6 @@
+v1.0.8(06/10/2020)
+- Correção lista "A seguir"
+
 v1.0.7(20/09/2020)
 - Adicionar a opção "A Seguir"
 

@@ -188,18 +188,15 @@ class mrpiracy:
 						favoritos = str(0)
 				else:
 					favoritos = str(0)
-				aseguir = str(0)
-				try:
-					if resultado['aseguir'] != "" or resultado['aseguir'] != []:
-						try:
-							#favoritos = ','.join(ast.literal_eval(json.dumps(resultado['favoritos'])).values())
-							favoritos = ','.join(map(str, resultado['aseguir']))
-						except:
-							favoritos = str(0)
-					else:
-						favoritos = str(0)
-				except:
+				if resultado['aseguir'] != "" or resultado['aseguir'] != []:
+					try:
+						#favoritos = ','.join(ast.literal_eval(json.dumps(resultado['favoritos'])).values())
+						aseguir = ','.join(map(str, resultado['aseguir']))
+					except:
+						aseguir = str(0)
+				else:
 					aseguir = str(0)
+				
 				categorias = resultado['categorias']
 				try:
 					username = resultado['username'].decode('utf-8')
