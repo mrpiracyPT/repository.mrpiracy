@@ -17,8 +17,8 @@ sys.setdefaultencoding('utf8')
 class mrpiracy:
 
 	def __init__(self):
-		self.API = base64.urlsafe_b64decode('aHR0cDovL21yYXBpLnh5ei8=')
-		self.API_SITE = base64.urlsafe_b64decode('aHR0cDovL21yYXBpLnh5ei9hcGluZXcv')#aHR0cDovL21wYXBpLm1sL2FwaS8=
+		self.API = base64.urlsafe_b64decode('aHR0cHM6Ly9tcmFwaS54eXov')
+		self.API_SITE = base64.urlsafe_b64decode('aHR0cHM6Ly9tcmFwaS54eXovYXBpbmV3Lw==')#aHR0cDovL21wYXBpLm1sL2FwaS8=
 		self.SITE = base64.urlsafe_b64decode('aHR0cDovL21ycGlyYWN5LmdxLw==')
 	def definicoes(self):
 		controlo.addon.openSettings()

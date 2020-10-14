@@ -1,3 +1,7 @@
+v1.0.9(14/10/2020)
+- Improve SSL
+- Novas imagens
+
 v1.0.8(06/10/2020)
 - Correção lista "A seguir"
 
