@@ -29,7 +29,7 @@ from png import Reader as PNGReader
 from HTMLParser import HTMLParser
 import controlo
 import time
-
+from random import randint
 import HTMLParser
 
 #from external.pyopenssl import SSL, crypto
@@ -481,28 +481,32 @@ class CloudMailRu():
 		return re.compile('(?:\/\/|\.)cloud\.mail\.ru\/public\/(.+)').findall(self.url)[0]
 	def getMediaUrl(self):
 
-		headers = { 'Accept': ' text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
-		  'Host': ' cloud.mail.ru',
-		  'User-Agent': ' Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36' }
+		headers = { 'Host': ' cloud.mail.ru',
+		  'Connection': ' keep-alive',
+		  'Cache-Control': ' max-age=0',
+		  'DNT': ' 1',
+		  'Upgrade-Insecure-Requests': ' 1',
+		  'User-Agent': ' Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.150 Safari/537.36',
+		  'Accept': ' text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+		  'Accept-Encoding': ' gzip, deflate, br',
+		  'Accept-Language': ' pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7' }
 		   
 		req = urllib2.Request(self.url, headers=headers)
 		response = urllib2.urlopen(req)  
 		sourceCode = response.read()
 		response.close()
-
-		ext = re.compile('<meta name=\"twitter:image\" content=\"(.+?)\"/>').findall(sourceCode)[0]
-		streamAux = clean(ext.split('/')[-1])
-		extensaoStream = clean(streamAux.split('.')[-1])
-		#token = re.compile('"tokens"\s*:\s*{\s*"download"\s*:\s*"([^"]+)').findall(conteudo)[0]
+		
+		randomNumber = randint(1, 5)
+		
 		mediaLink = ''
-		try:
-			mediaLink = re.compile('(https\:\/\/[a-zA-Z0-9\-\.]+cloud.+\.[a-zA-Z]{2,3}\/\S*?\/G)"').findall(sourceCode)[0]
-		except:
-			mediaLink = re.compile('(https\:\/\/[a-zA-Z0-9\-\.]+cloud.+\.[a-zA-Z]{2,3}(\/\S*)?\/weblink\/view\/)"').findall(sourceCode)[0][0]
+		mediaLink = 'https://cloclo%s.cloud.mail.ru/weblink/view/' % (randomNumber)
+		
+		#req2 = urllib2.Request(mediaLink2, headers=headers)
+		#test = urllib2.urlopen(req2)  
+		#log(test.getcode())
 
-		#videoUrl = '%s/%s?key=%s' % (mediaLink, self.getId(), token)
 		videoUrl = '%s/%s' % (mediaLink, self.getId())
-		return videoUrl, extensaoStream
+		return videoUrl, 'mp4'
 
 class GoogleVideo():
 	def __init__(self, url):
