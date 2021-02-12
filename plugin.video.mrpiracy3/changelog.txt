@@ -1,0 +1,403 @@
+v1.0.9(14/10/2020)
+- Improve SSL
+- Novas imagens
+
+v1.0.8(06/10/2020)
+- Correção lista "A seguir"
+
+v1.0.7(20/09/2020)
+- Adicionar a opção "A Seguir"
+
+v1.0.6(14/08/2020)
+- Correção Servidor MrPiracy
+- Correção Paginação +10 e +100
+
+v1.0.4(02/08/2020)
+- Correção Servidor MrPiracy
+- Adicionado Paginação +10 e +100
+
+v1.0.3(16/06/2020)
+- Correção Servidor MrPiracy
+
+v1.0.2(27/05/2020)
+- Correção MyStream
+
+v1.0.1(25/05/2020)
+- Correção Mixdrop
+- Adicionado MyStream
+
+v1.0.0(04/05/2020)
+- Ordenação de idiomas
+- Novas imagens para menus, anos e categorias
+
+v0.9.9(01/05/2020)
+- Nova zona infantil
+- Novos menus filtragem por lingua
+- Download
+- Novo Servidor
+
+v0.9.8(31/03/2020)
+- Correção servidor MrPiracy
+- Mudança de imagens
+
+v0.9.7(21/03/2020)
+- Correção MixDrop
+- Correção marcar como visto, se existir conta Trakt, marca como visto no Trakt
+- Correção servidor MrPiracy
+
+v0.9.6(15/01/2020)
+- Adicionado servidor Mixdrop
+- Adicionado ano 2020
+- Novas imagens
+- Fix favoritos e agendados
+
+v0.9.5(13/04/2019)
+- Fix Openload
+- Fix marcar como visto
+
+v0.9.4(27/03/2019)
+- Novo url
+
+v0.9.3(24/03/2019)
+- Novo url
+
+v0.9.2(19/03/2019)
+- Adicionado ano 2019
+- Fix Openload
+- Fix anos com limite
+- Fix se já foi visto não remove visto do episodio/filme
+
+v0.9.1(07/09/2018)
+- Menu Favoritos, Agendados.
+
+v0.9.0(20/08/2018)
+- Correção de legendas nos filmes mais recentes.
+
+v0.8.9(24/07/2018)
+- Restruturação parcial do addon
+- Opções temporariamente desativadas: Favoritos, Agendados, Mensagens, Notificações e Trakt (só está em funcionamento o marcar e desmarcar como visto)
+
+v0.8.8(17/04/2018)
+- OpenLoad e MrPiracy corrigido
+
+v0.8.7(27/01/2018)
+- Trakt username fix, ja aceita usernames com .
+- OpenLoad corrigido
+
+v0.8.6(02/01/2018)
+- Opção para remover favoritos (filmes e series/animes)
+- OpenLoad corrigido
+
+v0.8.4(29/10/2017)
+- Novo Servidor (Streamango)
+- Fimes para Putos (menu novo)
+- Filmes/Series/Animes ordenados por imdb (menu novo)
+
+v0.8.3(24/09/2017)
+- Force update
+
+v0.8.2(24/09/2017)
+- Correcao de OpenLoad
+- Correcao de extensao no download
+- Criação de um novo servidor: Vidoza
+
+v0.8.1(18/08/2017)
+- Correcao de marcar visto no Trakt (Filmes)
+- Implementado mensagem de erro quando email ou password estao erradas.
+
+v0.8.0(13/08/2017)
+- Adicionado seleção de qualidade para os filmes, ver definicoes.
+- Adicionado botao para remover dos favoritos e dos agendados.
+- Correção da pesquisa.
+
+v0.7.9(31/07/2017)
+- Correcao da informação do filme/episodio sem legenda.
+
+v0.7.8(28/07/2017)
+- Correcao das imagens nos episodios das series
+- Adicionado a Listas pessoais do Trakt
+
+v0.7.7(24/07/2017)
+- Correcao dos Filmes/Episodios Vistos com o Trakt
+
+v0.7.6(23/07/2017)
+- Correcao dos Filmes/Episodios Vistos
+
+v0.7.5(23/07/2017)
+- Correcao Temporada Especial (adicionado imagem)
+- Correcao de Servidores duplicados
+
+v0.7.4(21/07/2017)
+- Correcao Temporada Especial
+- Opção para escolher a melhor fonte automaticamente
+
+v0.7.3(02/07/2017)
+- Correcao Openload
+
+v0.7.2(02/05/2017)
+- RapidVideo para Kodi 16
+- Correcao legendas para os filmes
+
+v0.7.1(15/04/2017)
+- correcao Openload
+
+v0.7.0(13/04/2017)
+- correcao imports
+- correcao imagens em PT
+
+v0.6.9(13/04/2017)
+- correcao legendas Openload
+- correcao login error
+
+v0.6.8(08/04/2017)
+- correcao Openload
+
+v0.6.7(07/04/2017)
+- correcao Openload API
+- correcao login (so faz 1 por dia)
+
+v0.6.6(05/04/2017)
+- correcao Openload
+
+v0.6.4(02/04/2017)
+- correcao abrir_url
+
+v0.6.3(02/04/2017)
+- progresso trakt
+- correcao legenda
+- correcao abrir_url
+
+v0.6.2(02/04/2017)
+- Openload, Temporariamente por API
+
+v0.6.1(02/04/2017)
+- RapidVideo
+- Openload, Temporariamente por API
+
+v0.6.0(25/03/2017)
+- Correção legendas RapidVideo
+
+v0.5.9(25/03/2017)
+- Séries: só aparece mensagem para continuar se já tiver pelo menos 1 episodio visto!
+
+v0.5.8(22/03/2017)
+- Correção OpenLoad
+
+v0.5.7(21/03/2017)
+- Correção OpenLoad
+
+v0.5.6(21/03/2017)
+- pequena correção
+
+v0.5.4(05/03/2017)
+- Correcao Openload
+- Nova funcionalidade, proximo episodio automatico apos carregamento da temporada. Desactivar nas definicioes se necessario.
+
+v0.5.3(25/02/2017)
+- correcao watchlist Filmes Trakt
+- Correcao Openload
+
+v0.5.2(07/02/2017)
+- adicionado eventos (Oscars 2017)
+- Correcao Openload
+
+v0.5.1(20/01/2017)
+- correcao legendas openload 
+- Separacao dos Favoritos e dos Agendados.
+- opcao para Adicionar aos Favoritos e aos agendados
+
+v0.5.0(15/01/2017)
+- correcao openload 
+
+v0.4.9(15/01/2017)
+- correcao openload
+- opcao nas definicoes para marcar visto localmente ou no site, ou em ambos
+- opcao nas definicoes para o tipo de vista
+
+v0.4.8(09/01/2017)
+- retirado ESPECIAL NATAL
+- correcao openload
+
+v0.4.7(19/12/2016)
+- adicionado ESPECIAL NATAL
+- correcao erro DNS
+- trakt em ficheiros, em vez de DB
+- adicionado ano de 2017
+- adicionado qualidade 1080p e 4k ao rapidvideo (alguns filmes)
+
+v0.4.6(07/12/2016)
+- Correcao de legendas
+- Correcao de servidores
+- Correcao da listagem de anos
+- Correcao do trailer
+
+v0.4.5(30/11/2016)
+- Correcao de funcao de Download
+
+v0.4.4(27/11/2016)
+- Nome a azul se visto no Trakt, Branco se visto no site (em caso de ja visto)
+- Sigla PT ou BR caso seja filme/serie em Portugues ou Brasileiro
+- Correcao de marcar visto no site
+- Marcar visto Trakt
+
+v0.4.3(24/11/2016)
+- fix Login
+- titulo a vermelho se ja marcado visto no Trakt
+
+v0.4.2(21/11/2016)
+- fix Login Trakt
+
+v0.4.1(21/11/2016)
+- fix imports
+
+v0.4.0(20/11/2016)
+- Trakt Whatchlist Fimes/Series
+- Trakt Progresso
+- Correcao Notificacoes
+- Correcao de marcar visto automatico apos 90% do filme/episodio visto
+
+v0.3.9(14/11/2016)
+- Alteração completa do addon.
+- Novos servidores e código novo.
+- Integração parcial com o Trakt
+
+v0.3.8(14/11/2016)
+- Alteração completa do addon.
+- Novos servidores e código novo.
+
+v0.3.7 (26/10/2016)
+- Servidores Fix.
+
+v0.3.6 (13/10/2016)
+- Servidores Fix.
+
+v0.3.5 (14/09/2016)
+- OpenLoad Fix.
+
+v0.3.4 (13/09/2016)
+- OpenLoad Fix.
+- GoogleVideo Fix.
+
+v0.3.3 (10/09/2016)
+- Correção ao obter servidores.
+
+v0.3.2 (09/09/2016)
+- Alteração de dominio e repositorio
+
+v0.3.1 (05/09/2016)
+- correcao de bug incial (erro)
+- correcao Openload
+
+v0.3.0 (03/09/2016)
+- Correcao dos Servidores de video
+- Implementacao da funcionalidade de Download, Não esquecer de definir pasta nas definicoes.
+
+v0.2.9 (11/08/2016)
+- Alteração do dominio
+
+v0.2.8 (28/06/2016)
+- Correção do openload
+
+v0.2.7 (27/06/2016)
+- Novo servidor/legenda (séries)
+
+v0.2.6 (27/06/2016)
+- Novo servidor (séries)
+- Correção de utilização na primeira vez (criação de BD)
+
+v0.2.5 (17/06/2016)
+- Novo servidor
+
+v0.2.4 (15/05/2016)
+- Paginação das paginas por ano, corrigido.
+- Correção de erros ao iniciar o addon.
+
+v0.2.3 (15/05/2016)
+- Novo servidor
+- Integração com Trakt.tv (Algumas funcionalidades - entrem em contacto para mais sugestões)
+- Criação de BD local, para guardar as Infos das Series/Filmes (Primeiro carregamento de um determinado Filmes/Serie, vai à net buscar infos, depois carrega na BD para mostrar - o que torna mais rapido)
+
+v0.2.2 (06/04/2016)
+- Correcao de encondig na listagem dos episodios.
+- Correcao de numero de temporadas, em geral.
+
+v0.2.1 (02/04/2016)
+- Correção das listagens dos filmes.
+- Resolução de procura de Trailer. Necessário ativar nas definições.
+
+v0.2.0 (01/04/2016)
+- Novo dominio do site
+- Resolução de procura de Trailer. Necessário ativar nas definições.
+
+v0.1.9 (31/03/2016)
+- Correção para quem não tem notificações
+
+v0.1.8 (31/03/2016)
+- Ver trailer nos filmes. Opção para ativar nas definições.
+- Opção de download do Filmes/Episodio (series e animes). Opção para escolha da pasta nas definições do addon.
+- Marcar como visto no Kodi. Automaticamente após 90% do video visto, ou nas opções em cada Filme/Episodio.
+- Ver as notificações do site no Kodi.
+
+v0.1.7 (11/03/2016)
+- OpenLoad fix
+- Animes adicionados
+- Favoritos/Agendados fix (Parcialmente)
+
+v0.1.6
+- Alteração de repositório
+
+v0.1.5 (18/02/2016)
+- OpenLoad fix
+- Vidzi fix
+
+v0.1.4 (09/02/2016)
+- Correção de numero de temporadas
+
+v0.1.3 (09/02/2016)
+- Correção de Login
+
+v0.1.2 (02/02/2016)
+- Alteração de número de temporadas, novamente aparecem todas as temporadas.
+- Correção de legenda com o servidor OpenLoad, Vidzi
+- Problema do OpenLoad resolvido, não necessita de acesso ao API e sem captcha!
+
+v0.1.1 (01/02/2016)
+- Alteração de número de temporadas, novamente aparecem todas as temporadas.
+- Correção de legenda com o servidor OpenLoad
+
+v0.1.0 (24/01/2016)
+- Alterações nas séries, lista as temproadas e episódios!
+- Novos links internos
+- Imagem de pesquisa
+
+v0.0.9 (03/01/2016)
+- Alterações nas séries, lista as temproadas e episódios!
+
+v0.0.8 (05/12/2015)
+- Alterações do site corrigidas no addon!
+
+v0.0.7 (30/11/2015)
+- Alterações do site corrigidas no addon!
+
+v0.0.6 (29/11/2015)
+- Alterações do site corrigidas no addon!
+
+v0.0.5 (17/11/2015)
+- Novas alterações no site corrigidas!
+
+v0.0.4 (05/11/2015)
+- Erros de encoding no nome dos filmes/series! - #Resolvido com try/catch, provavelmente nao aparece o filme/serie
+
+v0.0.3 (01/11/2015)
+- Erros de encoding resolvidos!! - #UPDATE FORÇADO!
+
+v0.0.2
+- Paginação resolvida (devo de andar a dormir....)
+
+v0.0.1
+- Sistema Login
+- Ver filmes
+- Ver series
+- Pesquisa
+- Filmes/Series por categorias
+- Filmes/Series por ano
