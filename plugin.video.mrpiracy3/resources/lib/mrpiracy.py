@@ -223,7 +223,7 @@ class mrpiracy:
 				controlo.escrever_ficheiro(os.path.join(controlo.pastaDados,'favoritos.mrpiracy'), favoritos)
 				controlo.escrever_ficheiro(os.path.join(controlo.pastaDados,'a_seguir.mrpiracy'), aseguir)
 
-				controlo.escrever_ficheiro(os.path.join(controlo.pastaDados,'categorias.mrpiracy'), str(categorias))
+				controlo.escrever_ficheiro(os.path.join(controlo.pastaDados,'categorias.mrpiracy'), categorias)
 				
 				return True
 			except:
@@ -596,6 +596,7 @@ class mrpiracy:
 		
 	def listagemAnos(self, url):
 		anos = [
+			'2021',
 			'2020',
 			'2019',
 			'2018',

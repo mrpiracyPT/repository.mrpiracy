@@ -3,12 +3,11 @@
 
 import os,xbmc,xbmcaddon,xbmcplugin,xbmcgui,xbmcvfs,sys,urllib,unicodedata,re,json,base64,gzip
 import threading
-import requests
 from datetime import datetime
 
 try:
     # For Python 3.0 and later
-    import urllib.request as urllib2
+    import urllib.request
     from urllib.error import URLError as UrlError
 except ImportError:
     # Fall back to Python 2's urllib2
@@ -265,11 +264,14 @@ def abrir_url(url, post=None, header=None, code=False, erro=False, cookie=None, 
         #req.add_header('Content-Type', 'application/x-www-form-urlencoded')
  
     if post: 
-        req = requests.post(url, data=post, headers=header)
+        #req = requests.post(url, data=post, headers=header)
+        req = urllib.request.Request(url, data=post, headers=header)
     else:
-        req = requests.get(url, headers=header)
+        req = urllib.request.Request(url,headers=header)
+        #req = requests.get(url, headers=header)
 
-    content = req.text    
+    res = urllib.request.urlopen(req)
+    content = res.read()
 
     return content
 
@@ -357,11 +359,11 @@ def log(msg, level=xbmc.LOGINFO):
 
 
 def escrever_ficheiro(ficheiro, conteudo):
-    f = open(ficheiro, mode="w")
+    f = open(ficheiro, mode="w", encoding='utf8')
     f.write(str(conteudo))
     f.close()
 def ler_ficheiro(ficheiro):
-    f = open(ficheiro, "r")
+    f = open(ficheiro, "r", encoding='utf8')
     conteudo =  f.read()
     f.close()
     return conteudo

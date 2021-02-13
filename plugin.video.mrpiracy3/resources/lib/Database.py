@@ -12,7 +12,7 @@ import ast
 import hashlib
 import re
 import time
-import six
+
 
 __PASTA_TRAKT__ = os.path.join(xbmc.translatePath('special://userdata/addon_data/plugin.video.mrpiracy/trakt/'))
 __DB_FILE__ = os.path.join(xbmc.translatePath('special://userdata/addon_data/plugin.video.mrpiracy/'), 'dadosv1.db')

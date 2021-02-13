@@ -326,9 +326,9 @@ class CloudMailRu():
 		sourceCode = controlo.abrir_url(self.url, header=headers)
 
 		randomNumber = randint(1, 5)
-		ext = re.compile('<meta name=\"twitter:image\" content=\"(.+?)\"/>').findall(sourceCode)[0]
+		"""ext = re.compile('<meta name=\"twitter:image\" content=\"(.+?)\"/>').findall(sourceCode)[0]
 		streamAux = controlo.clean(ext.split('/')[-1])
-		extensaoStream = controlo.clean(streamAux.split('.')[-1])
+		extensaoStream = controlo.clean(streamAux.split('.')[-1])"""
 
 		#token = re.compile('"tokens"\s*:\s*{\s*"download"\s*:\s*"([^"]+)').findall(conteudo)[0]
 		"""mediaLink = ''

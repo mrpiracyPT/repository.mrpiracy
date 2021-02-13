@@ -7,8 +7,6 @@ from . import controlo, Database, Trakt, definicoes
 __HEADERS__ = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.11; rv:43.0) Gecko/20100101 Firefox/43.0', 'Accept-Charset': 'ISO-8859-1,utf-8;q=0.7,*;q=0.7'}
 
 
-#enen92 class (RatoTv) adapted for MrPiracy.xyz addon
-
 class Player(xbmc.Player):
     def __init__(self, url, idFilme, pastaData, temporada, episodio, nome, logo, imdb):
         xbmc.Player.__init__(self)
@@ -20,7 +18,7 @@ class Player(xbmc.Player):
         self.tempo = 0
         self.tempoTotal = 0
         self.idFilme = idFilme
-        self.pastaData = xbmc.translatePath(pastaData)
+        self.pastaData = xbmcvfs.translatePath(pastaData)
         self.nome = nome
         self.logo = logo
         self.imdb = imdb
@@ -60,7 +58,9 @@ class Player(xbmc.Player):
             else:
                 tempoAux = "%02d:%02d" % (minutos, segundos)
 
-            dialog = xbmcgui.Dialog().yesno('MrPiracy', u'Já começaste a ver antes.', 'Continuas a partir de %s?' % (tempoAux), '', 'Não', 'Sim')
+            linha2 = 'Continuas a partir de %s?' % (tempoAux)
+            controlo.log(linha2)
+            dialog = controlo.simNao('MrPiracy', 'Já começaste a ver antes. Continuas a partir de %s?' % (tempoAux), 'Não', 'Sim')
             if dialog:
                 self.seekTime(float(tempo))
 
@@ -68,6 +68,8 @@ class Player(xbmc.Player):
 
     def onPlayBackStopped(self):
         #print 'player Stop'
+        self.trackerTempo()
+
         self.playing = False
         
         #print 'self.time/self.totalTime='+str(self.tempo/self.tempoTotal)
@@ -248,6 +250,7 @@ class Player(xbmc.Player):
         try:
             self.tempoTotal = self.getTotalTime()
             self.tempo = self.getTime()
+            controlo.log(self.tempo)
             f = open(self.pastaVideo, mode="w")
             f.write(str(self.tempo))
             f.close()
