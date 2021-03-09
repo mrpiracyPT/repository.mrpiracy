@@ -13,19 +13,36 @@ try:
 except ImportError:
     from urllib.parse import urljoin
 
-try:
-    import json
-except:
-    import simplejson as json
+import six
+from six.moves import urllib_parse
+
+import simplejson as json
 
 try:  # Python 2
+    from urlparse import urlparse, urljoin
+    from urllib import quote, urlencode, quote_plus, addinfourl
+    import cookielib
     import urllib2
+    from cStringIO import StringIO
+    from HTMLParser import HTMLParser
+    unescape = HTMLParser().unescape
+    HTTPError = urllib2.HTTPError
 except ImportError:  # Python 3
+    from http import cookiejar as cookielib
+    from html import unescape
     import urllib.request as urllib2
+    from io import StringIO
+    from urllib.parse import urlparse, urljoin, quote, urlencode, quote_plus
+    from urllib.response import addinfourl
+    from urllib.error import HTTPError
+finally:
+    urlopen = urllib2.urlopen
+    Request = urllib2.Request
 
 import sys
 if sys.version_info[0] >= 3:
-    unicode = str
+    bytes = bytes
+    str = unicode = basestring = str
 
 
 
@@ -43,6 +60,21 @@ __TVDB_APIKEY__ = 'MUI0QThDRDFCMTQwNEY0Qg=='
 __HEADERS_TRAKT__ = {'Content-Type': 'application/json', 'trakt-api-key': __TRAKT_CLIENT__, 'trakt-api-version': '2'}
 __HEADERS__ = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.11; rv:43.0) Gecko/20100101 Firefox/43.0', 'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'}
 
+def client(url, post=None, headers=None, as_bytes=False):
+    if isinstance(post, dict):
+        post = bytes(urlencode(post), encoding='utf-8')
+    elif isinstance(post, str) and sys.version_info[0] >= 3:
+        post = bytes(post, encoding='utf-8')
+
+    req = urllib2.Request(url, data=post, headers=headers)
+    response = urllib2.urlopen(req)
+    content = response.headers
+    result = response.read()
+    response.close()
+    if not as_bytes:
+        result = six.ensure_text(result, errors='ignore')
+    return result, headers, content
+
 def getTraktCredentialsInfo():
     user = controlo.definicoes('utilizadorTrakt').strip()
     token = controlo.definicoes('tokenTrakt')
@@ -54,8 +86,12 @@ def getTraktCredentialsInfo():
 
 def getTraktAsJson(url, post=None):
     try:
+    
         r, res_headers = getTrakt(url, post)
+
+
         r = utils.json_loads_as_str(r)
+
         if 'X-Sort-By' in res_headers and 'X-Sort-How' in res_headers:
             r = sort_list(res_headers['X-Sort-By'], res_headers['X-Sort-How'], r)
         return r
@@ -64,42 +100,36 @@ def getTraktAsJson(url, post=None):
 
 def getTrakt(url, post=None):
     try:
-        url = urljoin(__TRAKT_API__, url)
+        url = urllib_parse.urljoin(__TRAKT_API__, url)
         url = url.encode().decode()
-        controlo.log(post)
         post = json.dumps(post) if post else None
-        controlo.log(post)
 
         if getTraktCredentialsInfo():
             __HEADERS_TRAKT__.update({'Authorization': 'Bearer %s' % controlo.definicoes('tokenTrakt')})
 
-        req = urllib2.Request(url, post, __HEADERS_TRAKT__)
-        resultado = urllib2.urlopen(req)
-        resultado = resultado.read()
+        result = client(url, post, __HEADERS_TRAKT__)
+        resultado, resp_code, resp_header = utils.byteify(result)
 
-        controlo.log(resultado)
-        resultado = json.loads(resultado)
-
+        resultado = utils.byteify(resultado)
 
         total = len(resultado)
 
 
-        """if resp_code in ['500', '502', '503', '504', '520', '521', '522', '524']:
+        if resp_code in ['500', '502', '503', '504', '520', '521', '522', '524']:
             controlo.log('Temporary Trakt Error: %s' % resp_code)
             return
         elif resp_code in ['404']:
             controlo.log('Object Not Found: %s' % resp_code)
             return        
         if resp_code not in ['401', '405']:
-            return resultado, resp_header"""
+            return resultado, resp_header
 
-        oauth = urljoin(__TRAKT_API__, '/oauth/token')
+        oauth = urllib_parse.urljoin(__TRAKT_API__, '/oauth/token')
         opost = {'client_id': __TRAKT_CLIENT__, 'client_secret': __TRAKT_SECRET__, 'redirect_uri': __TRAKT_REDIRECT__, 'grant_type': 'refresh_token', 'refresh_token': controlo.definicoes('refreshTrakt')}
 
-        req = urllib2.Request(oauth, json.dumps(opost), __HEADERS_TRAKT__)
-        resultado = urllib2.urlopen(req)
-        resultado = resultado.read()
-        resultado = json.loads(resultado)
+        result = client(oauth, json.dumps(opost), __HEADERS_TRAKT__)
+        resultado, resp_code, resp_header = utils.byteify(result)
+        resultado = utils.json_loads_as_str(resultado)
 
         token, refresh = resultado['access_token'], resultado['refresh_token']
 
@@ -108,11 +138,10 @@ def getTrakt(url, post=None):
 
         __HEADERS_TRAKT__['Authorization'] = 'Bearer %S' % token
 
-        req = urllib2.Request(url, post=post, headers=__HEADERS_TRAKT__)
-        resultado = urllib2.urlopen(req)
-        resultado = resultado.read()
-        resultado = json.loads(resultado)
-        return resultado
+        result = client(url, post, __HEADERS_TRAKT__)
+        resultado, resp_code, resp_header = utils.byteify(result)
+        resultado = utils.byteify(resultado)
+        return resultado, resp_header
     except Exception as e:
         traceException = traceback.format_exc()
         controlo.log('Trakt - Exception:\n' + str(traceException))
@@ -132,22 +161,23 @@ def authTrakt():
 
         resultado = getTraktAsJson('/oauth/device/code', post=post)
         verification_url = '1) Visite : [COLOR skyblue]%s[/COLOR]' % resultado['verification_url']
-        user_code = '2) Quando solicitado, introduza : [COLOR skyblue]%s[/COLOR]' % resultado['user_code']
+        user_code = six.ensure_text('2) Quando solicitado, introduza : [COLOR skyblue]%s[/COLOR]' % resultado['user_code'])
         expires_in = int(resultado['expires_in'])
-        expires_in = int(str(expires_in)[:2]) * 2
+        #expires_in = int(str(expires_in)[:2]) * 2
         device_code = resultado['device_code']
         interval = resultado['interval']
 
         progressDialog = controlo.progressDialog
-        progressDialog.create('Trakt', verification_url, user_code)
+        progressDialog.create('Trakt', verification_url + '[CR]' +  user_code)
         r = []
+
         for i in range(0, expires_in):
             try:
                 percent = int(100 * float(i) / int(expires_in))
-                progressDialog.update(max(1,percent))
+                progressDialog.update(max(1, percent), verification_url + '[CR]' + user_code)
                 if progressDialog.iscanceled():
                     break
-                time.spleep(1)
+                time.sleep(1)
                 if not float(i) % interval == 0:
                     raise Exception()
                 r = getTraktAsJson('/oauth/device/token', {'client_id': __TRAKT_CLIENT__, 'client_secret': __TRAKT_SECRET__, 'code': device_code})
@@ -161,12 +191,15 @@ def authTrakt():
         except Exception:
             pass
 
+        
         token, refresh = r['access_token'], r['refresh_token']
 
         headers = {'Content-Type': 'application/json', 'trakt-api-key': __TRAKT_CLIENT__,
                    'trakt-api-version': 2, 'Authorization': 'Bearer %s' % token}
 
-        resultado = client.request(urljoin(BASE_URL, '/users/me'), headers=headers)
+
+        resultado, resp, content = client(urllib_parse.urljoin(__TRAKT_API__, '/users/me'), headers=headers)
+        controlo.log(resultado)
         resultado = utils.json_loads_as_str(resultado)
 
         user = resultado['username']
@@ -229,7 +262,7 @@ def traktAuth():
         __ADDON__.openSettings()
 
 def loggedIn():
-    if not (__ADDON__.getSetting('utilizadorTrakt') == '' or __ADDON__.getSetting('tokenTrakt') == '' or __ADDON__.getSetting('refreshTrakt') == ''):
+    if not (controlo.definicoes('utilizadorTrakt').strip() == '' or controlo.definicoes('tokenTrakt') == '' or controlo.definicoes('refreshTrakt') == ''):
         return True
     else:
         return False

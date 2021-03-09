@@ -37,7 +37,7 @@ teclado = xbmc.Keyboard
 
 setSetting = xbmcaddon.Addon().setSetting
 
-pastaDados = xbmc.translatePath(addon.getAddonInfo('profile'))
+pastaDados = xbmcvfs.translatePath(addon.getAddonInfo('profile'))
 
 headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.11; rv:43.0) Gecko/20100101 Firefox/43.0', 'Accept-Charset': 'utf-8;q=0.7,*;q=0.7', 'Content-Type': 'application/json'}
 dataHoras = datetime.now()
@@ -54,11 +54,11 @@ try:
 except:
     pass
 
-controlFile = os.path.join(xbmc.translatePath('special://userdata/addon_data/plugin.video.mrpiracy/'), '1-1-0.mrpriacy')
+controlFile = os.path.join(xbmcvfs.translatePath('special://userdata/addon_data/plugin.video.mrpiracy3/'), '1-1-0.mrpriacy')
 
 
 def yesnoDialog(line1, line2, line3, heading=addonInfo('Name'), nolabel='', yeslabel=''):
-    return dialog.yesno(heading, line1, line2, line3, nolabel, yeslabel)
+    return dialog.yesno(heading, line1+ '[CR]' +line2+ '[CR]' + line3, nolabel, yeslabel)
 
 def openSettings(query=None, id=addonInfo('id')):
     try:
@@ -110,23 +110,23 @@ def addDir(name,url,modo,iconimage,pagina=False,tipo=False,infoLabels=False,post
     playcount = 0
     if menuO:
         if favorito:
-            menu.append(('Remover dos Favoritos', 'XBMC.RunPlugin(%s?modo=remover-favoritos&url=%s)' % (sys.argv[0], quote_plus(url))))
+            menu.append(('Remover dos Favoritos', 'RunPlugin(%s?modo=remover-favoritos&url=%s)' % (sys.argv[0], quote_plus(url))))
         else:
-            menu.append(('Adicionar aos Favoritos', 'XBMC.RunPlugin(%s?modo=adicionar-favoritos&url=%s)' % (sys.argv[0], quote_plus(url))))
+            menu.append(('Adicionar aos Favoritos', 'RunPlugin(%s?modo=adicionar-favoritos&url=%s)' % (sys.argv[0], quote_plus(url))))
         if agendado:
-            menu.append(('Remover dos Agendados (ver mais tarde)', 'XBMC.RunPlugin(%s?modo=remover-agendar&url=%s)' % (sys.argv[0], quote_plus(url))))    
+            menu.append(('Remover dos Agendados (ver mais tarde)', 'RunPlugin(%s?modo=remover-agendar&url=%s)' % (sys.argv[0], quote_plus(url))))    
         else:
-            menu.append(('Agendar (ver mais tarde)', 'XBMC.RunPlugin(%s?modo=adicionar-agendar&url=%s)' % (sys.argv[0], quote_plus(url))))
+            menu.append(('Agendar (ver mais tarde)', 'RunPlugin(%s?modo=adicionar-agendar&url=%s)' % (sys.argv[0], quote_plus(url))))
         if aseguir:
-            menu.append(('Não receber notificação (A Seguir)', 'XBMC.RunPlugin(%s?modo=remover-aseguir&url=%s)' % (sys.argv[0], quote_plus(url))))
+            menu.append(('Não receber notificação (A Seguir)', 'RunPlugin(%s?modo=remover-aseguir&url=%s)' % (sys.argv[0], quote_plus(url))))
         else:
-            menu.append(('Receber notificação (A Seguir)', 'XBMC.RunPlugin(%s?modo=adicionar-aseguir&url=%s)' % (sys.argv[0], quote_plus(url))))
+            menu.append(('Receber notificação (A Seguir)', 'RunPlugin(%s?modo=adicionar-aseguir&url=%s)' % (sys.argv[0], quote_plus(url))))
         if visto == True:
-            menu.append(('Marcar como não visto', 'XBMC.RunPlugin(%s?modo=marcar-visto&url=%s)' % (sys.argv[0], quote_plus(url))))
+            menu.append(('Marcar como não visto', 'RunPlugin(%s?modo=marcar-visto&url=%s)' % (sys.argv[0], quote_plus(url))))
             overlay = 7
             playcount = 1
         elif visto == False:
-            menu.append(('Marcar como visto', 'XBMC.RunPlugin(%s?modo=marcar-visto&url=%s)' % (sys.argv[0], quote_plus(url))))
+            menu.append(('Marcar como visto', 'RunPlugin(%s?modo=marcar-visto&url=%s)' % (sys.argv[0], quote_plus(url))))
 
     if tipo == 'filme':
         fan = posterAux
@@ -139,13 +139,12 @@ def addDir(name,url,modo,iconimage,pagina=False,tipo=False,infoLabels=False,post
         xbmcplugin.setContent(int(sys.argv[1]), 'episodes')
     else:
         xbmcplugin.setContent(int(sys.argv[1]), 'Movies')
-    log(iconimage)
-    log(name)
+
     try:
         str(name).decode('utf-8')
     except:
         pass
-    log(name)
+
     infoLabelsAux["overlay"] = overlay
     infoLabelsAux["playcount"] = playcount
     liz=xbmcgui.ListItem(name)
@@ -164,17 +163,17 @@ def addVideo(name,url,modo,iconimage,visto,tipo,temporada,episodio,infoLabels,po
         xbmcplugin.setContent(int(sys.argv[1]), 'Movies')
         #visto = checkVisto(url)
         if favorito:
-            menu.append(('Remover dos Favoritos', 'XBMC.RunPlugin(%s?modo=remover-favoritos&url=%s)' % (sys.argv[0], quote_plus(url))))
+            menu.append(('Remover dos Favoritos', 'RunPlugin(%s?modo=remover-favoritos&url=%s)' % (sys.argv[0], quote_plus(url))))
         else:
-            menu.append(('Adicionar aos Favoritos', 'XBMC.RunPlugin(%s?modo=adicionar-favoritos&url=%s)' % (sys.argv[0], quote_plus(url))))
+            menu.append(('Adicionar aos Favoritos', 'RunPlugin(%s?modo=adicionar-favoritos&url=%s)' % (sys.argv[0], quote_plus(url))))
         if agendado:
-            menu.append(('Remover dos Agendados (ver mais tarde)', 'XBMC.RunPlugin(%s?modo=remover-agendar&url=%s)' % (sys.argv[0], quote_plus(url))))
+            menu.append(('Remover dos Agendados (ver mais tarde)', 'RunPlugin(%s?modo=remover-agendar&url=%s)' % (sys.argv[0], quote_plus(url))))
         else:
-            menu.append(('Agendar (ver mais tarde)', 'XBMC.RunPlugin(%s?modo=adicionar-agendar&url=%s)' % (sys.argv[0], quote_plus(url))))
+            menu.append(('Agendar (ver mais tarde)', 'RunPlugin(%s?modo=adicionar-agendar&url=%s)' % (sys.argv[0], quote_plus(url))))
         if aseguir:
-            menu.append(('Não receber notificação (A Seguir)', 'XBMC.RunPlugin(%s?modo=remover-aseguir&url=%s)' % (sys.argv[0], quote_plus(url))))
+            menu.append(('Não receber notificação (A Seguir)', 'RunPlugin(%s?modo=remover-aseguir&url=%s)' % (sys.argv[0], quote_plus(url))))
         else:
-            menu.append(('Receber notificação (A Seguir)', 'XBMC.RunPlugin(%s?modo=adicionar-aseguir&url=%s)' % (sys.argv[0], quote_plus(url))))
+            menu.append(('Receber notificação (A Seguir)', 'RunPlugin(%s?modo=adicionar-aseguir&url=%s)' % (sys.argv[0], quote_plus(url))))
         if addon.getSetting('trailer-filmes') == 'true':
             try:
                 idYoutube = trailer.split('?v=')[-1].split('/')[-1].split('?')[0].split('&')[0]
@@ -200,11 +199,11 @@ def addVideo(name,url,modo,iconimage,visto,tipo,temporada,episodio,infoLabels,po
     
 
     if visto == True:
-        menu.append(('Marcar como não visto', 'XBMC.RunPlugin(%s?modo=marcar-n-visto&url=%s)' % (sys.argv[0], quote_plus(url))))
+        menu.append(('Marcar como não visto', 'RunPlugin(%s?modo=marcar-n-visto&url=%s)' % (sys.argv[0], quote_plus(url))))
         overlay = 7
         playcount = 1
     elif visto == False:
-        menu.append(('Marcar como visto', 'XBMC.RunPlugin(%s?modo=marcar-visto&url=%s)' % (sys.argv[0], quote_plus(url))))
+        menu.append(('Marcar como visto', 'RunPlugin(%s?modo=marcar-visto&url=%s)' % (sys.argv[0], quote_plus(url))))
 
 
     if not serieNome:
@@ -229,9 +228,9 @@ def addVideo(name,url,modo,iconimage,visto,tipo,temporada,episodio,infoLabels,po
     if linkTrailer != '':
         menu.append(('Ver Trailer', 'XBMC.PlayMedia(%s)' % (linkTrailer)))
 
-    #menu.append(('Marcar como visto (Site)', 'XBMC.RunPlugin(%s?mode=16&url=%s)' % (sys.argv[0], quote_plus(url))))
+    #menu.append(('Marcar como visto (Site)', 'RunPlugin(%s?mode=16&url=%s)' % (sys.argv[0], quote_plus(url))))
 
-    menu.append(('Download', 'XBMC.RunPlugin(%s?modo=download&url=%s)'%(sys.argv[0], quote_plus(url))))
+    menu.append(('Download', 'RunPlugin(%s?modo=download&url=%s)'%(sys.argv[0], quote_plus(url))))
     liz.addContextMenuItems(menu, replaceItems=True)
     ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=False)
     return ok

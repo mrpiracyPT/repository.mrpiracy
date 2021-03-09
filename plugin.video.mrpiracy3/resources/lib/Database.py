@@ -14,15 +14,15 @@ import re
 import time
 
 
-__PASTA_TRAKT__ = os.path.join(xbmc.translatePath('special://userdata/addon_data/plugin.video.mrpiracy/trakt/'))
-__DB_FILE__ = os.path.join(xbmc.translatePath('special://userdata/addon_data/plugin.video.mrpiracy/'), 'dadosv1.db')
+__PASTA_TRAKT__ = os.path.join(xbmcvfs.translatePath('special://userdata/addon_data/plugin.video.mrpiracy3/trakt/'))
+__DB_FILE__ = os.path.join(xbmcvfs.translatePath('special://userdata/addon_data/plugin.video.mrpiracy3/'), 'dadosv1.db')
 __PROGRESSO_FILE__ = os.path.join(__PASTA_TRAKT__, 'progresso.mrpiracy')
 __WATCH_FILMES_FILE__ = os.path.join(__PASTA_TRAKT__, 'watch_filmes.mrpiracy')
 __WATCH_SERIES_FILE__ = os.path.join(__PASTA_TRAKT__, 'watch_series.mrpiracy')
 __FILMES_FILE__ = os.path.join(__PASTA_TRAKT__, 'filmes.mrpiracy')
 __SERIES_FILE__ = os.path.join(__PASTA_TRAKT__, 'series.mrpiracy')
 
-__CACHE_FILE__ = os.path.join(xbmc.translatePath('special://userdata/addon_data/plugin.video.mrpiracy/'), 'dadosv1.db')
+__CACHE_FILE__ = os.path.join(xbmcvfs.translatePath('special://userdata/addon_data/plugin.video.mrpiracy3/'), 'dadosv1.db')
 __CACHE_TABLE__ = 'cache'
 
 
@@ -128,7 +128,7 @@ def cache_insert(key, value):
         "UPDATE %s SET value=?,date=? WHERE key=?"
         % cache_table, (value, now, key))
 
-    if update_result.rowcount is 0:
+    if update_result.rowcount == 0:
         cursor.execute(
             "INSERT INTO %s Values (?, ?, ?)"
             % cache_table, (key, value, now)

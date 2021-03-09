@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.mrpiracy3" name="MrPiracy" provider-name="MrPiracy" version="3.0.1">
+<addon id="plugin.video.mrpiracy3" name="MrPiracy" provider-name="MrPiracy" version="3.0.2">
  <requires>
   <import addon="xbmc.python" version="3.0.0"/>
   <import addon="plugin.video.youtube" optional="true" />
+  <import addon="script.module.six" />
+  <import addon="script.module.simplejson" />
   </requires>
  <extension library="addon.py" point="xbmc.python.pluginsource">
   <provides>video</provides>

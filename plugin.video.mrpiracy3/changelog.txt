@@ -1,3 +1,6 @@
+v3.0.2(08/03/2021)
+- bug fix
+
 v1.0.9(14/10/2020)
 - Improve SSL
 - Novas imagens

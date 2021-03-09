@@ -58,18 +58,19 @@ class mrpiracy:
 			controlo.addDir('Entrar novamente', 'url', 'inicio', os.path.join(controlo.artFolder, controlo.skin, 'retroceder.png'))
 		definicoes.vista_menu()
 	def loginTrakt(self):
-		Trakt.authTrakt()
+		#Trakt.authTrakt()
+		return None
 	def getTrakt(self):
-		url = 'https://api-v2launch.trakt.tv/users/%s/watched/movies' % controlo.addon.getSetting('utilizadorTrakt').replace('.', '-')
+		url = Trakt.__TRAKT_API__+'/users/%s/watched/movies' % controlo.addon.getSetting('utilizadorTrakt').replace('.', '-')
 		filmes = Trakt.getTraktAsJson(url)
-		url = 'https://api-v2launch.trakt.tv/users/%s/watched/shows' % controlo.addon.getSetting('utilizadorTrakt').replace('.', '-')
+		url = Trakt.__TRAKT_API__+'/users/%s/watched/shows' % controlo.addon.getSetting('utilizadorTrakt').replace('.', '-')
 		series = Trakt.getTraktAsJson(url)
 		#insertTraktDB(filmes, series, data)
-		url = 'https://api-v2launch.trakt.tv/sync/watchlist/movies'
+		url = Trakt.__TRAKT_API__+'/sync/watchlist/movies'
 		watchlistFilmes = Trakt.getTraktAsJson(url)
-		url = 'https://api-v2launch.trakt.tv/sync/watchlist/shows'
+		url = Trakt.__TRAKT_API__+'/sync/watchlist/shows'
 		watchlistSeries = Trakt.getTraktAsJson(url)
-		url = 'https://api-v2launch.trakt.tv/users/%s/watched/shows' % controlo.addon.getSetting('utilizadorTrakt').replace('.', '-')
+		url = Trakt.__TRAKT_API__+'/users/%s/watched/shows' % controlo.addon.getSetting('utilizadorTrakt').replace('.', '-')
 		progresso = Trakt.getTraktAsJson(url)
 		Database.insertTraktDB(filmes, series, watchlistFilmes, watchlistSeries, progresso, controlo.dataHoras)
 	def menuFilmes(self):
@@ -111,7 +112,7 @@ class mrpiracy:
 	def conta(self):
 		controlo.addDir('Favoritos', self.API_SITE+'favoritos.php', 'favoritosMenu', os.path.join(controlo.artFolder, controlo.skin, 'favoritos.png'))
 		controlo.addDir('Agendados', self.API_SITE+'verdepois.php', 'verdepoisMenu', os.path.join(controlo.artFolder, controlo.skin, 'agendados.png'))
-		controlo.addDir('A seguir', self.API_SITE+'aseguir.php', 'aseguirMenu', os.path.join(controlo.artFolder, controlo.skin, 'agendados.png'))
+		controlo.addDir('A seguir', self.API_SITE+'aseguir.php', 'aseguirMenu', os.path.join(controlo.artFolder, controlo.skin, 'seguir.png'))
 		#controlo.addDir('Notificações', self.API_SITE+'index.php?action=notificacoes', 'notificacoes', os.path.join(controlo.artFolder, controlo.skin, 'notificacoes.png'))
 		#controlo.addDir('Mensagens', self.API_SITE+'index.php?action=mensagens', 'mensagens', os.path.join(controlo.artFolder, controlo.skin, 'notificacoes.png'))
 		definicoes.vista_menu()
@@ -126,9 +127,9 @@ class mrpiracy:
 		controlo.addDir('Animes Agendados', self.API_SITE+'verdepois.php?action=animes', 'verdepois', os.path.join(controlo.artFolder, controlo.skin, 'anagend.png'))
 		definicoes.vista_menu()
 	def aseguirMenu(self):
-		controlo.addDir('Filmes a Seguir', self.API_SITE+'aseguir.php?action=filmes&qualidade='+definicoes.getQualidade(), 'aseguir', os.path.join(controlo.artFolder, controlo.skin, 'fiagend.png'))
-		controlo.addDir('Séries a Seguir', self.API_SITE+'aseguir.php?action=series', 'aseguir', os.path.join(controlo.artFolder, controlo.skin, 'seagend.png'))
-		controlo.addDir('Animes a Seguir', self.API_SITE+'aseguir.php?action=animes', 'aseguir', os.path.join(controlo.artFolder, controlo.skin, 'anagend.png'))
+		controlo.addDir('Filmes a Seguir', self.API_SITE+'aseguir.php?action=filmes&qualidade='+definicoes.getQualidade(), 'aseguir', os.path.join(controlo.artFolder, controlo.skin, 'fiseg.png'))
+		controlo.addDir('Séries a Seguir', self.API_SITE+'aseguir.php?action=series', 'aseguir', os.path.join(controlo.artFolder, controlo.skin, 'seseg.png'))
+		controlo.addDir('Animes a Seguir', self.API_SITE+'aseguir.php?action=animes', 'aseguir', os.path.join(controlo.artFolder, controlo.skin, 'aniseg.png'))
 		definicoes.vista_menu()
 
 	def login(self):
@@ -211,9 +212,7 @@ class mrpiracy:
 				except:
 					username = resultado['username'].encode('utf-8')"""
 				
-				
-				
-				xbmc.executebuiltin("XBMC.Notification('MrPiracy', 'Sessão iniciada: "+username+"', '10000', '"+controlo.addonFolder+"/icon.png')")
+				xbmc.executebuiltin("Notification(MrPiracy,"+"Sessão iniciada: "+username+""+","+"6000"+","+ os.path.join(controlo.addonFolder,'icon.png')+")")
 				controlo.addon.setSetting('tokenMrpiracy', token)
 				controlo.addon.setSetting('refreshMrpiracy', refresh)
 				controlo.addon.setSetting('loggedin', username)
@@ -534,7 +533,9 @@ class mrpiracy:
 					ep = i['episodio'].split('/')[0]
 				if 'e' in i['episodio']:
 					ep = i['episodio'].split('e')[0]
-				for v in json.loads(vistos):
+				controlo.log(vistos)
+				for v in utils.json_loads_as_str(vistos):
+					controlo.log(v)
 					if v["show"]["ids"]["imdb"] is None:
 						visto = False
 						continue
@@ -1332,7 +1333,7 @@ class mrpiracy:
 	def marcarVisto(self, url):
 		
 		resultado = controlo.abrir_url(url, header=controlo.headers, cookie=definicoes.getCookie())
-		#controlo.log(url)
+		controlo.log(url)
 		resultado = json.loads(resultado)[0]
 		
 		links = url.split('/')
@@ -1361,7 +1362,7 @@ class mrpiracy:
 			post = {'id_anime': id_video, 'temporada': temporada, 'episodio':episodio}
 			url = (self.API_SITE+'index.php?action=marcar-visto-episodio&idSerie=%s&temporada=%s&episodio=%s' % (id_video, temporada, episodio) )
 			tipo = 2
-		#controlo.log(url)
+		controlo.log(url)
 		if opcao == '0' or opcao == '2': 
 			pastaVisto=os.path.join(controlo.pastaDados,'vistos')
 			try:
@@ -1429,15 +1430,15 @@ class mrpiracy:
 				Trakt.markwatchedFilmeTrakt(imdb)
 			self.getTrakt()
 		if colocar == 1:
-			xbmc.executebuiltin("XBMC.Notification(MrPiracy,"+"Marcado como visto"+","+"6000"+","+ os.path.join(controlo.addonFolder,'icon.png')+")")
+			xbmc.executebuiltin("Notification(MrPiracy,"+"Marcado como visto"+","+"6000"+","+ os.path.join(controlo.addonFolder,'icon.png')+")")
 			xbmc.executebuiltin("Container.Refresh")
 		if colocar == 2:
-			xbmc.executebuiltin("XBMC.Notification(MrPiracy,"+"Marcado como não visto"+","+"6000"+","+ os.path.join(controlo.addonFolder,'icon.png')+")")
+			xbmc.executebuiltin("Notification(MrPiracy,"+"Marcado como não visto"+","+"6000"+","+ os.path.join(controlo.addonFolder,'icon.png')+")")
 			xbmc.executebuiltin("Container.Refresh")
 		elif colocar == 3:
 			controlo.alerta('MrPiracy', 'Ocorreu um erro ao marcar como visto')
 		elif colocar == 4:
-			xbmc.executebuiltin("XBMC.Notification(MrPiracy,"+"Marcado como visto no Trakt"+","+"6000"+","+ os.path.join(controlo.addonFolder,'icon.png')+")")
+			xbmc.executebuiltin("Notification(MrPiracy,"+"Marcado como visto no Trakt"+","+"6000"+","+ os.path.join(controlo.addonFolder,'icon.png')+")")
 			xbmc.executebuiltin("Container.Refresh")
 	def marcarNaoVisto(self, url):
 
@@ -1532,15 +1533,15 @@ class mrpiracy:
 				Trakt.marknotwatchedFilmeTrakt(imdb)
 			self.getTrakt()
 		if colocar == 1:
-			xbmc.executebuiltin("XBMC.Notification(MrPiracy,"+"Marcado como visto"+","+"6000"+","+ os.path.join(controlo.addonFolder,'icon.png')+")")
+			xbmc.executebuiltin("Notification(MrPiracy,"+"Marcado como visto"+","+"6000"+","+ os.path.join(controlo.addonFolder,'icon.png')+")")
 			xbmc.executebuiltin("Container.Refresh")
 		if colocar == 2:
-			xbmc.executebuiltin("XBMC.Notification(MrPiracy,"+"Marcado como não visto"+","+"6000"+","+ os.path.join(controlo.addonFolder,'icon.png')+")")
+			xbmc.executebuiltin("Notification(MrPiracy,"+"Marcado como não visto"+","+"6000"+","+ os.path.join(controlo.addonFolder,'icon.png')+")")
 			xbmc.executebuiltin("Container.Refresh")
 		if colocar == 3:
 			controlo.alerta('MrPiracy', 'Ocorreu um erro ao marcar como visto')
 		elif colocar == 4:
-			xbmc.executebuiltin("XBMC.Notification(MrPiracy,"+"Marcado como não visto no Trakt"+","+"6000"+","+ os.path.join(controlo.addonFolder,'icon.png')+")")
+			xbmc.executebuiltin("Notification(MrPiracy,"+"Marcado como não visto no Trakt"+","+"6000"+","+ os.path.join(controlo.addonFolder,'icon.png')+")")
 			xbmc.executebuiltin("Container.Refresh")
 
 	def download(self, url):
@@ -1584,7 +1585,7 @@ class mrpiracy:
 
 		legendasOn = False
 		
-		folder = xbmc.translatePath(controlo.addon.getSetting('pastaDownloads'))
+		folder = xbmcvfs.translatePath(controlo.addon.getSetting('pastaDownloads'))
 		if legenda != '':
 			legendasOn = True
 		if tipo > 0:
@@ -1952,7 +1953,7 @@ class mrpiracy:
 		controlo.escrever_ficheiro(os.path.join(controlo.pastaDados,'favoritos.mrpiracy'), favoritos)
 
 		if resultado['mensagem']['codigo'] == 200:
-			xbmc.executebuiltin("XBMC.Notification(MrPiracy,"+nome+": Adicionado aos Favoritos"+","+"6000"+","+ os.path.join(controlo.addonFolder,'icon.png')+")")
+			xbmc.executebuiltin("Notification(MrPiracy,"+nome+": Adicionado aos Favoritos"+","+"6000"+","+ os.path.join(controlo.addonFolder,'icon.png')+")")
 			xbmc.executebuiltin("Container.Refresh")
 	def removerFavoritos(self, url):
 		
@@ -1990,7 +1991,7 @@ class mrpiracy:
 				
 		controlo.escrever_ficheiro(os.path.join(controlo.pastaDados,'favoritos.mrpiracy'), favoritos)
 		if resultado['mensagem']['codigo'] == 200:
-			xbmc.executebuiltin("XBMC.Notification(MrPiracy,"+nome+": Removido dos Favoritos"+","+"6000"+","+ os.path.join(controlo.addonFolder,'icon.png')+")")
+			xbmc.executebuiltin("Notification(MrPiracy,"+nome+": Removido dos Favoritos"+","+"6000"+","+ os.path.join(controlo.addonFolder,'icon.png')+")")
 			xbmc.executebuiltin("Container.Refresh")
 
 	def adicionarAgendar(self, url):
@@ -2027,7 +2028,7 @@ class mrpiracy:
 				
 		controlo.escrever_ficheiro(os.path.join(controlo.pastaDados,'ver_depois.mrpiracy'), ver_depois)
 		if resultado['mensagem']['codigo'] == 200:
-			xbmc.executebuiltin("XBMC.Notification(MrPiracy,"+nome+": Agendado"+","+"6000"+","+ os.path.join(controlo.addonFolder,'icon.png')+")")
+			xbmc.executebuiltin("Notification(MrPiracy,"+nome+": Agendado"+","+"6000"+","+ os.path.join(controlo.addonFolder,'icon.png')+")")
 			xbmc.executebuiltin("Container.Refresh")
 
 	def removerAgendar(self, url):
@@ -2064,7 +2065,7 @@ class mrpiracy:
 				
 		controlo.escrever_ficheiro(os.path.join(controlo.pastaDados,'ver_depois.mrpiracy'), ver_depois)
 		if resultado['mensagem']['codigo'] == 200:
-			xbmc.executebuiltin("XBMC.Notification(MrPiracy,"+nome+": Removido dos Agendados"+","+"6000"+","+ os.path.join(controlo.addonFolder,'icon.png')+")")
+			xbmc.executebuiltin("Notification(MrPiracy,"+nome+": Removido dos Agendados"+","+"6000"+","+ os.path.join(controlo.addonFolder,'icon.png')+")")
 			xbmc.executebuiltin("Container.Refresh")
 
 	def adicionarAseguir(self, url):
@@ -2101,7 +2102,7 @@ class mrpiracy:
 				
 		controlo.escrever_ficheiro(os.path.join(controlo.pastaDados,'a_seguir.mrpiracy'), a_seguir)
 		if resultado['mensagem']['codigo'] == 200:
-			xbmc.executebuiltin("XBMC.Notification(MrPiracy,"+nome+": A seguir"+","+"6000"+","+ os.path.join(controlo.addonFolder,'icon.png')+")")
+			xbmc.executebuiltin("Notification(MrPiracy,"+nome+": A seguir"+","+"6000"+","+ os.path.join(controlo.addonFolder,'icon.png')+")")
 			xbmc.executebuiltin("Container.Refresh")
 
 	def removerAseguir(self, url):
@@ -2138,7 +2139,7 @@ class mrpiracy:
 				
 		controlo.escrever_ficheiro(os.path.join(controlo.pastaDados,'a_seguir.mrpiracy'), a_seguir)
 		if resultado['mensagem']['codigo'] == 200:
-			xbmc.executebuiltin("XBMC.Notification(MrPiracy,"+nome+": Deixado de seguir"+","+"6000"+","+ os.path.join(controlo.addonFolder,'icon.png')+")")
+			xbmc.executebuiltin("Notification(MrPiracy,"+nome+": Deixado de seguir"+","+"6000"+","+ os.path.join(controlo.addonFolder,'icon.png')+")")
 			xbmc.executebuiltin("Container.Refresh")
 
 	def traktListas(self):

@@ -8,7 +8,7 @@
         <setting id="marcarVisto" type="enum" label="Marcar como Visto" visible="false" values="Local|Site|Ambos (Site e Local)" default="2"/>
         <setting type="sep" />
         <setting label="Trakt:" type="lsep" />
-        <setting id="utilizadorTrakt" type="action" label="Utilizador" option="close" action="RunPlugin(plugin://plugin.video.mrpiracy/?modo=loginTrakt)" />
+        <setting id="utilizadorTrakt" type="action" label="Utilizador" option="close" action="RunPlugin(plugin://plugin.video.mrpiracy3/?modo=loginTrakt)" />
     		<setting id="tokenTrakt" type="text" option="hidden" visible="false" label="" default="" />
     		<setting id="refreshTrakt" type="text" option="hidden" visible="false" label="" default="" />
         <setting id="tokenMrpiracy" type="text" option="hidden" visible="false" label="" default="" />
@@ -36,8 +36,8 @@
     </category>
 
     <!--<category label="Biblioteca">
-        <setting id="bibliotecaFilmes" type="folder" label="Filmes" default="special://userdata/addon_data/plugin.video.mrpiracy/Filmes"/>
-        <setting id="bibliotecaSeries" type="folder" label="Series" default="special://userdata/addon_data/plugin.video.mrpiracy/Series"/>
+        <setting id="bibliotecaFilmes" type="folder" label="Filmes" default="special://userdata/addon_data/plugin.video.mrpiracy3/Filmes"/>
+        <setting id="bibliotecaSeries" type="folder" label="Series" default="special://userdata/addon_data/plugin.video.mrpiracy3/Series"/>
     </category>-->
     <category label="Tipos de vista">
       <setting label="Definições de vista:" type="lsep" />
