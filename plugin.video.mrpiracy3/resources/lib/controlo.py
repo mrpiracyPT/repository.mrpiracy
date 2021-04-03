@@ -45,6 +45,8 @@ API = base64.urlsafe_b64decode('aHR0cHM6Ly9tcmFwaS54eXov')
 API_SITE = base64.urlsafe_b64decode('aHR0cHM6Ly9tcmFwaS54eXovYXBpbmV3Lw==')#aHR0cDovL21wYXBpLm1sL2FwaS8=
 SITE = base64.urlsafe_b64decode('aHR0cDovL21ycGlyYWN5LmdxLw==')
 
+condVisibility = xbmc.getCondVisibility
+
 try:
     import ssl
     #context = ssl.SSLContext(ssl.PROTOCOL_TLSv1)
@@ -56,6 +58,11 @@ except:
 
 controlFile = os.path.join(xbmcvfs.translatePath('special://userdata/addon_data/plugin.video.mrpiracy3/'), '1-1-0.mrpriacy')
 
+
+def installAddon(addon_id):
+    addon_path = os.path.join(transPath('special://home/addons'), addon_id)
+    if not os.path.exists(addon_path) == True:
+        xbmc.executebuiltin('InstallAddon(%s)' % (addon_id))
 
 def yesnoDialog(line1, line2, line3, heading=addonInfo('Name'), nolabel='', yeslabel=''):
     return dialog.yesno(heading, line1+ '[CR]' +line2+ '[CR]' + line3, nolabel, yeslabel)
@@ -176,8 +183,10 @@ def addVideo(name,url,modo,iconimage,visto,tipo,temporada,episodio,infoLabels,po
             menu.append(('Receber notificação (A Seguir)', 'RunPlugin(%s?modo=adicionar-aseguir&url=%s)' % (sys.argv[0], quote_plus(url))))
         if addon.getSetting('trailer-filmes') == 'true':
             try:
+                
                 idYoutube = trailer.split('?v=')[-1].split('/')[-1].split('?')[0].split('&')[0]
-                linkTrailer = 'plugin://plugin.video.youtube/play/?video_id='+idYoutube
+                linkTrailer = 'plugin://plugin.video.youtube/?action=play_video&videoid='+idYoutube
+                
             except:
                 linkTrailer = ''
         else:
@@ -226,7 +235,7 @@ def addVideo(name,url,modo,iconimage,visto,tipo,temporada,episodio,infoLabels,po
     liz.setInfo( type="Video", infoLabels=infoLabels )
 
     if linkTrailer != '':
-        menu.append(('Ver Trailer', 'XBMC.PlayMedia(%s)' % (linkTrailer)))
+        menu.append(('Ver Trailer', 'PlayMedia(%s)' % (linkTrailer)))
 
     #menu.append(('Marcar como visto (Site)', 'RunPlugin(%s?mode=16&url=%s)' % (sys.argv[0], quote_plus(url))))
 

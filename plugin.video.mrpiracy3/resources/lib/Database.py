@@ -7,15 +7,16 @@ try:
 except:
     from pysqlite2 import dbapi2 as database
 
-import xbmcvfs, os, sys, xbmc
+import xbmcvfs, os, sys, xbmc, json
 import ast
 import hashlib
 import re
 import time
+from . import controlo, utils
 
 
 __PASTA_TRAKT__ = os.path.join(xbmcvfs.translatePath('special://userdata/addon_data/plugin.video.mrpiracy3/trakt/'))
-__DB_FILE__ = os.path.join(xbmcvfs.translatePath('special://userdata/addon_data/plugin.video.mrpiracy3/'), 'dadosv1.db')
+__DB_FILE__ = os.path.join(xbmcvfs.translatePath('special://userdata/addon_data/plugin.video.mrpiracy3/'), 'trakt.db')
 __PROGRESSO_FILE__ = os.path.join(__PASTA_TRAKT__, 'progresso.mrpiracy')
 __WATCH_FILMES_FILE__ = os.path.join(__PASTA_TRAKT__, 'watch_filmes.mrpiracy')
 __WATCH_SERIES_FILE__ = os.path.join(__PASTA_TRAKT__, 'watch_series.mrpiracy')
@@ -146,13 +147,26 @@ def isExists():
 
 def escrever_ficheiro(ficheiro, conteudo):
     f = open(ficheiro, mode="w")
-    f.write(str(conteudo))
+    #conteudo = conteudo.replace("'", " ")
+    f.write(str(conteudo).replace("'", " "))
     f.close()
 def ler_ficheiro(ficheiro):
     f = open(ficheiro, "r")
     conteudo =  f.read()
     f.close()
     return conteudo
+def ler_ficheiro_json(ficheiro):
+    f = open(ficheiro, "r")
+    conteudo =  f.read()
+    f.close()
+    s = conteudo
+    s = s.replace("'", " ")
+    """s = s.replace('\t','')
+    s = s.replace('\n','')
+    s = s.replace(',}','}')
+    s = s.replace(',]',']')"""
+
+    return s
 def criarFicheiros():
     try:
         os.makedirs(__PASTA_TRAKT__)
@@ -163,6 +177,7 @@ def criarFicheiros():
     escrever_ficheiro(__WATCH_FILMES_FILE__, '')
     escrever_ficheiro(__SERIES_FILE__, '')
     escrever_ficheiro(__FILMES_FILE__, '')
+    createDB()
 
 def createDB():
 
@@ -172,6 +187,7 @@ def createDB():
         f.close()"""
 
         con, dbcursor = connect()
+        #dbcursor.execute("CREATE TABLE IF NOT EXISTS trakt (id integer PRIMARY KEY NOT NULL, filmes json, series json, watchlistFilmes json, watchlistSeries json, progresso json, horas text);")
         dbcursor.execute("CREATE TABLE IF NOT EXISTS trakt (id integer PRIMARY KEY NOT NULL, filmes text, series text, watchlistFilmes text, watchlistSeries text, progresso text, horas text);")
         """
         dbcursor.execute("CREATE TABLE IF NOT EXISTS episodios (id integer PRIMARY KEY NOT NULL,nome text,plot text,categoria text,actores text,temporada text,episodio text,visto text DEFAULT('nao'),fanart text,poster text,imdb text,tvdb text,aired text,serienome text,traktid text);")
@@ -197,24 +213,42 @@ def insertTraktDB(filmes, series, watchlistFilmes, watchlistSeries, progresso, d
     escrever_ficheiro(__SERIES_FILE__, series)
 
 def selectProgresso():
-    return ler_ficheiro(__PROGRESSO_FILE__)
+    return ler_ficheiro_json(__PROGRESSO_FILE__)
 def selectWatchFilmes():
-    return ler_ficheiro(__WATCH_FILMES_FILE__)
+    return ler_ficheiro_json(__WATCH_FILMES_FILE__)
 def selectWatchSeries():
-    return ler_ficheiro(__WATCH_SERIES_FILE__)
+    return ler_ficheiro_json(__WATCH_SERIES_FILE__)
 def selectFilmes():
-    return ler_ficheiro(__FILMES_FILE__)
+    return ler_ficheiro_json(__FILMES_FILE__)
 def selectSeries():
-    return ler_ficheiro(__SERIES_FILE__)
+    return ler_ficheiro_json(__SERIES_FILE__)
+
+def selectProgresso2():
+    return selectTraktDB('progresso')
+def selectWatchFilmes2():
+    return selectTraktDB('watchlistFilmes')
+def selectWatchSeries2():
+    return selectTraktDB('watchlistSeries')
+def selectFilmes2():
+    return selectTraktDB('filmes')
+def selectSeries2():
+    return selectTraktDB('series')
 
 def insertTraktDB2(filmes, series, watchlistFilmes, watchlistSeries, progresso, data):
+    filmes = json.dumps(filmes)
+    series = json.dumps(series)
+    watchlistFilmes = json.dumps(watchlistFilmes)
+    watchlistSeries = json.dumps(watchlistSeries)
+    progresso = json.dumps(progresso)
+
     con, dbcursor = connect()
-    dbcursor.execute("INSERT OR REPLACE INTO trakt (id, filmes, series, watchlistFilmes, watchlistSeries, progresso, horas) VALUES (?, ?, ?, ?, ?, ?, ?)", (1, filmes, series, watchlistFilmes, watchlistSeries, progresso, data))
+    dbcursor.execute("INSERT OR REPLACE INTO trakt (id, filmes, series, watchlistFilmes, watchlistSeries, progresso, horas) VALUES (?, ?, ?, ?, ?, ?, ?)", (int(1), filmes, series, watchlistFilmes, watchlistSeries, progresso, data))
     con.commit()
 
-def selectTraktDB():
+def selectTraktDB(typeData):
     con, dbcursor = connect()
-    dbcursor.execute("SELECT * FROM trakt WHERE id=1")
+    dbcursor.execute("SELECT "+typeData+" FROM trakt WHERE id=1")
+    #controlo.log(dbcursor.fetchone())
     return dbcursor.fetchone()
 
 def insertFilmeDB(nome, plot, imdb, poster, fanart, trailer, ano, traktid, slug, categoria=None, actores=None):

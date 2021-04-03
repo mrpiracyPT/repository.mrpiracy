@@ -1,3 +1,8 @@
+v3.0.2(03/04/2021)
+- Trakt
+- Marcar como visto e seguir proximo episodio no final do video
+- Trailer fix
+
 v3.0.2(08/03/2021)
 - bug fix
 

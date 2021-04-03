@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import os, base64, xbmcgui, xbmc, xbmcvfs, time, urllib, re, sys, traceback, json, ast
-from . import controlo, Database, Trakt, definicoes
+from . import controlo, Database, Trakt, definicoes, mrpiracy
 
 __HEADERS__ = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.11; rv:43.0) Gecko/20100101 Firefox/43.0', 'Accept-Charset': 'ISO-8859-1,utf-8;q=0.7,*;q=0.7'}
 
@@ -76,7 +76,13 @@ class Player(xbmc.Player):
         if (self.tempo/self.tempoTotal > 0.90):
 
             #self.adicionarVistoBiblioteca()
-            self.adicionarVistoSite()
+            #self.adicionarVistoSite()
+            if self.content == 'episode':
+                WasAlreadySeen = mrpiracy.mrpiracy().getVistoEpisodio(self.idFilme)
+            elif self.content == 'movie':
+                WasAlreadySeen = mrpiracy.mrpiracy().getVistoFilme(self.idFilme)
+            if not WasAlreadySeen:
+                mrpiracy.mrpiracy().marcarVisto(self.url)
 
             try:
                 xbmcvfs.delete(self.pastaVideo)

@@ -84,11 +84,13 @@ def getTraktCredentialsInfo():
         return False
     return True
 
-def getTraktAsJson(url, post=None):
+def getTraktAsJson(url, post=None, toSave=False):
     try:
     
         r, res_headers = getTrakt(url, post)
 
+        if toSave:
+            return r
 
         r = utils.json_loads_as_str(r)
 

@@ -58,20 +58,20 @@ class mrpiracy:
 			controlo.addDir('Entrar novamente', 'url', 'inicio', os.path.join(controlo.artFolder, controlo.skin, 'retroceder.png'))
 		definicoes.vista_menu()
 	def loginTrakt(self):
-		#Trakt.authTrakt()
-		return None
+		Trakt.authTrakt()
+		#return None
 	def getTrakt(self):
 		url = Trakt.__TRAKT_API__+'/users/%s/watched/movies' % controlo.addon.getSetting('utilizadorTrakt').replace('.', '-')
-		filmes = Trakt.getTraktAsJson(url)
+		filmes = Trakt.getTraktAsJson(url, toSave=True)
 		url = Trakt.__TRAKT_API__+'/users/%s/watched/shows' % controlo.addon.getSetting('utilizadorTrakt').replace('.', '-')
-		series = Trakt.getTraktAsJson(url)
+		series = Trakt.getTraktAsJson(url, toSave=True)
 		#insertTraktDB(filmes, series, data)
 		url = Trakt.__TRAKT_API__+'/sync/watchlist/movies'
-		watchlistFilmes = Trakt.getTraktAsJson(url)
+		watchlistFilmes = Trakt.getTraktAsJson(url, toSave=True)
 		url = Trakt.__TRAKT_API__+'/sync/watchlist/shows'
-		watchlistSeries = Trakt.getTraktAsJson(url)
+		watchlistSeries = Trakt.getTraktAsJson(url, toSave=True)
 		url = Trakt.__TRAKT_API__+'/users/%s/watched/shows' % controlo.addon.getSetting('utilizadorTrakt').replace('.', '-')
-		progresso = Trakt.getTraktAsJson(url)
+		progresso = Trakt.getTraktAsJson(url, toSave=True)
 		Database.insertTraktDB(filmes, series, watchlistFilmes, watchlistSeries, progresso, controlo.dataHoras)
 	def menuFilmes(self):
 		controlo.addDir('Todos os Filmes', self.API_SITE+'filmes.php?qualidade='+definicoes.getQualidade(), 'filmes', os.path.join(controlo.artFolder, controlo.skin, 'filmes.png'))
@@ -307,7 +307,7 @@ class mrpiracy:
 	def favoritos(self, url):
 		resultado = controlo.abrir_url(url, header=controlo.headers, cookie=definicoes.getCookie())
 		resultado = json.loads(resultado)
-		#controlo.log(url)
+		controlo.log(resultado)
 		if 'filmes' in url:
 			tipo = 'filmes'
 		elif 'series' in url:
@@ -533,13 +533,11 @@ class mrpiracy:
 					ep = i['episodio'].split('/')[0]
 				if 'e' in i['episodio']:
 					ep = i['episodio'].split('e')[0]
-				controlo.log(vistos)
-				for v in utils.json_loads_as_str(vistos):
-					controlo.log(v)
+				for v in json.loads(vistos):
 					if v["show"]["ids"]["imdb"] is None:
 						visto = False
 						continue
-					if v["show"]["ids"]["imdb"] != imdbSerie:
+					if v["show"]["ids"]["imdb"].upper() != imdbSerie.upper() or v["show"]["ids"]["imdb"]+'PT'.upper() != imdbSerie+'PT'.upper():
 						visto = False
 						continue
 					else:
@@ -2309,7 +2307,7 @@ class mrpiracy:
 		if 'Portu' in categoria or imdbPT == True or 'PT' in i['IMBD'].upper():
 			pt = '[B][COLOR green]P[/COLOR][COLOR red]T[/COLOR]: [/B]'
 		cor = "white"
-		if 'PT' in i['IMBD']:
+		if 'PT' in i['IMBD'].upper():
 			i['IMBD'] = re.compile('(.+?)PT').findall(i['IMBD'].upper())[0]
 
 		visto = False
@@ -2321,10 +2319,12 @@ class mrpiracy:
 			vistoa = self.verificarVistoLocal(i['id_video'])
 		
 		if Trakt.loggedIn():
+			
 			for v in json.loads(vistos):
+			
 				if v["movie"]["ids"]["imdb"] is None:
 					continue
-				if v["movie"]["ids"]["imdb"] == i['IMBD']:
+				if v["movie"]["ids"]["imdb"].upper() == i['IMBD'].upper() or v["movie"]["ids"]["imdb"]+'PT'.upper() == i['IMBD']+'PT'.upper():
 					visto = True
 					cor = "blue"
 					break
