@@ -147,8 +147,12 @@ def isExists():
 
 def escrever_ficheiro(ficheiro, conteudo):
     f = open(ficheiro, mode="w")
-    #conteudo = conteudo.replace("'", " ")
-    f.write(str(conteudo).replace("'", " "))
+    try:
+        conteudo = conteudo.replace("'", " ").encode('ascii', errors='replace').decode('ascii')
+    except:
+        conteudo = conteudo.replace("'", " ")
+
+    f.write(conteudo)
     f.close()
 def ler_ficheiro(ficheiro):
     f = open(ficheiro, "r")
