@@ -874,6 +874,10 @@ class mrpiracy:
 				nome = 'MyStream'
 				servidores.append(resultado['URL'])
 				titulos.append('Servidor #%s: %s' % (i, nome))
+			elif 'streamtape.' in resultado['URL'].lower():
+				nome = 'Streamtape'
+				servidores.append(resultado['URL'])
+				titulos.append('Servidor #%s: %s' % (i, nome))
 		if resultado['URL2'] != '':
 			i+=1
 			if 'openload' in resultado['URL2'].lower():
@@ -914,6 +918,10 @@ class mrpiracy:
 				titulos.append('Servidor #%s: %s' % (i, nome))
 			elif 'mystream' in resultado['URL2'].lower():
 				nome = 'MyStream'
+				servidores.append(resultado['URL2'])
+				titulos.append('Servidor #%s: %s' % (i, nome))
+			elif 'streamtape.' in resultado['URL2'].lower():
+				nome = 'Streamtape'
 				servidores.append(resultado['URL2'])
 				titulos.append('Servidor #%s: %s' % (i, nome))
 		try:
@@ -959,6 +967,10 @@ class mrpiracy:
 					nome = 'MyStream'
 					servidores.append(resultado['URL3'])
 					titulos.append('Servidor #%s: %s' % (i, nome))
+				elif 'streamtape.' in resultado['URL3'].lower():
+					nome = 'Streamtape'
+					servidores.append(resultado['URL3'])
+					titulos.append('Servidor #%s: %s' % (i, nome))
 		except:
 			pass
 		try:
@@ -1002,6 +1014,10 @@ class mrpiracy:
 					titulos.append('Servidor #%s: %s' % (i, nome))
 				elif 'mystream' in resultado['URL4'].lower():
 					nome = 'MyStream'
+					servidores.append(resultado['URL4'])
+					titulos.append('Servidor #%s: %s' % (i, nome))
+				elif 'streamtape.' in resultado['URL4'].lower():
+					nome = 'Streamtape'
 					servidores.append(resultado['URL4'])
 					titulos.append('Servidor #%s: %s' % (i, nome))
 		except:
@@ -1050,6 +1066,10 @@ class mrpiracy:
 					nome = 'MyStream'
 					servidores.append(resultado['URL5'])
 					titulos.append('Servidor #%s: %s' % (i, nome))
+				elif 'streamtape.' in resultado['URL5'].lower():
+					nome = 'Streamtape'
+					servidores.append(resultado['URL5'])
+					titulos.append('Servidor #%s: %s' % (i, nome))
 		except:
 			pass
 
@@ -1096,6 +1116,10 @@ class mrpiracy:
 					nome = 'MyStream'
 					servidores.append(resultado['URL6'])
 					titulos.append('Servidor #%s: %s' % (i, nome))
+				elif 'streamtape.' in resultado['URL6'].lower():
+					nome = 'Streamtape'
+					servidores.append(resultado['URL6'])
+					titulos.append('Servidor #%s: %s' % (i, nome))
 		except:
 			pass
 
@@ -1140,6 +1164,10 @@ class mrpiracy:
 					titulos.append('Servidor #%s: %s' % (i, nome))
 				elif 'mystream' in resultado['URL7'].lower():
 					nome = 'MyStream'
+					servidores.append(resultado['URL7'])
+					titulos.append('Servidor #%s: %s' % (i, nome))
+				elif 'streamtape.' in resultado['URL7'].lower():
+					nome = 'Streamtape'
 					servidores.append(resultado['URL7'])
 					titulos.append('Servidor #%s: %s' % (i, nome))
 		except:
@@ -1228,6 +1256,10 @@ class mrpiracy:
 			mystream = URLResolverMedia.MyStream(servidores[servidor])
 			stream = mystream.getMediaUrl()
 			legenda = mystream.getLegenda()
+		elif 'streamtape.' in servidores[servidor].lower():
+			streamtape = URLResolverMedia.Streamtape(servidores[servidor])
+			stream = streamtape.getMediaUrl()
+			legenda = streamtape.getLegenda()
 
 		"""if coiso == 'filme':
 			legenda = legendaAux

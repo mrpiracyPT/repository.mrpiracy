@@ -1,3 +1,7 @@
+v3.0.5(30/05/2021)
+- fix Fembed
+- Streamtape added
+
 v3.0.4(04/04/2021)
 - fix Takt enconding
 

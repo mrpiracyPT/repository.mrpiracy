@@ -19,6 +19,7 @@
 import json, re, xbmc, xbmcgui, os, sys, pprint, base64, math, string, socket, time
 from . import jsunpack
 from . import controlo
+from . import packer
 from random import randint
 try:
 	import urllib2
@@ -36,6 +37,8 @@ except:
 
 #post: controlo.abrir_url(self.API_SITE+'login.php', post=post, header=controlo.headers)
 #get: controlo.abrir_url(self.API_SITE+'eventos', header=controlo.headers)
+
+
 
 class MyStream():
 	def __init__(self, url):
@@ -114,20 +117,23 @@ class Fembed():
 	def __init__(self, url):
 		self.oldUrl = url
 		self.id = self.getId(url)
-		self.headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:61.0) Gecko/20100101 Firefox/61.0"}
+		self.headers = {"User-Agent": controlo.RAND_UA}
 		self.legenda = ''
 		req = urllib2.Request(url, headers=self.headers)
 		response = urllib2.urlopen(req)
 		self.url = response.geturl()
 		response.close()
 		self.host = re.findall(r'(?://|\.)([^/]+)', self.url)[0]
-		self.headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:61.0) Gecko/20100101 Firefox/61.0", "Referer": self.get_url(self.host,self.id)}
+		self.headers = {"User-Agent": controlo.RAND_UA, "Referer": self.get_url(self.host,self.id)}
+		self.patterna = r'(?://|\.)((?:fembed|feurl|femax20|24hd|anime789|[fv]cdn|sharinglink|votrefiles?|femoload|dailyplanet|jplayer|there|sexhd|gcloud|mediashore|xstreamcdn|vcdnplay|vidohd|vidsource|viplayer|zidiplay)\.(?:com|club|io|xyz|pw|net|to|live|me|stream|co|cc|org))/(?:v|f)/([a-zA-Z0-9-]+)'
 
 	def get_url(self, host, media_id):
 		return 'https://{host}/v/{media_id}'.format(host=host, media_id=media_id)
 
 	def getId(self, url):
-		return urlparse.urlparse(url).path.split("/")[-1]
+		match_object =  re.search(r'(?://|\.)((?:fembed|feurl|femax20|24hd|anime789|[fv]cdn|sharinglink|votrefiles?|femoload|dailyplanet|jplayer|there|sexhd|gcloud|mediashore|xstreamcdn|vcdnplay|vidohd|vidsource|viplayer|zidiplay)\.(?:com|club|io|xyz|pw|net|to|live|me|stream|co|cc|org))/(?:v|f)/([a-zA-Z0-9-]+)', url)
+		ida = match_object.group(2)
+		return ida
 
 	def abrirMixdrop(self, url):
 		return controlo.abrir_url(url, header=self.headers)
@@ -140,7 +146,7 @@ class Fembed():
 
 		responseUrl = ''
 		#controlo.abrir_url(self.API_SITE+'login.php', post=post, header=controlo.headers)
-
+		#controlo.log(controlo.abrir_url(api_url, post=post, header=self.headers, retrieveUrl=True))
 		content, responseUrl = controlo.abrir_url(api_url, post=post, header=self.headers, retrieveUrl=True)
 
 		if responseUrl != api_url:
@@ -159,16 +165,73 @@ class Fembed():
 						controlo.log("ERRO")
 					videoUrl = sources[qualidade][1]
 
-
+		self.headers.pop('Content-Type')
 		request = urllib2.Request(videoUrl)
 		request.get_method = lambda: 'HEAD'
 		request.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.3; rv:36.0) Gecko/20100101 Firefox/36.0')
 		for key in self.headers:
 			request.add_header(key, self.headers[key])
 		response = urllib2.urlopen(request)
-
+		videoUrl = response.url
+		#content, videoUrl = controlo.abrir_url(videoUrl, post=post, header=self.headers, retrieveUrl=True)
+		
+		controlo.log(videoUrl+'|%s' % '&'.join(['%s=%s' % (key, urllib.quote_plus(self.headers[key])) for key in self.headers]))
 		return videoUrl+'|%s' % '&'.join(['%s=%s' % (key, urllib.quote_plus(self.headers[key])) for key in self.headers])
 		
+	def getLegenda(self):
+		return self.legenda
+
+class Streamtape():
+	def __init__(self, url):
+		self.url = url
+		self.headers = {"User-Agent": "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:68.0) Gecko/20100101 Firefox/68.0"}
+		self.legenda = ''
+
+	def getId(self):
+		return urlparse.urlparse(self.url).path.split("/")[-1]
+
+	def abrirStreamtape(self):
+		return controlo.abrir_url(self.url, header=self.headers)
+
+	def getMediaUrl(self):
+		videoUrl = ''
+		content = self.abrirStreamtape() 
+		pattern = r'innerHTML = ([^;]+)'
+		result = self.parse(content,pattern)
+		try:
+			content = content.decode('utf-8')
+		except:
+			pass
+
+		#result = re.findall(pattern, content)
+		if result[0] == True:
+
+			url = result[1][0]
+			url = url.replace(' ','').replace('"','').replace("'","").replace("+","")
+			#controlo.log(url)
+			
+			videoUrl = 'https:' + url + "&stream=1"
+
+		#controlo.log(videoUrl)
+		return videoUrl+'|User-Agent=' + "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:68.0) Gecko/20100101 Firefox/68.0" + '&Referer=' + self.url
+
+	def parse(self, sHtmlContent, sPattern, iMinFoundValue = 1):
+		sHtmlContent = self.replaceSpecialCharacters(str(sHtmlContent))
+		aMatches = re.compile(sPattern, re.IGNORECASE).findall(sHtmlContent)
+		if (len(aMatches) >= iMinFoundValue):
+			return True, aMatches
+		return False, aMatches
+
+	def replaceSpecialCharacters(self, sString):
+		return sString.replace('\r', '').replace('\n', '').replace('\t', '').replace('\\/', '/').replace('&amp;', '&')\
+                      .replace('&#039;', "'").replace('&#8211;', '-').replace('&#8212;', '-').replace('&eacute;', 'é')\
+                      .replace('&acirc;', 'â').replace('&ecirc;', 'ê').replace('&icirc;', 'î').replace('&ocirc;', 'ô')\
+                      .replace('&hellip;', '...').replace('&quot;', '"').replace('&gt;', '>').replace('&egrave;', 'è')\
+                      .replace('&ccedil;', 'ç').replace('&laquo;', '<<').replace('&raquo;', '>>').replace('\xc9', 'E')\
+                      .replace('&ndash;', '-').replace('&ugrave;', 'ù').replace('&agrave;', 'à').replace('&lt;', '<')\
+                      .replace('&rsquo;', "'").replace('&lsquo;', '\'').replace('&nbsp;', '').replace('&#8217;', "'")\
+                      .replace('&#8230;', '...').replace('&#8242;', "'").replace('&#884;', '\'').replace('&#39;', '\'')\
+                      .replace('&#038;', '&').replace('&iuml;', 'ï').replace('–', '-').replace('—', '-')
 	def getLegenda(self):
 		return self.legenda
 
@@ -182,8 +245,10 @@ class Mixdrop():
 		return urlparse.urlparse(self.url).path.split("/")[-1]
 
 	def abrirMixdrop(self):
-		headers = { 'User-Agent' : 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)',
-					'Cookie' : 'hds2=1' }
+		headers = {'Origin': 'https://{0}'.format(self.getHost()), 
+					'Referer': 'https://{0}/'.format(self.getHost()), 
+					'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:52.0) Gecko/20100101 Firefox/52.0',
+					'Cookie' : 'hds2=1'}
 		return controlo.abrir_url(self.url, header=self.headers)
 
 	def getHost(self):
@@ -193,36 +258,22 @@ class Mixdrop():
 	def getMediaUrl(self):
 		videoUrl = ''
 		content = self.abrirMixdrop() 
-		pattern = '(\s*eval\s*\(\s*function(?:.|\s)+?)<\/script>'
+		pattern = '<script>(\s*eval\s*\(\s*function(?:.|\s)+?)<\/script>'
 		result = self.parse(content,pattern)
-		controlo.log(self.getHost())
 		headers = {'Origin': 'https://{0}'.format(self.getHost()), 'Referer': 'https://{0}/'.format(self.getHost()), 'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:52.0) Gecko/20100101 Firefox/52.0'}
-
 		if result[0] == True:
 
-			r = re.search(r'location\s*=\s*"([^"]+)', content)
-			if r:
-				web_url = 'https://{0}{1}'.format(self.getHost(), r.group(1))
-				content = controlo.abrir_url(web_url, header=headers)
+			htmlContent = packer.unpack(result[1][0])
+			controlo.log(htmlContent)
+			pattern = 'wurl="([^"]+)"'
+			result = self.parse(htmlContent,pattern)
 
-			if '(p,a,c,k,e,d)' in content:
-				content = self.get_packed_data(content)
-				#content = cPacker().unpack(result[1][0])
-
-			#pattern = 'vsrc\d+="([^"]+)"'
-			pattern = '(?:vsr|wurl|surl)[^=]*=\s*"([^"]+)'
-			result = self.parse(content, pattern)
-			if result[0] == True:
-				videoUrl = result[1][0]
-			#else:
-			#	pattern = 'furl="([^"]+)"'
-			#	result = self.parse(content, pattern)
-			#	if result[0] == True:
-			#		videoUrl = result[1][0]
+			if (result[0] == True):
+				videoUrl = aResult[1][0]
 
 			if videoUrl.startswith('//'):
 				videoUrl = 'https:'+videoUrl
-
+		#controlo.log(videoUrl)
 		return videoUrl
 
 	def parse(self, sHtmlContent, sPattern, iMinFoundValue = 1):
@@ -233,8 +284,15 @@ class Mixdrop():
 		return False, aMatches
 
 	def replaceSpecialCharacters(self, sString):
-		return sString.replace('\\/','/').replace('&amp;','&').replace('\xc9','E').replace('&#8211;', '-').replace('&#038;', '&').replace('&rsquo;','\'').replace('\r','').replace('\n','').replace('\t','').replace('&#039;',"'")
-
+		return sString.replace('\r', '').replace('\n', '').replace('\t', '').replace('\\/', '/').replace('&amp;', '&')\
+                      .replace('&#039;', "'").replace('&#8211;', '-').replace('&#8212;', '-').replace('&eacute;', 'é')\
+                      .replace('&acirc;', 'â').replace('&ecirc;', 'ê').replace('&icirc;', 'î').replace('&ocirc;', 'ô')\
+                      .replace('&hellip;', '...').replace('&quot;', '"').replace('&gt;', '>').replace('&egrave;', 'è')\
+                      .replace('&ccedil;', 'ç').replace('&laquo;', '<<').replace('&raquo;', '>>').replace('\xc9', 'E')\
+                      .replace('&ndash;', '-').replace('&ugrave;', 'ù').replace('&agrave;', 'à').replace('&lt;', '<')\
+                      .replace('&rsquo;', "'").replace('&lsquo;', '\'').replace('&nbsp;', '').replace('&#8217;', "'")\
+                      .replace('&#8230;', '...').replace('&#8242;', "'").replace('&#884;', '\'').replace('&#39;', '\'')\
+                      .replace('&#038;', '&').replace('&iuml;', 'ï').replace('–', '-').replace('—', '-')
 	def getLegenda(self):
 		return self.legenda
 
