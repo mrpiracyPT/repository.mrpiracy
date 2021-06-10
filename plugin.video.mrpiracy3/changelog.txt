@@ -1,3 +1,6 @@
+v3.0.6(11/06/2021)
+- Mixdrop & Streamtape fixed
+
 v3.0.5(30/05/2021)
 - fix Fembed
 - Streamtape added

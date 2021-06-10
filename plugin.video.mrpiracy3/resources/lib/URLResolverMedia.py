@@ -166,6 +166,8 @@ class Fembed():
 					videoUrl = sources[qualidade][1]
 
 		self.headers.pop('Content-Type')
+		#controlo.log(self.headers)
+		#controlo.log(videoUrl)
 		request = urllib2.Request(videoUrl)
 		request.get_method = lambda: 'HEAD'
 		request.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.3; rv:36.0) Gecko/20100101 Firefox/36.0')
@@ -175,8 +177,9 @@ class Fembed():
 		videoUrl = response.url
 		#content, videoUrl = controlo.abrir_url(videoUrl, post=post, header=self.headers, retrieveUrl=True)
 		
-		controlo.log(videoUrl+'|%s' % '&'.join(['%s=%s' % (key, urllib.quote_plus(self.headers[key])) for key in self.headers]))
-		return videoUrl+'|%s' % '&'.join(['%s=%s' % (key, urllib.quote_plus(self.headers[key])) for key in self.headers])
+		#controlo.log(videoUrl+'|%s' % '&'.join(['%s=%s' % (key, urllib.quote_plus(self.headers[key])) for key in self.headers]))
+		return videoUrl
+		#+'|%s' % '&'.join(['%s=%s' % (key, urllib.quote_plus(self.headers[key])) for key in self.headers])
 		
 	def getLegenda(self):
 		return self.legenda
@@ -184,7 +187,7 @@ class Fembed():
 class Streamtape():
 	def __init__(self, url):
 		self.url = url
-		self.headers = {"User-Agent": "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:68.0) Gecko/20100101 Firefox/68.0"}
+		self.headers = {"User-Agent": "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:68.0) Gecko/20100101 Firefox/68.0",'Referer': 'https://{0}/'.format(self.url)}
 		self.legenda = ''
 
 	def getId(self):
@@ -196,24 +199,30 @@ class Streamtape():
 	def getMediaUrl(self):
 		videoUrl = ''
 		content = self.abrirStreamtape() 
-		pattern = r'innerHTML = ([^;]+)'
-		result = self.parse(content,pattern)
+		#pattern = r'innerHTML = ([^;]+)'
+		#result = self.parse(content,pattern)
 		try:
 			content = content.decode('utf-8')
 		except:
 			pass
 
 		#result = re.findall(pattern, content)
-		if result[0] == True:
+		src = re.search(r'''ById\('vi.+?=\s*["']([^"']+)['"].+?["']([^"']+)''', content)
+		if src:
 
-			url = result[1][0]
-			url = url.replace(' ','').replace('"','').replace("'","").replace("+","")
+			src_url = 'https:{0}{1}&stream=1'.format(src.group(1), src.group(2))
+			controlo.log(src_url)
+			request = urllib2.Request(src_url, headers=self.headers)
+			request.get_method = lambda: 'HEAD'
+			response = urllib2.urlopen(request)
+			videoUrl = response.url
 			#controlo.log(url)
 			
-			videoUrl = 'https:' + url + "&stream=1"
+			videoUrl = videoUrl
 
-		#controlo.log(videoUrl)
-		return videoUrl+'|User-Agent=' + "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:68.0) Gecko/20100101 Firefox/68.0" + '&Referer=' + self.url
+		controlo.log(videoUrl)
+		return videoUrl+'|%s' % '&'.join(['%s=%s' % (key, urllib.quote_plus(self.headers[key])) for key in self.headers])
+		#+'|User-Agent=' + "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:68.0) Gecko/20100101 Firefox/68.0" + '&Referer=' + self.url
 
 	def parse(self, sHtmlContent, sPattern, iMinFoundValue = 1):
 		sHtmlContent = self.replaceSpecialCharacters(str(sHtmlContent))
@@ -238,7 +247,10 @@ class Streamtape():
 class Mixdrop():
 	def __init__(self, url):
 		self.url = url
-		self.headers = {"User-Agent": "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:52.0) Gecko/20100101 Firefox/52.0"}
+		self.headers = {'Origin': 'https://{0}'.format(self.getHost()), 
+					'Referer': 'https://{0}/'.format(self.getHost()), 
+					'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:52.0) Gecko/20100101 Firefox/52.0',
+					'Cookie' : 'hds2=1'}
 		self.legenda = ''
 
 	def getId(self):
@@ -258,22 +270,27 @@ class Mixdrop():
 	def getMediaUrl(self):
 		videoUrl = ''
 		content = self.abrirMixdrop() 
+		try:
+			content = content.decode('utf-8')
+		except:
+			pass
 		pattern = '<script>(\s*eval\s*\(\s*function(?:.|\s)+?)<\/script>'
-		result = self.parse(content,pattern)
-		headers = {'Origin': 'https://{0}'.format(self.getHost()), 'Referer': 'https://{0}/'.format(self.getHost()), 'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:52.0) Gecko/20100101 Firefox/52.0'}
-		if result[0] == True:
+		r = re.search(r'location\s*=\s*"([^"]+)', content)
+		if r:
+			url = 'https://{0}{1}'.format(self.getHost(), r.group(1))
+			content = controlo.abrir_url(url, headers=self.headers)
+			try:
+				content = content.decode('utf-8')
+			except:
+				pass
+		if '(p,a,c,k,e,d)' in content:
+			content = self.get_packed_data(content)
+			controlo.log(content)
+		r = re.search(r'(?:vsr|wurl|surl)[^=]*=\s*"([^"]+)', content)
+		if r:
+			headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:52.0) Gecko/20100101 Firefox/52.0', 'Referer': self.url}
+			videoUrl = "https:" + r.group(1) +'|%s' % '&'.join(['%s=%s' % (key, urllib.quote_plus(headers[key])) for key in headers])
 
-			htmlContent = packer.unpack(result[1][0])
-			controlo.log(htmlContent)
-			pattern = 'wurl="([^"]+)"'
-			result = self.parse(htmlContent,pattern)
-
-			if (result[0] == True):
-				videoUrl = aResult[1][0]
-
-			if videoUrl.startswith('//'):
-				videoUrl = 'https:'+videoUrl
-		#controlo.log(videoUrl)
 		return videoUrl
 
 	def parse(self, sHtmlContent, sPattern, iMinFoundValue = 1):
@@ -299,12 +316,8 @@ class Mixdrop():
 	def get_packed_data(self, html):
 		packed_data = ''
 		for match in re.finditer(r'(eval\s*\(function.*?)</script>', html, re.DOTALL | re.I):
-			try:
-				js_data = jsunpack.unpack(match.group(1))
-				js_data = js_data.replace('\\', '')
-				packed_data += js_data
-			except:
-				pass
+			if jsunpack.detect(match.group(1)):
+				packed_data += jsunpack.unpack(match.group(1))
 		return packed_data
 
 class Vidoza():
