@@ -105,7 +105,7 @@ class mrpiracy:
 	def conta(self):
 		controlo.addDir('Favoritos', self.API_SITE+'favoritos.php', 'favoritosMenu', os.path.join(controlo.artFolder, controlo.skin, 'favoritos.png'))
 		controlo.addDir('Agendados', self.API_SITE+'verdepois.php', 'verdepoisMenu', os.path.join(controlo.artFolder, controlo.skin, 'agendados.png'))
-		controlo.addDir('A seguir', self.API_SITE+'aseguir.php', 'aseguirMenu', os.path.join(controlo.artFolder, controlo.skin, 'agendados.png'))
+		controlo.addDir('A seguir', self.API_SITE+'aseguir.php', 'aseguirMenu', os.path.join(controlo.artFolder, controlo.skin, 'seguir.png'))
 		#controlo.addDir('Notificações', self.API_SITE+'index.php?action=notificacoes', 'notificacoes', os.path.join(controlo.artFolder, controlo.skin, 'notificacoes.png'))
 		#controlo.addDir('Mensagens', self.API_SITE+'index.php?action=mensagens', 'mensagens', os.path.join(controlo.artFolder, controlo.skin, 'notificacoes.png'))
 		definicoes.vista_menu()
@@ -120,9 +120,9 @@ class mrpiracy:
 		controlo.addDir('Animes Agendados', self.API_SITE+'verdepois.php?action=animes', 'verdepois', os.path.join(controlo.artFolder, controlo.skin, 'anagend.png'))
 		definicoes.vista_menu()
 	def aseguirMenu(self):
-		controlo.addDir('Filmes a Seguir', self.API_SITE+'aseguir.php?action=filmes&qualidade='+definicoes.getQualidade(), 'aseguir', os.path.join(controlo.artFolder, controlo.skin, 'fiagend.png'))
-		controlo.addDir('Séries a Seguir', self.API_SITE+'aseguir.php?action=series', 'aseguir', os.path.join(controlo.artFolder, controlo.skin, 'seagend.png'))
-		controlo.addDir('Animes a Seguir', self.API_SITE+'aseguir.php?action=animes', 'aseguir', os.path.join(controlo.artFolder, controlo.skin, 'anagend.png'))
+		controlo.addDir('Filmes a Seguir', self.API_SITE+'aseguir.php?action=filmes&qualidade='+definicoes.getQualidade(), 'aseguir', os.path.join(controlo.artFolder, controlo.skin, 'fiseg.png'))
+		controlo.addDir('Séries a Seguir', self.API_SITE+'aseguir.php?action=series', 'aseguir', os.path.join(controlo.artFolder, controlo.skin, 'seseg.png'))
+		controlo.addDir('Animes a Seguir', self.API_SITE+'aseguir.php?action=animes', 'aseguir', os.path.join(controlo.artFolder, controlo.skin, 'aniseg.png'))
 		definicoes.vista_menu()
 
 	def login(self):
